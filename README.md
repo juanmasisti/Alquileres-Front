@@ -2,7 +2,7 @@
 # Alquieres-Front
 
 ## Descripción
-Este es el frontend del proyecto **Mani Maquinarias**, desarrollada con [Angular CLI] version 15.1.4.
+Este es el frontend del proyecto **Manny Maquinarias**, desarrollada con [Angular CLI] version 19.2.10.
 
 ## Tecnologías utilizadas
 - **Angular**: Framework principal para el desarrollo frontend.
@@ -14,8 +14,8 @@ Este es el frontend del proyecto **Mani Maquinarias**, desarrollada con [Angular
 ## Requisitos previos
 Antes de comenzar, asegúrate de tener instalados los siguientes requisitos:
 
-- **Node.js** (Versión 16.14.2 o superior)
-- **Angular CLI** (Versión 15.1.4 o superior)
+- **Node.js** (Versión 22.15.0 o superior)
+- **Angular CLI** (Versión 19.2.10 o superior)
 
 ## Instalación
 
