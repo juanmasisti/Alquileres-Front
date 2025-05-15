@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from "../../shared/header/header.component";
+import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [HeaderComponent]
+  imports: [NavbarComponent],
 })
 export class HomeComponent implements OnInit {
 

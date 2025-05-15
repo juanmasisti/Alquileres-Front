@@ -1,0 +1,329 @@
+@use 'index' as *;
+
+.navbar {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: $section-color;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-bottom: 3px solid $secondary-color;
+ /* Borde naranja con efecto de profundidad */
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: $secondary-color;
+    z-index: 1;
+  }
+  
+  /* Sombra solo en los lados */
+  box-shadow: 0 5px 15px rgba($black, 0.1);
+  
+  /* Efecto al hacer scroll */
+  &.scrolled {
+    &::before {
+      opacity: 0.8;
+      height: 2px;
+    }
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.2rem 2rem;
+    position: relative;
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    z-index: 1100;
+
+    .logo {
+      height: 40px;
+      margin-right: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .brand-name {
+      font-family: $font-family-heading;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: $primary-color;
+      letter-spacing: -0.5px;
+      
+      .brand-sub {
+        font-weight: 400;
+        font-size: 1rem;
+        color: $gray-dark;
+      }
+    }
+
+    &:hover {
+      .logo {
+        transform: rotate(-10deg);
+      }
+    }
+  }
+
+  .desktop-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+
+    li {
+      position: relative;
+
+      a {
+        color: $gray-dark;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 0.5rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s ease;
+
+        i {
+          margin-bottom: 4px;
+          font-size: 1.1rem;
+          color: $primary-color;
+          transition: all 0.3s ease;
+        }
+
+        .hover-indicator {
+          width: 0;
+          height: 2px;
+          background: $primary-color;
+          transition: width 0.3s ease;
+        }
+
+        &:hover, &.active {
+          color: $primary-color;
+
+          .hover-indicator {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .auth-button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+
+    i {
+      font-size: 0.9rem;
+    }
+
+    &.login-button {
+      background: $white;
+      color: $primary-color;
+      border-color: $primary-color;
+
+      &:hover {
+        background: rgba($primary-color, 0.1);
+        transform: translateY(-2px);
+      }
+    }
+
+    &.register-button {
+      background: $primary-color;
+      color: $white;
+      box-shadow: 0 4px 15px rgba($primary-color, 0.2);
+
+       &:hover {
+        background: color-mix(in srgb, $primary-color, black 8%);
+        /* También actualiza la sombra para coincidir */
+        box-shadow: 0 6px 20px color-mix(in srgb, $primary-color, black 8%, 0.3);
+      }
+    }
+  }
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      display: none;
+      z-index: 1100;
+
+      .hamburger {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: $primary-color;
+        position: relative;
+        transition: all 0.3s ease;
+
+        &::before, &::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: inherit;
+          left: 0;
+          transition: all 0.3s ease;
+        }
+
+        &::before {
+          top: -6px;
+        }
+
+        &::after {
+          top: 6px;
+        }
+
+        &.active {
+          background: transparent;
+
+          &::before {
+            transform: rotate(45deg);
+            top: 0;
+          }
+
+          &::after {
+            transform: rotate(-45deg);
+            top: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba($white, 0.98);
+    backdrop-filter: blur(10px);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-menu-container {
+      width: 100%;
+      max-width: 500px;
+      padding: 2rem;
+      text-align: center;
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 2rem;
+
+        li {
+          margin-bottom: 1.5rem;
+
+          a {
+            color: $gray-dark;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+
+            i {
+              font-size: 1.2rem;
+              color: $primary-color;
+            }
+
+            &:hover, &.active {
+              color: $primary-color;
+              background: rgba($primary-color, 0.1);
+            }
+          }
+        }
+      }
+
+      .mobile-contact {
+        margin-top: 2rem;
+
+        .contact-button {
+          background: $primary-color;
+          color: $white;
+          padding: 1rem 2rem;
+          border-radius: 50px;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 1.1rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 1rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba($primary-color, 0.2);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba($primary-color, 0.3);
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 992px) {
+    .desktop-menu {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: block !important;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .navbar-container {
+      padding: 1rem;
+    }
+
+    .contact-button span {
+      display: none;
+    }
+
+    .brand-sub {
+      display: none;
+    }
+  }
+}

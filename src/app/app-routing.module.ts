@@ -17,14 +17,15 @@ export const routes: Routes = [
     component: HomeComponent
   },
     {
-    path: 'home',
+    path: 'inicio',
     data: {
       title: "Manny Maquinarias"
     },
     component: HomeComponent
   },
+  
   {
-    path: 'contact',
+    path: 'contacto',
     data: {
       title: "Contacto"
     },
