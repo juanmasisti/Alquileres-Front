@@ -9,8 +9,8 @@ import {
 
 @Component({
   selector: 'app-Login',
-  templateUrl: './Login.component.html',
-  styleUrls: ['./Login.component.scss'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
   imports: [FormsModule, ReactiveFormsModule],
 })
 export class LoginComponent implements OnInit {

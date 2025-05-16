@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
-import { LoginComponent } from '../Login/Login.component';
+import { LoginComponent } from '../login/Login.component';
 import { RegisterComponent } from '../register/register.component';
 
 @Component({

@@ -1,79 +1,108 @@
+<app-navbar></app-navbar>
 <section class="main__container">
-  <div class="container">
-    <div class="register__container">
-      <h3>Registrarse</h3>
-      <form
-        class="register__form"
-        [formGroup]="registerForm"
-        (ngSubmit)="registrarUsuario()"
-      >
-        <div class="nombre__container">
-          <input
-            class="nombre"
-            type="text"
-            placeholder="Nombre"
-            [formControlName="name"
-            ]
-            required
-          />
-          <input
-            class="apellido"
-            type="text"
-            placeholder="Apellido"
-            [formControlName="lastName"
-            ]
-            required
-          />
-        </div>
-        <p class="error-message">Debe ingresar un mail valido.</p>
-        <input
-          type="email"
-          placeholder="Email"
-          [formControlName="email"
-          ]
-          required
-        />
-        <p class="error-message">
-          La contraseña debe tener mas de 8 caracteres.
-        </p>
-        <input
-          type="password"
-          placeholder="Contraseña"
-          [formControlName="password"
-          ]
-          required
-        />
-        <p class="error-message">Las contraseñas no coinciden.</p>
-        <input type="password" placeholder="Confirmar contraseña" required />
-
-        <p class="error-message">Debe ingresar un DNI valido.</p>
-        <input
-          type="number"
-          placeholder="DNI"
-          maxlength="8"
-          [formControlName="DNI"
-          ]
-          required
-        />
-
-        <p class="error-message">Debe ingresar una fecha valida.</p>
-        <input
-          type="date"
-          [min]="minDate"
-          [max]="maxDate"
-          [formControlName="birthDate"
-          ]
-          required
-        />
-        <p style="font-size: 0.8rem; margin-top: -10px">
-          Se debe ser mayor de 18 años.
-        </p>
-        <button class="register__btn" type="submit">Registrarse</button>
-      </form>
-      <p>
-        ¿Ya tienes una cuenta?
-        <a href="">Ingresa</a>!
-      </p>
+<div class="container">
+<div class="register__container">
+  <h3>Registrarse</h3>
+  <form [formGroup]="registerForm" (ngSubmit)="registrarUsuario()">
+    <!-- Nombre -->
+    <div class="form-group">
+      <!-- <label for="name">Nombre</label> -->
+      <input id="name" type="text" formControlName="name" placeholder="Nombre" />
+      <small *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.errors">
+        @if (registerForm.get('name')?.errors?.['required']) {
+          El nombre es obligatorio.
+        } @else if (registerForm.get('name')?.errors?.['minlength']) {
+          Mínimo 2 caracteres.
+        } @else if (registerForm.get('name')?.errors?.['maxlength']) {
+          Máximo 50 caracteres.
+        } @else if (registerForm.get('name')?.errors?.['invalidName']) {
+          Solo se permiten letras y espacios.
+        }
+      </small>
     </div>
-  </div>
+
+    <!-- Apellido -->
+    <div class="form-group">
+      <!-- <label for="lastName">Apellido</label> -->
+      <input id="lastName" type="text" formControlName="lastName" placeholder="Apellido" />
+      <small *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors">
+        @if (registerForm.get('lastName')?.errors?.['required']) {
+          El apellido es obligatorio.
+        } @else if (registerForm.get('lastName')?.errors?.['invalidLastName']) {
+          Solo se permiten letras y espacios.
+        }
+      </small>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <!-- <label for="email">Correo electrónico</label> -->
+      <input id="email" type="email" formControlName="email" placeholder="Email" />
+      <small *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+        @if (registerForm.get('email')?.errors?.['required']) {
+          El email es obligatorio.
+        } @else if (registerForm.get('email')?.errors?.['invalidEmail']) {
+          El formato de correo no es válido. Ej: juanperez&#64;gmail.com
+        }
+      </small>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="form-group">
+      <!-- <label for="password">Contraseña</label> -->
+      <input id="password" type="password" formControlName="password" placeholder="Contraseña" />
+      <small *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+        @if (registerForm.get('password')?.errors?.['required']) {
+          La contraseña es obligatoria.
+        } @else if (registerForm.get('password')?.errors?.['minlength']) {
+          Debe tener al menos 8 caracteres.
+        } @else if (registerForm.get('password')?.errors?.['weakPassword']) {
+          Debe contener mayúsculas, minúsculas, número y símbolo.
+        }
+      </small>
+    </div>
+
+    <!-- DNI -->
+    <div class="form-group">
+      <!-- <label for="dni">DNI</label> -->
+      <input id="dni" type="text" formControlName="dni" placeholder="Número de Documento" />
+      <small *ngIf="registerForm.get('dni')?.touched && registerForm.get('dni')?.errors">
+        @if (registerForm.get('dni')?.errors?.['required']) {
+          El DNI es obligatorio.
+        } @else if (registerForm.get('dni')?.errors?.['invalidDni']) {
+          Debe contener solo números (7 u 8 dígitos).
+        }
+      </small>
+    </div>
+
+    <!-- Fecha de nacimiento -->
+    <div class="form-group">
+      <!-- <label for="birthDate">Fecha de nacimiento</label> -->
+      <input
+        id="birthDate"
+        type="date"
+        formControlName="birthDate"
+        [min]="minDate"
+        [max]="maxDate"
+      />
+      <small *ngIf="registerForm.get('birthDate')?.touched && registerForm.get('birthDate')?.errors">
+        @if (registerForm.get('birthDate')?.errors?.['required']) {
+          La fecha de nacimiento es obligatoria.
+        } @else if (registerForm.get('birthDate')?.errors?.['tooYoung']) {
+          {{ registerForm.get('birthDate')?.errors?.['tooYoung']?.message }}
+        } @else if (registerForm.get('birthDate')?.errors?.['tooOld']) {
+          {{ registerForm.get('birthDate')?.errors?.['tooOld']?.message }}
+        }
+      </small>
+    </div>
+    
+
+    <!-- Botón -->
+    <div class="form-group" style="align-items: center;" >
+      <button [disabled]="registerForm.invalid" class="register__btn" type="submit">Registrarse</button>
+    </div>
+  </form>
+</div>
+</div>
 </section>
+<app-footer></app-footer>
