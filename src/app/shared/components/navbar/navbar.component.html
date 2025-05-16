@@ -21,17 +21,19 @@
 
     <!-- Acciones -->
     <div class="navbar-actions">
-      <a routerLink="/auth/login" class="auth-button login-button">
-        <i class="fas fa-sign-in-alt"></i>
-        <span>Iniciar sesión</span>
-      </a>
+      <div class="auth-buttons">
+        <a routerLink="/auth/login" class="auth-button login-button">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Iniciar sesión</span>
+        </a>
+        
+        <a routerLink="/auth/register" class="auth-button register-button">
+          <i class="fas fa-user-plus"></i>
+          <span>Registrarse</span>
+        </a>
+      </div>
       
-      <a routerLink="/auth/register" class="auth-button register-button">
-        <i class="fas fa-user-plus"></i>
-        <span>Registrarse</span>
-      </a>
-      
-      <button class="menu-toggle" (click)="toggleMobileMenu()" aria-label="Menú">
+      <button class="menu-toggle" (click)="toggleMobileMenu()" aria-label="Menú" [attr.aria-expanded]="mobileMenuOpen">
         <span class="hamburger" [class.active]="mobileMenuOpen"></span>
       </button>
     </div>
@@ -40,6 +42,10 @@
   <!-- Menú Mobile -->
   <div class="mobile-menu" [class.active]="mobileMenuOpen">
     <div class="mobile-menu-container">
+      <button class="mobile-close" (click)="closeMobileMenu()" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+      
       <ul>
         <li *ngFor="let item of menuItems" (click)="closeMobileMenu()">
           <a [routerLink]="item.path" routerLinkActive="active">
