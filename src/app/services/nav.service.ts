@@ -11,16 +11,31 @@ export interface Menu {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NavService {
-  constructor() { }
+  constructor() {}
 
   private MENUITEMS: Menu[] = [
     { title: 'INICIO', path: '/', type: 'link', icon: 'fas fa-home' },
-    { title: 'MAQUINARIAS', path: '/maquinarias', type: 'link', icon: 'fas fa-tools' },
-    { title: 'CÓMO ALQUILAR', path: '/como-alquilar', type: 'link', icon: 'fas fa-question-circle' },
-    { title: 'CONTACTO', path: '/contacto', type: 'link', icon: 'fas fa-envelope' }
+    {
+      title: 'MAQUINARIAS',
+      path: '/maquinarias',
+      type: 'link',
+      icon: 'fas fa-tools',
+    },
+    {
+      title: 'CÓMO ALQUILAR',
+      path: '/como-alquilar',
+      type: 'link',
+      icon: 'fas fa-question-circle',
+    },
+    {
+      title: 'CONTACTO',
+      path: '/contacto',
+      type: 'link',
+      icon: 'fas fa-envelope',
+    },
   ];
 
   items = new BehaviorSubject<Menu[]>(this.MENUITEMS);

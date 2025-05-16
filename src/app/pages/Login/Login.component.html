@@ -1,0 +1,38 @@
+<section class="main__container">
+  <div class="container">
+    <div class="login__container">
+      <h3>Iniciar Sesion</h3>
+      <form class="login__form" [formGroup]="loginForm" (ngSubmit)="ingresar()">
+        <!-- El email debe ser valido -->
+        @if (email.value != "ejemplo") {
+        <p class="error-message">Debe ingresar un mail valido.</p>
+        }@else if (email.value != "ejemplo2") {
+        <p class="error-message">El email no esta registrado.</p>
+        }
+        <input
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+          required
+        />
+        <!-- La contraseña debe tener al menos 8 caracteres -->
+        @if (+password.value.length < 8) {
+        <p class="error-message">
+          La contraseña debe tener al menos 8 caracteres.
+        </p>
+        } @else if (password.value != "ejemplo") {
+        <p class="error-message">Contraseña incorrecta.</p>
+        }
+        <input
+          type="password"
+          placeholder="Contraseña"
+          formControlName="password"
+          required
+          minlength="8"
+        />
+        <button class="login__btn" type="submit">Ingresar</button>
+      </form>
+      <p>¿Aun no tienes cuenta? <a href="">Registrate</a>!</p>
+    </div>
+  </div>
+</section>
