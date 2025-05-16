@@ -2,16 +2,17 @@
   <div class="navbar-container">
     <!-- Logo -->
     <a routerLink="/" class="navbar-brand" (click)="closeMobileMenu()">
-      <img src="assets/images/logo.png" alt="MaNi Maquinarias" class="logo">
+      <img src="assets/images/logo.png" alt="MaNi Maquinarias" class="logo" />
     </a>
 
     <!-- Menú Desktop -->
     <ul class="desktop-menu">
       <li *ngFor="let item of menuItems" [class.active]="isActive(item.path!)">
-        <a 
-          [routerLink]="item.path" 
+        <a
+          [routerLink]="item.path"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <i [class]="item.icon"></i>
           <span>{{ item.title }}</span>
           <div class="hover-indicator"></div>
@@ -26,14 +27,19 @@
           <i class="fas fa-sign-in-alt"></i>
           <span>Iniciar sesión</span>
         </a>
-        
+
         <a routerLink="/registro" class="auth-button register-button">
           <i class="fas fa-user-plus"></i>
           <span>Registrarse</span>
         </a>
       </div>
-      
-      <button class="menu-toggle" (click)="toggleMobileMenu()" aria-label="Menú" [attr.aria-expanded]="mobileMenuOpen">
+
+      <button
+        class="menu-toggle"
+        (click)="toggleMobileMenu()"
+        aria-label="Menú"
+        [attr.aria-expanded]="mobileMenuOpen"
+      >
         <span class="hamburger" [class.active]="mobileMenuOpen"></span>
       </button>
     </div>
@@ -42,10 +48,14 @@
   <!-- Menú Mobile -->
   <div class="mobile-menu" [class.active]="mobileMenuOpen">
     <div class="mobile-menu-container">
-      <button class="mobile-close" (click)="closeMobileMenu()" aria-label="Cerrar menú">
+      <button
+        class="mobile-close"
+        (click)="closeMobileMenu()"
+        aria-label="Cerrar menú"
+      >
         <i class="fas fa-times"></i>
       </button>
-      
+
       <ul>
         <li *ngFor="let item of menuItems" (click)="closeMobileMenu()">
           <a [routerLink]="item.path" routerLinkActive="active">
@@ -54,14 +64,22 @@
           </a>
         </li>
       </ul>
-      
+
       <div class="mobile-auth-buttons">
-        <a routerLink="/auth/login" class="auth-button login-button" (click)="closeMobileMenu()">
+        <a
+          routerLink="/auth/login"
+          class="auth-button login-button"
+          (click)="closeMobileMenu()"
+        >
           <i class="fas fa-sign-in-alt"></i>
           Iniciar sesión
         </a>
-        
-        <a routerLink="/auth/register" class="auth-button register-button" (click)="closeMobileMenu()">
+
+        <a
+          routerLink="/auth/register"
+          class="auth-button register-button"
+          (click)="closeMobileMenu()"
+        >
           <i class="fas fa-user-plus"></i>
           Registrarse
         </a>
