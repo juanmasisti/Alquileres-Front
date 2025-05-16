@@ -1,0 +1,113 @@
+@use "index" as *;
+
+.main__container {
+    height: 90vh;
+    width: 100vw;
+    background-image: url('../../../assets/images/BG-img.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register__container {
+    display: flex;
+    //justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 25px 0;
+    
+    background-color: $section-color;
+    border-radius: 10px;
+    //height: 60%;
+    width: 30%;
+}
+
+.register__container h3 {
+    color: $primary-color;
+    font-size: 2rem;
+    margin:0 0 20px;
+}
+
+.register__form {
+    display: flex;
+    //justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.register__container input {
+    width: 80%;
+    height: 30px;
+
+    padding: 0 20px;
+    margin-bottom: 10px;
+
+    border-radius: 10px;
+    border: 1px solid $primary-color;
+
+    font-size: large;
+}
+
+.nombre__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+
+.nombre {
+    margin-right: 2px;
+}
+.apellido {
+    margin-left: 2px;
+}
+
+.register__btn {
+    width: 80%;
+        height: 30px;
+    
+        margin-top: 10px;
+    
+        border: 1px solid $primary-color;
+        border-radius: 10px;
+        background-color: $secondary-color;
+        color: white;
+    
+        cursor: pointer;
+}
+
+.register__btn:hover {
+    background-color: $primary-color;
+    scale: 1.05;
+    transition: all 0.2s ease-in-out;
+}
+
+.register__btn:active {
+    background-color: white;
+    color: black;
+    scale: 0.95;
+    transition: all 0.2s ease-in-out;
+}
+
+.input-Error {
+    border: 2px solid red;
+    background-color: #ffc9c9;
+}
+
+.error-message {
+    display:none;
+    color: $error-color;
+    font-size: 0.7rem;
+    margin-top: -10px;
+}

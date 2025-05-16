@@ -1,0 +1,79 @@
+<section class="main__container">
+  <div class="container">
+    <div class="register__container">
+      <h3>Registrarse</h3>
+      <form
+        class="register__form"
+        [formGroup]="registerForm"
+        (ngSubmit)="registrarUsuario()"
+      >
+        <div class="nombre__container">
+          <input
+            class="nombre"
+            type="text"
+            placeholder="Nombre"
+            [formControlName="name"
+            ]
+            required
+          />
+          <input
+            class="apellido"
+            type="text"
+            placeholder="Apellido"
+            [formControlName="lastName"
+            ]
+            required
+          />
+        </div>
+        <p class="error-message">Debe ingresar un mail valido.</p>
+        <input
+          type="email"
+          placeholder="Email"
+          [formControlName="email"
+          ]
+          required
+        />
+        <p class="error-message">
+          La contraseña debe tener mas de 8 caracteres.
+        </p>
+        <input
+          type="password"
+          placeholder="Contraseña"
+          [formControlName="password"
+          ]
+          required
+        />
+        <p class="error-message">Las contraseñas no coinciden.</p>
+        <input type="password" placeholder="Confirmar contraseña" required />
+
+        <p class="error-message">Debe ingresar un DNI valido.</p>
+        <input
+          type="number"
+          placeholder="DNI"
+          maxlength="8"
+          [formControlName="DNI"
+          ]
+          required
+        />
+
+        <p class="error-message">Debe ingresar una fecha valida.</p>
+        <input
+          type="date"
+          [min]="minDate"
+          [max]="maxDate"
+          [formControlName="birthDate"
+          ]
+          required
+        />
+        <p style="font-size: 0.8rem; margin-top: -10px">
+          Se debe ser mayor de 18 años.
+        </p>
+        <button class="register__btn" type="submit">Registrarse</button>
+      </form>
+      <p>
+        ¿Ya tienes una cuenta?
+        <a href="">Ingresa</a>!
+      </p>
+    </div>
+  </div>
+</section>
