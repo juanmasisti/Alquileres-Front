@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+
+<section class="container">
+  <div class="main__container">
+    <div class="info__container">
+      <div class="image__container">
+        <img src="../../../assets/images/ProfileIcon.png" alt="" />
+      </div>
+      <div class="description__container">
+        <div class="name__container">
+          <input type="text" placeholder=" {{ name }} " readonly />
+          <input type="text" placeholder=" {{ lastName }} " readonly />
+        </div>
+        <h2 class="data__title">DATOS PERSONALES</h2>
+        <div class="description__info__container">
+          <div>
+            <input type="email" placeholder=" {{ email }} " readonly />
+            <input type="tel" placeholder=" {{ phone }} " readonly />
+          </div>
+          <div>
+            <input type="number" placeholder=" {{ DNI }} " readonly />
+            <input type="date" placeholder=" {{ BirthDate }} " readonly />
+          </div>
+        </div>
+        <div class="buttons__container">
+          <button>EDITAR DATOS</button>
+          <a href="">Cambiar contraseña</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</section>
+
+<app-manage> </app-manage>
+
+<app-footer></app-footer>

@@ -5,6 +5,7 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/Login/Login.component';
 import { MaquinaryProfileComponent } from './pages/maquinary-profile/maquinary-profile.component';
+import { PersonProfileComponent } from './pages/person-profile/person-profile.component';
 
 export const routes: Routes = [
   {
@@ -54,6 +55,13 @@ export const routes: Routes = [
       title: 'Maquina',
     },
     component: MaquinaryProfileComponent,
+  },
+  {
+    path: `perfil/id`,
+    data: {
+      title: 'Perfil',
+    },
+    component: PersonProfileComponent,
   },
 ];
 @NgModule({
