@@ -37,6 +37,7 @@ export class RegisterComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   private readonly DNI_REGEX = /^\d{7,8}$/;
+  private readonly PHONE_REGEX = /^\+54\s\d{2,4}\s\d{6,8}$/;
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -64,6 +65,13 @@ export class RegisterComponent implements OnInit {
           Validators.required,
           Validators.email,
           this.validateRegex(this.EMAIL_REGEX, 'invalidEmail'),
+        ],
+      ],
+      phone: [
+        '',
+        [
+          Validators.required,
+          this.validateRegex(this.PHONE_REGEX, 'invalidPhone'),
         ],
       ],
       password: [

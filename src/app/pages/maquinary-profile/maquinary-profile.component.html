@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<section class="container">
+  <div class="main__container">
+    <div class="info__container">
+      <div class="image__container">
+        <img src="https://img.interempresas.net/fotos/2791134.jpeg" alt="" />
+      </div>
+      <div class="description__container">
+        <h2 class="title">{{ name }}</h2>
+        <div class="price">
+          <h3>${{ price }}</h3>
+          <p>por dia</p>
+        </div>
+
+        <div class="info">
+          <div>
+            <p>Categoria: {{ category }}.</p>
+            <p>Estado: {{ state }}.</p>
+          </div>
+          <div>
+            <p>Politica: {{ politic }} de devolucion.</p>
+            <p>Sucursal: {{ branch }}.</p>
+          </div>
+        </div>
+        <h3>ESPECIFICACIONES</h3>
+        <div class="specifications">
+          <p>Marca: {{ brand }}</p>
+          <p>Modelo: {{ model }}</p>
+          <p>Adquisicion: {{ year }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class=""></section>
+
+<app-footer></app-footer>

@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { LoginComponent } from './pages/login/Login.component';
+import { LoginComponent } from './pages/Login/Login.component';
+import { MaquinaryProfileComponent } from './pages/maquinary-profile/maquinary-profile.component';
 
 export const routes: Routes = [
   {
@@ -14,45 +15,54 @@ export const routes: Routes = [
   {
     path: '',
     data: {
-      title: "Manny Maquinarias"
+      title: 'Manny Maquinarias',
     },
-    component: HomeComponent
+    component: HomeComponent,
   },
-    {
+  {
     path: 'inicio',
     data: {
-      title: "Manny Maquinarias"
+      title: 'Manny Maquinarias',
     },
-    component: HomeComponent
+    component: HomeComponent,
   },
-  
+
   {
     path: 'contacto',
     data: {
-      title: "Contacto"
+      title: 'Contacto',
     },
-    component: ContactComponent
+    component: ContactComponent,
   },
   {
-    path: 'registro',
+    path: 'registrar',
     data: {
-      title: "Registro"
+      title: 'Registro',
     },
-    component: RegisterComponent
+    component: RegisterComponent,
   },
   {
-    path: 'login',
+    path: 'ingresar',
     data: {
-      title: "Login"
+      title: 'Ingreso',
     },
-    component: LoginComponent
-  }
+    component: LoginComponent,
+  },
+  {
+    path: `maquina/id`,
+    data: {
+      title: 'Maquina',
+    },
+    component: MaquinaryProfileComponent,
+  },
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    anchorScrolling: 'enabled',
-    scrollPositionRestoration: 'enabled',
-})],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes, {
+      anchorScrolling: 'enabled',
+      scrollPositionRestoration: 'enabled',
+    }),
+  ],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
