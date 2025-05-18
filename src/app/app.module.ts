@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AppRoutingModule, routes } from './app-routing.module';
 import { NavbarComponent } from "./shared/components/navbar/navbar.component";
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { NavbarComponent } from "./shared/components/navbar/navbar.component";
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(routes, { useHash: false, anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
-    NavbarComponent
+    NavbarComponent,
+    HttpClientModule,
 ],
   providers: [],
   bootstrap: [AppComponent]

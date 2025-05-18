@@ -1,0 +1,73 @@
+<section class="maquinarias-container">
+  <aside class="filtros">
+    <h4>Filtros</h4>
+
+    <input
+      type="text"
+      placeholder="Buscar maquinaria..."
+      [(ngModel)]="filters.text"
+      (input)="fetchMachines()"
+    />
+
+    <div class="filtro-group" *ngIf="categorias.length">
+      <label>Categoría</label>
+      <select [(ngModel)]="filters.categoria" (change)="fetchMachines()">
+        <option value="">Todas</option>
+        <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+      </select>
+    </div>
+
+    <div class="filtro-group" *ngIf="sucursales.length">
+      <label>Sucursal</label>
+      <select [(ngModel)]="filters.sucursal" (change)="fetchMachines()">
+        <option value="">Todas</option>
+        <option *ngFor="let s of sucursales" [value]="s">{{ s }}</option>
+      </select>
+    </div>
+
+    <div class="filtro-group" *ngIf="politicas.length">
+      <label>Política</label>
+      <select [(ngModel)]="filters.politica" (change)="fetchMachines()">
+        <option value="">Todas</option>
+        <option *ngFor="let p of politicas" [value]="p">{{ p }}</option>
+      </select>
+    </div>
+
+    <div class="filtro-group" *ngIf="estados.length">
+      <label>Estado</label>
+      <select [(ngModel)]="filters.state" (change)="fetchMachines()">
+        <option value="">Todos</option>
+        <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+      </select>
+    </div>
+
+    <button (click)="clearFilters()">Limpiar filtros</button>
+  </aside>
+
+  <div class="maquinarias-listado">
+    <h3>Maquinarias disponibles</h3>
+
+    <div *ngIf="maquinarias.length === 0" class="no-results">
+      No se encontraron maquinarias con los filtros aplicados.
+    </div>
+
+    <div class="cards-grid" *ngIf="maquinarias.length > 0">
+      <div class="card" *ngFor="let m of maquinarias">
+        <img *ngIf="m.imagen" [src]="m.imagen" alt="Imagen de {{ m.nombre }}" />
+        <div class="card-content">
+          <h4>{{ m.nombre }}</h4>
+          <p><strong>Marca:</strong> {{ m.marca }}</p>
+          <p><strong>Modelo:</strong> {{ m.modelo }}</p>
+          <p><strong>Año:</strong> {{ m.anio_adquisicion }}</p>
+          <p><strong>Precio:</strong> ${{ m.precio }}</p>
+          <p><strong>Categoría:</strong> {{ m.categoria }}</p>
+          <p><strong>Sucursal:</strong> {{ m.sucursal }}</p>
+          <p><strong>Política:</strong> {{ m.politica }}</p>
+          <p><strong>Estado:</strong> {{ m.state }}</p>
+
+          <a class="detalle-btn" [routerLink]="['/maquinaria', m.id]">Ver detalle</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
