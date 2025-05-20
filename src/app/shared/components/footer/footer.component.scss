@@ -10,12 +10,14 @@
 }
 
 .footer__container {
+    
     margin: 0 300px;
     display: flex;
     justify-content:space-around;
 }
 
 .footer__container div{
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

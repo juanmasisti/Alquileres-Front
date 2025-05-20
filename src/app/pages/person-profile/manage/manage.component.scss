@@ -28,6 +28,11 @@
 }
 
 .manage__options {
+    width: 100%;
+
+    overflow: scroll;
+    scrollbar-width: thin;
+
     display: flex;
     justify-content: space-around;
 
@@ -65,8 +70,6 @@
     & span {
         padding: 5px 35px;
 
-        border-right: 1px solid $primary-color;
-        border-left: 1px solid $primary-color;
     }
 }
 
@@ -76,14 +79,20 @@
     justify-content: space-around;
     align-items: center;
 
+
+    overflow: scroll;
+    scrollbar-width: thin;
+    //border: 1px solid red;
+
     & li {
-        border: 1px solid $primary-color;
+        
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
         height: 50px;
-        width: 100%;
+        
 
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         align-items: center;
 
     }
@@ -93,10 +102,21 @@
     }
 }
 
+.cancel__btn {
+    background-color: $primary-color;
+    color: $background-color;
+    border-radius: 10px;
+    padding: 5px 20px;
+
+    cursor: pointer;
+}
+
 ul {
     list-style: none;
     display: flex;
     flex-direction: column;
+
+    width: 100%;
     
 }
 

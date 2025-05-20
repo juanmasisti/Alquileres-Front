@@ -6,6 +6,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/Login/Login.component';
 import { MaquinaryProfileComponent } from './pages/maquinary-profile/maquinary-profile.component';
 import { PersonProfileComponent } from './pages/person-profile/person-profile.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 
 export const routes: Routes = [
   {
@@ -62,6 +63,13 @@ export const routes: Routes = [
       title: 'Perfil',
     },
     component: PersonProfileComponent,
+  },
+  {
+    path: `perfil/id/cambiar-clave`,
+    data: {
+      title: 'Cambiar clave',
+    },
+    component: ChangePasswordComponent,
   },
 ];
 @NgModule({
