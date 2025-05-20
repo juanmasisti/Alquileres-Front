@@ -50,14 +50,14 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: `maquina/id`,
+    path: 'maquinaria/:id',
     data: {
-      title: 'Maquina',
+      title: 'Maquinaria',
     },
     component: MaquinaryProfileComponent,
   },
   {
-    path: `perfil/id`,
+    path: 'perfil/id',
     data: {
       title: 'Perfil',
     },

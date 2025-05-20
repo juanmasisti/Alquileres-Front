@@ -13,6 +13,7 @@ export class MaquinariaService {
   /**
    * Obtiene el listado de maquinarias, aplicando filtros si se proveen.
    * @param filters Filtros opcionales por estado, texto, política, etc.
+   * pasando el objeto filters como query params.
    */
   getAll(filters?: MaquinariaFilters): Observable<Maquinaria[]> {
     let params = new HttpParams();

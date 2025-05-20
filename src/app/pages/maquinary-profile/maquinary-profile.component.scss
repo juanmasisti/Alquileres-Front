@@ -1,98 +1,204 @@
 @use "index" as *;
 
 .container {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 0;
+  min-height: calc(100vh - 160px); // Ajusta según altura de navbar y footer
+}
+
+.loading-state, .error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+
+  i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: $primary-color;
+  }
+
+  p, h3 {
+    color: $gray-dark;
+  }
+}
+
+.error-state {
+  i {
+    color: $danger-color;
+  }
+
+  .back-btn {
+    display: inline-flex;
     align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    color: $primary-color;
+    text-decoration: none;
 
-    padding: 100px 0;
-
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .main__container {
-    background-color: $section-color;
-    border-radius: 10px;
-
-    width: 60%;
-
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-
-    padding: 50px;
-}
-
-.image__container {
-    width: 40%;
-    height: auto;
-    
-    border: 1px solid $primary-color;
-    border-radius: 10px;
-
-    & img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px;
-    }
-}
-
-
-
-.title {
-    color: $primary-color;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-
-    font-size: 32px;
-}
-
-.price {
-    display: flex;
-    align-items:end;
-
-    margin: 2px 0 15px 20px;
-}
-
-.price h3 {
-    font-size: 24px;
-    margin-right: 2px;
-    font-weight: 600;
-    color: $secondary-color;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  background-color: $section-color;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 1200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
 }
 
 .info__container {
+  display: flex;
+  gap: 2rem;
 
-    display: flex;
-    justify-content: space-evenly;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
 
-    
+.image__container {
+  width: 40%;
+  height: auto;
+  border: 1px solid $primary-color;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 300px;
+  }
+}
+
+.status-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+
+  &.available {
+    background: $success-color;
+  }
+  &.rented {
+    background: $warning-color;
+  }
+  &.maintenance {
+    background: $danger-color;
+  }
 }
 
 .description__container {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
 
-} 
+.title {
+  color: $primary-color;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.price {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+
+  h3 {
+    font-size: 1.75rem;
+    margin: 0;
+    color: $secondary-color;
+    font-weight: 700;
+  }
+
+  p {
+    color: $gray-dark;
+    margin: 0 0 0.25rem 0;
+  }
+}
 
 .info {
-    display: flex;
-    justify-content: space-around;
-    
-}
+  display: flex;
+  gap: 2rem;
+  background: rgba($primary-color, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
 
-.info p {
-    margin: 2px;
-}
+  p {
+    margin: 0.5rem 0;
+    color: $gray-dark;
 
-.description__container h3 {
-    color: $primary-color;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    strong {
+      color: $primary-color;
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 .specifications {
-    display: flex;
-    flex-direction: column;
+  background: rgba($primary-color, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
 
-    margin-left: 20px;
+  p {
+    margin: 0.5rem 0;
+    color: $gray-dark;
+
+    strong {
+      color: $primary-color;
+    }
+  }
+}
+
+.rent-btn {
+  align-self: flex-start;
+  background: $secondary-color;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+
+  &:hover {
+    background: darken($secondary-color, 10%);
+  }
+
+  i {
+    font-size: 1rem;
+  }
 }

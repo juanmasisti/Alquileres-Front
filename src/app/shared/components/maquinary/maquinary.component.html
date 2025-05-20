@@ -1,73 +1,114 @@
 <section class="maquinarias-container">
-  <aside class="filtros">
-    <h4>Filtros</h4>
+  <!-- Panel de Filtros -->
+  <aside class="filtros-panel">
+    <div class="filtros-header">
+      <h4 class="filtros-title">Filtros</h4>
+      <button class="clear-filters" (click)="clearFilters()">
+        <i class="fas fa-undo"></i> Limpiar
+      </button>
+    </div>
 
-    <input
-      type="text"
-      placeholder="Buscar maquinaria..."
-      [(ngModel)]="filters.text"
-      (input)="fetchMachines()"
-    />
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        placeholder="Buscar por nombre, marca o modelo..."
+        [(ngModel)]="filters.text"
+        (input)="onSearchChange()"
+      />
+    </div>
 
     <div class="filtro-group" *ngIf="categorias.length">
-      <label>Categoría</label>
-      <select [(ngModel)]="filters.categoria" (change)="fetchMachines()">
-        <option value="">Todas</option>
+      <label class="filtro-label">Categoría</label>
+      <select class="filtro-select" [(ngModel)]="filters.categoria" (change)="fetchMachines()">
+        <option value="">Todas las categorías</option>
         <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
       </select>
     </div>
 
     <div class="filtro-group" *ngIf="sucursales.length">
-      <label>Sucursal</label>
-      <select [(ngModel)]="filters.sucursal" (change)="fetchMachines()">
-        <option value="">Todas</option>
+      <label class="filtro-label">Sucursal</label>
+      <select class="filtro-select" [(ngModel)]="filters.sucursal" (change)="fetchMachines()">
+        <option value="">Todas las sucursales</option>
         <option *ngFor="let s of sucursales" [value]="s">{{ s }}</option>
       </select>
     </div>
 
     <div class="filtro-group" *ngIf="politicas.length">
-      <label>Política</label>
-      <select [(ngModel)]="filters.politica" (change)="fetchMachines()">
-        <option value="">Todas</option>
+      <label class="filtro-label">Política de devolución</label>
+      <select class="filtro-select" [(ngModel)]="filters.politica" (change)="fetchMachines()">
+        <option value="">Todas las políticas</option>
         <option *ngFor="let p of politicas" [value]="p">{{ p }}</option>
       </select>
     </div>
 
     <div class="filtro-group" *ngIf="estados.length">
-      <label>Estado</label>
-      <select [(ngModel)]="filters.state" (change)="fetchMachines()">
-        <option value="">Todos</option>
+      <label class="filtro-label">Estado</label>
+      <select class="filtro-select" [(ngModel)]="filters.state" (change)="fetchMachines()">
+        <option value="">Todos los estados</option>
         <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
       </select>
     </div>
-
-    <button (click)="clearFilters()">Limpiar filtros</button>
   </aside>
 
-  <div class="maquinarias-listado">
-    <h3>Maquinarias disponibles</h3>
-
-    <div *ngIf="maquinarias.length === 0" class="no-results">
-      No se encontraron maquinarias con los filtros aplicados.
+  <!-- Listado de Maquinarias -->
+  <main class="maquinarias-content">
+    <div class="content-header">
+      <h3 class="content-title">Maquinarias Disponibles</h3>
+      <div class="results-count">{{ maquinarias.length }} resultado(s)</div>
     </div>
 
-    <div class="cards-grid" *ngIf="maquinarias.length > 0">
-      <div class="card" *ngFor="let m of maquinarias">
-        <img *ngIf="m.imagen" [src]="m.imagen" alt="Imagen de {{ m.nombre }}" />
-        <div class="card-content">
-          <h4>{{ m.nombre }}</h4>
-          <p><strong>Marca:</strong> {{ m.marca }}</p>
-          <p><strong>Modelo:</strong> {{ m.modelo }}</p>
-          <p><strong>Año:</strong> {{ m.anio_adquisicion }}</p>
-          <p><strong>Precio:</strong> ${{ m.precio }}</p>
-          <p><strong>Categoría:</strong> {{ m.categoria }}</p>
-          <p><strong>Sucursal:</strong> {{ m.sucursal }}</p>
-          <p><strong>Política:</strong> {{ m.politica }}</p>
-          <p><strong>Estado:</strong> {{ m.state }}</p>
+    <div *ngIf="isLoading" class="loading-spinner">
+      <i class="fas fa-circle-notch fa-spin"></i> Cargando...
+    </div>
 
-          <a class="detalle-btn" [routerLink]="['/maquinaria', m.id]">Ver detalle</a>
+    <div *ngIf="!isLoading && maquinarias.length === 0" class="no-results">
+      <i class="fas fa-exclamation-circle"></i>
+      <p>No se encontraron maquinarias con esos criterios.</p>
+      <button class="retry-btn" (click)="clearFilters()">Mostrar todas</button>
+    </div>
+
+    <div class="maquinarias-grid" *ngIf="!isLoading && maquinarias.length > 0">
+      <article class="maquinaria-card" *ngFor="let m of maquinarias; trackBy: trackByMaquinariaId">
+        <div class="card-image">
+          <img [src]="m.imagen || 'assets/images/maquinaria-default.jpg'" [alt]="m.nombre">
+          <span class="card-badge" [ngClass]="{
+            'available': m.state === 'Disponible',
+            'maintenance': m.state === 'Mantenimiento'
+          }">
+            {{ m.state }}
+          </span>
         </div>
-      </div>
+        
+        <div class="card-body">
+          <h4 class="card-title">{{ m.nombre }}</h4>
+          <div class="card-specs">
+            <div class="spec-item">
+              <i class="fas fa-tag"></i>
+              <span>{{ m.marca }} {{ m.modelo }}</span>
+            </div>
+            <div class="spec-item">
+              <i class="fas fa-calendar-alt"></i>
+              <span>{{ m.anio_adquisicion }}</span>
+            </div>
+            <div class="spec-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>{{ m.sucursal }}</span>
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            <div class="price">
+              <span class="price-label">Desde</span>
+              <span class="price-value">${{ m.precio | number }}</span>
+              <span class="price-period">/día</span>
+            </div>
+            <a class="detail-btn" [routerLink]="['/maquinaria', m.id]">
+              <i class="fas fa-arrow-right"></i> Ver detalle
+            </a>
+          </div>
+        </div>
+      </article>
     </div>
-  </div>
+  </main>
 </section>
