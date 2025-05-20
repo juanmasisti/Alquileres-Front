@@ -6,34 +6,164 @@
       <div class="image__container">
         <img src="../../../assets/images/ProfileIcon.png" alt="" />
       </div>
-      <div class="description__container">
+      <form
+        [formGroup]="personDataForm"
+        (ngSubmit)="editarDatos()"
+        class="description__container"
+      >
         <div class="name__container">
-          <input type="text" placeholder=" {{ name }} " readonly />
-          <input type="text" placeholder=" {{ lastName }} " readonly />
+          <!-- Nombre -->
+          <div class="form-group form__title">
+            <!-- <label for="name">Nombre</label> -->
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              placeholder="{{ name }}"
+            />
+            <small
+              *ngIf="
+                personDataForm.get('name')?.touched &&
+                personDataForm.get('name')?.errors
+              "
+            >
+              @if (personDataForm.get('name')?.errors?.['required']) { El nombre
+              es obligatorio. } @else if
+              (personDataForm.get('name')?.errors?.['minlength']) { Mínimo 2
+              caracteres. } @else if
+              (personDataForm.get('name')?.errors?.['maxlength']) { Máximo 50
+              caracteres. } @else if
+              (personDataForm.get('name')?.errors?.['invalidName']) { Solo se
+              permiten letras y espacios. }
+            </small>
+          </div>
+          <!-- Apellido -->
+          <div class="form-group form__title">
+            <!-- <label for="lastName">Apellido</label> -->
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              placeholder="{{ lastName }}"
+            />
+            <small
+              *ngIf="
+                personDataForm.get('lastName')?.touched &&
+                personDataForm.get('lastName')?.errors
+              "
+            >
+              @if (personDataForm.get('lastName')?.errors?.['required']) { El
+              apellido es obligatorio. } @else if
+              (personDataForm.get('lastName')?.errors?.['invalidLastName']) {
+              Solo se permiten letras y espacios. }
+            </small>
+          </div>
         </div>
         <h2 class="data__title">DATOS PERSONALES</h2>
         <div class="description__info__container">
-          <div>
-            <input type="email" placeholder=" {{ email }} " readonly />
-            <input type="tel" placeholder=" {{ phone }} " readonly />
+          <!-- Email -->
+          <div class="form-group">
+            <!-- <label for="email">Correo electrónico</label> -->
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="{{ email }}"
+            />
+            <small
+              *ngIf="
+                personDataForm.get('email')?.touched &&
+                personDataForm.get('email')?.errors
+              "
+            >
+              @if (personDataForm.get('email')?.errors?.['required']) { El email
+              es obligatorio. } @else if
+              (personDataForm.get('email')?.errors?.['invalidEmail']) { El
+              formato de correo no es válido. Ej: juanperez&#64;gmail.com }
+            </small>
           </div>
-          <div>
-            <input type="number" placeholder=" {{ DNI }} " readonly />
-            <input type="date" placeholder=" {{ BirthDate }} " readonly />
+          <!-- Telefono -->
+          <div class="form-group">
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              mask="+00 000 0000000"
+              placeholder="{{ phone }}"
+            />
+            <!-- mask="+00 000 0000000" en el input PARA FORZAR EL INPUT A ESA FORMA-->
+            <small
+              *ngIf="
+                personDataForm.get('phone')?.touched &&
+                personDataForm.get('phone')?.errors
+              "
+            >
+              @if (personDataForm.get('phone')?.errors?.['required']) { El
+              numero de telefono es obligatorio. } @else if
+              (personDataForm.get('phone')?.errors?.['invalidPhone']) { El
+              formato de telefono no es válido. Ej: +54 9 11 1234-5678 }
+            </small>
+          </div>
+          <!-- DNI -->
+          <div class="form-group">
+            <!-- <label for="dni">DNI</label> -->
+            <input
+              id="dni"
+              type="text"
+              formControlName="dni"
+              placeholder="{{ DNI }}"
+            />
+            <small
+              *ngIf="
+                personDataForm.get('dni')?.touched &&
+                personDataForm.get('dni')?.errors
+              "
+            >
+              @if (personDataForm.get('dni')?.errors?.['required']) { El DNI es
+              obligatorio. } @else if
+              (personDataForm.get('dni')?.errors?.['invalidDni']) { Debe
+              contener solo números (7 u 8 dígitos). }
+            </small>
+          </div>
+          <!-- Fecha de nacimiento -->
+          <div class="form-group">
+            <!-- <label for="birthDate">Fecha de nacimiento</label> -->
+            <input
+              id="birthDate"
+              type="date"
+              formControlName="birthDate"
+              [min]="minDate"
+              [max]="maxDate"
+            />
+            <small
+              *ngIf="
+                personDataForm.get('birthDate')?.touched &&
+                personDataForm.get('birthDate')?.errors
+              "
+            >
+              @if (personDataForm.get('birthDate')?.errors?.['required']) { La
+              fecha de nacimiento es obligatoria. } @else if
+              (personDataForm.get('birthDate')?.errors?.['tooYoung']) {
+              {{ personDataForm.get('birthDate')?.errors?.['tooYoung']?.message }}
+              } @else if (personDataForm.get('birthDate')?.errors?.['tooOld']) {
+              {{ personDataForm.get('birthDate')?.errors?.['tooOld']?.message }}
+              }
+            </small>
           </div>
         </div>
         <div class="buttons__container">
-          <button>EDITAR DATOS</button>
-          <a href="">Cambiar contraseña</a>
+          <button>CONFIRMAR</button>
+          <a
+            [routerLink]="['/perfil/id/cambiar-clave']"
+            routerLinkActive="router-link-active"
+            >Cambiar contraseña</a
+          >
         </div>
-      </div>
+      </form>
     </div>
   </div>
-
-
-
 </section>
 
-<app-manage> </app-manage>
+<!-- <app-manage> </app-manage> -->
 
 <app-footer></app-footer>
