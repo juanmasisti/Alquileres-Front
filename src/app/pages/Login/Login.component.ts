@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormGroup,
@@ -9,7 +9,9 @@ import {
   ValidationErrors,
   AbstractControl,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { LoginResModel } from 'src/app/models/login.model';
+import { AutenticationService } from 'src/app/services/autentication.service';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
 
@@ -34,7 +36,9 @@ export class LoginComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  constructor(private fb: FormBuilder) {
+  private readonly router = inject(Router)
+
+  constructor(private fb: FormBuilder, private authService: AutenticationService) {
     this.loginForm = this.fb.group({
       email: [
         '',
@@ -80,12 +84,17 @@ export class LoginComponent implements OnInit {
     }
 
     const formData = this.loginForm.value;
-    console.log('Formulario válido:', formData);
 
-    const serialized = JSON.stringify(formData);
-    console.log('JSON serializado:', serialized);
-
-    sessionStorage.setItem('Usuario', serialized);
+    this.authService.login(formData).subscribe({
+      next: (data: LoginResModel) => {
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('rol', data.rol);
+        this.router.navigate(['inicio'])
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    })
 
     // Leerlo inmediatamente para verificar
     /* const saved = sessionStorage.getItem('registroUsuario');
