@@ -10,22 +10,22 @@
           <input
             id="name"
             type="text"
-            formControlName="name"
+            formControlName="nombre"
             placeholder="Nombre"
           />
           <small
             *ngIf="
-              registerForm.get('name')?.touched &&
-              registerForm.get('name')?.errors
+              registerForm.get('nombre')?.touched &&
+              registerForm.get('nombre')?.errors
             "
           >
-            @if (registerForm.get('name')?.errors?.['required']) { El nombre es
+            @if (registerForm.get('nombre')?.errors?.['required']) { El nombre es
             obligatorio. } @else if
-            (registerForm.get('name')?.errors?.['minlength']) { Mínimo 2
+            (registerForm.get('nombre')?.errors?.['minlength']) { Mínimo 2
             caracteres. } @else if
-            (registerForm.get('name')?.errors?.['maxlength']) { Máximo 50
+            (registerForm.get('nombre')?.errors?.['maxlength']) { Máximo 50
             caracteres. } @else if
-            (registerForm.get('name')?.errors?.['invalidName']) { Solo se
+            (registerForm.get('nombre')?.errors?.['invalidName']) { Solo se
             permiten letras y espacios. }
           </small>
         </div>
@@ -36,18 +36,18 @@
           <input
             id="lastName"
             type="text"
-            formControlName="lastName"
+            formControlName="apellido"
             placeholder="Apellido"
           />
           <small
             *ngIf="
-              registerForm.get('lastName')?.touched &&
-              registerForm.get('lastName')?.errors
+              registerForm.get('apellido')?.touched &&
+              registerForm.get('apellido')?.errors
             "
           >
-            @if (registerForm.get('lastName')?.errors?.['required']) { El
+            @if (registerForm.get('apellido')?.errors?.['required']) { El
             apellido es obligatorio. } @else if
-            (registerForm.get('lastName')?.errors?.['invalidLastName']) { Solo
+            (registerForm.get('apellido')?.errors?.['invalidLastName']) { Solo
             se permiten letras y espacios. }
           </small>
         </div>
@@ -79,20 +79,20 @@
           <input
             id="phone"
             type="tel"
-            formControlName="phone"
+            formControlName="telefono"
             mask="+00 000 0000000"
             placeholder="Telefono"
           />
           <!-- mask="+00 000 0000000" en el input PARA FORZAR EL INPUT A ESA FORMA-->
           <small
             *ngIf="
-              registerForm.get('phone')?.touched &&
-              registerForm.get('phone')?.errors
+              registerForm.get('telefono')?.touched &&
+              registerForm.get('telefono')?.errors
             "
           >
-            @if (registerForm.get('phone')?.errors?.['required']) { El numero de
+            @if (registerForm.get('telefono')?.errors?.['required']) { El numero de
             telefono es obligatorio. } @else if
-            (registerForm.get('phone')?.errors?.['invalidPhone']) { El formato
+            (registerForm.get('telefono')?.errors?.['invalidPhone']) { El formato
             de telefono no es válido. Ej: +54 9 11 1234-5678 }
           </small>
         </div>
@@ -149,22 +149,22 @@
           <input
             id="birthDate"
             type="date"
-            formControlName="birthDate"
+            formControlName="nacimiento"
             [min]="minDate"
             [max]="maxDate"
           />
           <small
             *ngIf="
-              registerForm.get('birthDate')?.touched &&
-              registerForm.get('birthDate')?.errors
+              registerForm.get('nacimiento')?.touched &&
+              registerForm.get('nacimiento')?.errors
             "
           >
-            @if (registerForm.get('birthDate')?.errors?.['required']) { La fecha
+            @if (registerForm.get('nacimiento')?.errors?.['required']) { La fecha
             de nacimiento es obligatoria. } @else if
-            (registerForm.get('birthDate')?.errors?.['tooYoung']) {
-            {{ registerForm.get('birthDate')?.errors?.['tooYoung']?.message }}
-            } @else if (registerForm.get('birthDate')?.errors?.['tooOld']) {
-            {{ registerForm.get('birthDate')?.errors?.['tooOld']?.message }}
+            (registerForm.get('nacimiento')?.errors?.['tooYoung']) {
+            {{ registerForm.get('nacimiento')?.errors?.['tooYoung']?.message }}
+            } @else if (registerForm.get('nacimiento')?.errors?.['tooOld']) {
+            {{ registerForm.get('nacimiento')?.errors?.['tooOld']?.message }}
             }
           </small>
         </div>
