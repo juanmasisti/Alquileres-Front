@@ -82,7 +82,7 @@ export const routes: Routes = [
     component: PasswordRecoveryComponent,
   },
   {
-    path: 'recuperar-clave/:token',
+    path: 'recuperar-clave/token',
     data: {
       title: 'Recuperar clave',
     },
