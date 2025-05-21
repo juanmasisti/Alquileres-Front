@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormGroup,
@@ -11,7 +11,8 @@ import {
 } from '@angular/forms';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { RegisterService } from 'src/app/services/register.service';
 
 @Component({
   selector: 'app-register',
@@ -37,11 +38,15 @@ export class RegisterComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   private readonly DNI_REGEX = /^\d{7,8}$/;
-  private readonly PHONE_REGEX = /^\+54\s\d{2,4}\s\d{6,8}$/;
-
-  constructor(private fb: FormBuilder) {
+  private readonly PHONE_REGEX = /\d*$/;
+  private readonly router = inject(Router)
+  
+  constructor(
+    private fb: FormBuilder,
+    private registerService: RegisterService
+  ) {
     this.registerForm = this.fb.group({
-      name: [
+      nombre: [
         '',
         [
           Validators.required,
@@ -50,7 +55,7 @@ export class RegisterComponent implements OnInit {
           this.validateRegex(this.NAME_REGEX, 'invalidName'),
         ],
       ],
-      lastName: [
+      apellido: [
         '',
         [
           Validators.required,
@@ -67,7 +72,7 @@ export class RegisterComponent implements OnInit {
           this.validateRegex(this.EMAIL_REGEX, 'invalidEmail'),
         ],
       ],
-      phone: [
+      telefono: [
         '',
         [
           Validators.required,
@@ -86,7 +91,7 @@ export class RegisterComponent implements OnInit {
         '',
         [Validators.required, this.validateRegex(this.DNI_REGEX, 'invalidDni')],
       ],
-      birthDate: ['', [Validators.required, this.validateAgeRange(18, 80)]],
+      nacimiento: ['', [Validators.required, this.validateAgeRange(18, 80)]],
     });
   }
 
@@ -173,12 +178,16 @@ export class RegisterComponent implements OnInit {
     }
 
     const formData = this.registerForm.value;
-    console.log('Formulario válido:', formData);
 
-    const serialized = JSON.stringify(formData);
-    console.log('JSON serializado:', serialized);
-
-    sessionStorage.setItem('registroUsuario', serialized);
+    this.registerService.register(formData).subscribe({
+      next: (value) => {
+        console.log(value)
+        this.router.navigate(['ingresar'])
+      },
+      error: (err) => {
+        console.log(err)
+      },
+    })
 
     // Leerlo inmediatamente para verificar
     /* const saved = sessionStorage.getItem('registroUsuario');
