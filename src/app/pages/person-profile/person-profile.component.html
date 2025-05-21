@@ -112,6 +112,7 @@
               type="text"
               formControlName="dni"
               placeholder="{{ DNI }}"
+              input__active
             />
             <small
               *ngIf="
@@ -152,7 +153,7 @@
           </div>
         </div>
         <div class="buttons__container">
-          <button>CONFIRMAR</button>
+          <button>EDITAR DATOS</button>
           <a
             [routerLink]="['/perfil/id/cambiar-clave']"
             routerLinkActive="router-link-active"
@@ -164,6 +165,6 @@
   </div>
 </section>
 
-<!-- <app-manage> </app-manage> -->
+<app-manage> </app-manage>
 
 <app-footer></app-footer>

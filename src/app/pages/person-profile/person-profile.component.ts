@@ -24,6 +24,7 @@ import {
     NavbarComponent,
     FooterComponent,
     RouterLink,
+    ManageComponent,
   ],
 })
 export class PersonProfileComponent implements OnInit {
