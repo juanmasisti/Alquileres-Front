@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+
+<section class="container">
+  <div *ngIf="isLoading" class="loading-state">
+    <i class="fas fa-circle-notch fa-spin"></i>
+    <p>Cargando detalles de la maquinaria...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <h3>{{ error }}</h3>
+    <a routerLink="/maquinarias" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Volver al listado
+    </a>
+  </div>
+
+  <div *ngIf="maquinaria && !isLoading" class="main__container">
+    <div class="info__container">
+      <div class="image__container">
+        <img [src]="maquinaria.imagen || 'https://img.interempresas.net/fotos/2791134.jpeg'" [alt]="maquinaria.nombre" />
+        <span class="status-badge" [ngClass]="getStatusClass(maquinaria.state!)">
+          {{ maquinaria.state }}
+        </span>
+      </div>
+      
+      <div class="description__container">
+        <h2 class="title">{{ maquinaria.nombre }}</h2>
+        
+        <div class="price">
+          <h3>${{ maquinaria.precio | number }}</h3>
+          <p>por día</p>
+        </div>
+
+        <div class="info">
+          <div>
+            <p><strong>Categoría:</strong> {{ maquinaria.categoria }}</p>
+            <p><strong>Estado:</strong> {{ maquinaria.state }}</p>
+          </div>
+          <div>
+            <p><strong>Política:</strong> {{ maquinaria.politica }} de devolución</p>
+            <p><strong>Sucursal:</strong> {{ maquinaria.sucursal }}</p>
+          </div>
+        </div>
+        
+        <h3>ESPECIFICACIONES</h3>
+        
+        <div class="specifications">
+          <p><strong>Marca:</strong> {{ maquinaria.marca }}</p>
+          <p><strong>Modelo:</strong> {{ maquinaria.modelo }}</p>
+          <p><strong>Año de adquisición:</strong> {{ maquinaria.anio_adquisicion }}</p>
+        </div>
+
+        <button class="rent-btn">
+          <i class="fas fa-calendar-check"></i> Reservar ahora
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

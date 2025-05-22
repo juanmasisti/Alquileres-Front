@@ -1,0 +1,146 @@
+// =============================================
+// PALETA DE COLORES PRINCIPALES
+// =============================================
+
+// Colores base de la marca 
+$primary-color: #EB8310;        // Naranja principal (logo)
+$secondary-color: #EEBC51;        // Naranja claro
+$primary-lighter: #F1E4CC;      // Naranja muy claro
+
+$background-color: #F1E4CC; // Color de fondo
+$section-color: #FFF8E6; // Color de fondo de la sección
+$footer-color: #5D5D5D; // Color del pie de página
+
+$text-light-color: #c5c5c5; // Color del texto
+
+// Escala de grises 
+$gray-dark: #5D5D5D;           // Gris oscuro
+$gray-medium: #C5C5C5;         // Gris medio
+$gray-light: #E9E9E9;          // Gris claro (adicional)
+
+// Colores neutros
+$white: #FFFFFF;
+$black: #000000;
+$off-white: #FAFAFA;
+
+
+// =============================================
+// PALETA DE COLORES COMPLEMENTARIOS
+// =============================================
+
+// Colores para estados y acciones
+$success-color: #28A745;        // Verde
+$error-color: #DC3545;         // Rojo
+$warning-color: #FFC107;       // Amarillo
+$info-color: #17A2B8;          // Azul claro
+$danger-color: #FF5733;       // Rojo oscuro
+// Colores para interacciones
+$hover-color: darken($primary-color, 10%);
+$active-color: darken($primary-color, 15%);
+$disabled-color: mix($gray-medium, $white, 50%);
+
+
+// =============================================
+// VARIABLES DE APLICACIÓN
+// =============================================
+
+// Texto
+$text-color: $gray-dark;
+$text-light: $gray-medium;
+$text-on-primary: $white;
+$text-on-dark: $white;
+
+// Fondos
+$background-alt: $section-color;
+$background-dark: $gray-dark;
+
+// Bordes
+$border-color: $gray-medium;
+$border-radius: 4px;
+$border-radius-lg: 8px;
+$border-radius-xl: 12px;
+
+// Sombras
+$shadow-sm: 0 1px 3px rgba($black, 0.12);
+$shadow-md: 0 4px 6px rgba($black, 0.1);
+$shadow-lg: 0 10px 15px rgba($black, 0.1);
+$shadow-primary: 0 4px 12px rgba($primary-color, 0.2);
+
+// Espaciado
+$spacing-unit: 8px;
+$spacing-xs: $spacing-unit * 0.5;  // 4px
+$spacing-sm: $spacing-unit;        // 8px
+$spacing-md: $spacing-unit * 2;    // 16px
+$spacing-lg: $spacing-unit * 3;    // 24px
+$spacing-xl: $spacing-unit * 4;    // 32px
+
+// Tipografía
+$font-family-base: 'Roboto', sans-serif;
+$font-family-heading: 'Montserrat', sans-serif;
+$font-size-base: 16px;
+$line-height-base: 1.5;
+
+// Breakpoints
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
+
+// =============================================
+// VARIABLES ESPECÍFICAS DE COMPONENTES
+// =============================================
+
+// Botones
+$btn-primary-bg: $primary-color;
+$btn-primary-hover: $hover-color;
+$btn-primary-active: $active-color;
+$btn-primary-text: $text-on-primary;
+
+// Header
+$header-bg: $white;
+$header-text: $text-color;
+$header-shadow: $shadow-sm;
+
+// Navbar
+$navbar-bg: $white;
+$navbar-link: $gray-dark;
+$navbar-link-hover: $primary-color;
+$navbar-link-active: $primary-color;
+
+// WhatsApp (según tu especificación)
+$whatsapp-color: #25D366;
+$whatsapp-color2: #128C7E;
+$whatsapp-color3: #075E54;
+$whatsapp-color4: #25D366;
+
+
+// =============================================
+// FUNCIONES Y MIXINS ÚTILES
+// =============================================
+
+// Función para generar variaciones de color
+@function tint($color, $percentage) {
+  @return mix($white, $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+  @return mix($black, $color, $percentage);
+}
+
+// Mixin para breakpoints
+@mixin respond-to($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+// Mixin para texto truncado
+@mixin truncate($max-width) {
+  max-width: $max-width;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

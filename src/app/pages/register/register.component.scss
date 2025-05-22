@@ -1,0 +1,128 @@
+@use "index" as *;
+
+.main__container {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('../../../assets/images/BG-img.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background-color: rgba(0, 0, 0, 0.3);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register__container {
+  background-color: $section-color;
+  border-radius: 12px;
+  padding: 30px 25px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+
+  h3 {
+    color: $primary-color;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+.register__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  align-items: center; // 💡 Esta línea centra el botón (y todo el contenido)
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0 10%;
+  margin-bottom: 20px; // ✅ Espacio total entre campos
+
+
+  label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: $primary-color;
+  }
+
+  input {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 1rem;
+    border: 1px solid $primary-color;
+    border-radius: 8px;
+    transition: border-color 0.2s ease-in-out;
+
+    &:focus {
+      outline: none;
+      border-color: $secondary-color;
+      box-shadow: 0 0 0 2px rgba($secondary-color, 0.2);
+    }
+
+    &.input-Error {
+      border-color: red;
+      background-color: #ffe6e6;
+    }
+  }
+
+  small {
+    color: $error-color;
+    font-size: 0.75rem;
+    margin-top: 4px;
+  }
+}
+
+.register__btn {
+    width: 100%;
+    height: 40px;
+    margin: 35px auto 0;
+    border: none;
+    border-radius: 10px;
+    background-color: #EEBC51;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $primary-color;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background-color: white;
+    color: black;
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
+
+}
+.login__option {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

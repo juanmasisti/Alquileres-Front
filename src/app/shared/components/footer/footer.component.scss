@@ -1,0 +1,71 @@
+@use 'index' as *; // Importa las variables SCSS
+
+.footer {
+    width: 100%;    
+
+    background-color: $footer-color;
+    color: $text-light-color;
+
+    //border-radius: 10px 10px 0 0;
+}
+
+.footer__container {
+    
+    margin: 0 300px;
+    display: flex;
+    justify-content:space-around;
+}
+
+.footer__container div{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.footer__container div h3{
+    font-size: 1.5rem;
+    margin: 2rem 0;
+
+    display: flex;
+    align-items: center;
+
+}
+
+svg {
+    width: 15px;
+    height: 15px;
+
+    margin: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: $text-light-color;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+a:active {
+    color: $primary-color;
+}
+
+.footer__contact__list {
+    margin-bottom: 35px;    
+}
+
+
+ul {
+    list-style: none;
+    padding: 20px;
+}
+
+li {
+    display: flex;
+    align-items: center;
+}
+
