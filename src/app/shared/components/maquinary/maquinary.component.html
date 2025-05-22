@@ -21,7 +21,7 @@
     <div class="filtro-group" *ngIf="categorias.length">
       <label class="filtro-label">Categoría</label>
       <select class="filtro-select" [(ngModel)]="filters.categoria" (change)="fetchMachines()">
-        <option value="">Todas las categorías</option>
+        <option [ngValue]="undefined">Todas las categorías</option>
         <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
       </select>
     </div>
@@ -29,7 +29,7 @@
     <div class="filtro-group" *ngIf="sucursales.length">
       <label class="filtro-label">Sucursal</label>
       <select class="filtro-select" [(ngModel)]="filters.sucursal" (change)="fetchMachines()">
-        <option value="">Todas las sucursales</option>
+        <option [ngValue]="undefined">Todas las sucursales</option>
         <option *ngFor="let s of sucursales" [value]="s">{{ s }}</option>
       </select>
     </div>
@@ -37,7 +37,7 @@
     <div class="filtro-group" *ngIf="politicas.length">
       <label class="filtro-label">Política de devolución</label>
       <select class="filtro-select" [(ngModel)]="filters.politica" (change)="fetchMachines()">
-        <option value="">Todas las políticas</option>
+        <option [ngValue]="undefined">Todas las políticas</option>
         <option *ngFor="let p of politicas" [value]="p">{{ p }}</option>
       </select>
     </div>
@@ -45,7 +45,7 @@
     <div class="filtro-group" *ngIf="estados.length">
       <label class="filtro-label">Estado</label>
       <select class="filtro-select" [(ngModel)]="filters.state" (change)="fetchMachines()">
-        <option value="">Todos los estados</option>
+        <option [ngValue]="undefined">Todos los estados</option>
         <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
       </select>
     </div>
