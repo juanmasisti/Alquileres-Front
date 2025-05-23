@@ -91,7 +91,35 @@ export class PersonProfileComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.personDataForm = this.fb.group({
+      name: [
+        { value: this.user.nombre, disabled: true },
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+        ],
+      ],
+      lastName: [
+        { value: this.user.apellido, disabled: true },
+        [Validators.required],
+      ],
+      email: [
+        { value: this.user.email, disabled: true },
+        [Validators.required],
+      ],
+      phone: [
+        { value: this.user.telefono, disabled: true },
+        [Validators.required],
+      ],
+      dni: [{ value: this.user.dni, disabled: true }, [Validators.required]],
+      birthDate: [
+        { value: this.user.nacimiento, disabled: true },
+        [Validators.required],
+      ],
+    });
+  }
 
   private validateRegex(regex: RegExp, errorKey: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -146,7 +174,20 @@ export class PersonProfileComponent implements OnInit {
     };
   }
 
+  isEditing = false;
+
   editarDatos() {
-    throw new Error('Method not implemented.');
+    if (this.isEditing) {
+      if (this.personDataForm.valid) {
+        console.log(this.personDataForm.value);
+        this.personDataForm.disable();
+        this.isEditing = false;
+      } else {
+        this.personDataForm.markAllAsTouched();
+      }
+    } else {
+      this.personDataForm.enable();
+      this.isEditing = true;
+    }
   }
 }

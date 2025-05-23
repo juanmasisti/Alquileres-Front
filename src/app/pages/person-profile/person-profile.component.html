@@ -20,6 +20,7 @@
               type="text"
               formControlName="name"
               placeholder="{{ name }}"
+              [readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -45,6 +46,7 @@
               type="text"
               formControlName="lastName"
               placeholder="{{ lastName }}"
+              [readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -69,6 +71,7 @@
               type="email"
               formControlName="email"
               placeholder="{{ email }}"
+              [readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -90,6 +93,7 @@
               formControlName="phone"
               mask="+00 000 0000000"
               placeholder="{{ phone }}"
+              [readonly]="!isEditing"
             />
             <!-- mask="+00 000 0000000" en el input PARA FORZAR EL INPUT A ESA FORMA-->
             <small
@@ -113,6 +117,7 @@
               formControlName="dni"
               placeholder="{{ DNI }}"
               input__active
+              [readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -135,6 +140,7 @@
               formControlName="birthDate"
               [min]="minDate"
               [max]="maxDate"
+              [readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -153,7 +159,7 @@
           </div>
         </div>
         <div class="buttons__container">
-          <button>EDITAR DATOS</button>
+          <button>{{ isEditing ? "GUARDAR" : "EDITAR DATOS" }}</button>
           <a
             [routerLink]="['/perfil/id/cambiar-clave']"
             routerLinkActive="router-link-active"
@@ -164,7 +170,7 @@
     </div>
   </div>
 </section>
-
+<!--
 <app-manage> </app-manage>
-
+-->
 <app-footer></app-footer>
