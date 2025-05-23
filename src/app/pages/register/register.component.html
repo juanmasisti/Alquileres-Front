@@ -169,6 +169,11 @@
           </small>
         </div>
 
+        <!-- Mensaje de error global -->
+        <div *ngIf="registerError" class="form-group">
+          <small style="color: red;">{{ registerError }}</small>
+        </div>
+
         <!-- Botón -->
         <div class="form-group" style="align-items: center">
           <button
@@ -190,3 +195,16 @@
   </div>
 </section>
 <app-footer></app-footer>
+
+
+<!-- modal de registro exitoso -->
+ <div class="modal-overlay" *ngIf="registroExitoso">
+  <div class="modal">
+    <h4>¡Registro exitoso!</h4>
+    <p>Tu cuenta ha sido creada correctamente.</p>
+    <p>Ahora podés iniciar sesión con tu correo y contraseña.</p>
+    <div class="modal-actions">
+      <button class="btn confirm" (click)="irALogin()">Ir a iniciar sesión</button>
+    </div>
+  </div>
+</div>

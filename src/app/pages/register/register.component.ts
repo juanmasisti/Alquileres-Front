@@ -30,6 +30,8 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   minDate!: string;
   maxDate!: string;
+  registroExitoso = false;
+  registerError: string | null = null;
 
   // Expresiones regulares (las mismas que antes)
   private readonly NAME_REGEX = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$/;
@@ -171,28 +173,29 @@ export class RegisterComponent implements OnInit {
     this.minDate = minDate.toISOString().split('T')[0];
   }
 
-  registrarUsuario() {
-    if (this.registerForm.invalid) {
-      this.markAllAsTouched();
-      return;
-    }
-
-    const formData = this.registerForm.value;
-
-    this.registerService.register(formData).subscribe({
-      next: (value) => {
-        console.log(value)
-        this.router.navigate(['ingresar'])
-      },
-      error: (err) => {
-        console.log(err)
-      },
-    })
-
-    // Leerlo inmediatamente para verificar
-    /* const saved = sessionStorage.getItem('registroUsuario');
-    console.log('Leído desde sessionStorage:', saved); */
+ registrarUsuario() {
+  if (this.registerForm.invalid) {
+    this.markAllAsTouched();
+    return;
   }
+
+  const formData = this.registerForm.value;
+
+  this.registerService.register(formData).subscribe({
+    next: () => {
+      this.registroExitoso = true; // mostrar modal
+    },
+    error: (err) => {
+      this.registerError = err?.error?.message || 'Credenciales inválidas.';
+      console.error(err);
+    }
+  });
+}
+
+irALogin() {
+  this.registroExitoso = false;
+  this.router.navigate(['/ingresar']);
+}
 
   private markAllAsTouched() {
     Object.values(this.registerForm.controls).forEach((control) => {

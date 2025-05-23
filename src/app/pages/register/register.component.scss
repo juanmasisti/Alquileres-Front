@@ -126,3 +126,56 @@
   align-items: center;
   text-align: center;
 }
+
+// modal registro exitoso
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+
+  .modal {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+
+    h4 {
+      margin-bottom: 0.5rem;
+      color: #28a745;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+
+      .btn.confirm {
+        background-color: #28a745;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.95;
+        }
+      }
+    }
+  }
+}

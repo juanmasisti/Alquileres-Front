@@ -54,13 +54,16 @@
           >
         </div>
 
+        <!-- Mensaje de error global -->
+        <div *ngIf="loginError" class="form-group">
+          <small style="color: red;">{{ loginError }}</small>
+        </div>
+
+        <!-- Botón -->
         <div class="form-group" style="align-items: center">
-          <button
-            [disabled]="loginForm.invalid"
-            class="login__btn"
-            type="submit"
-          >
-            Ingresa
+          <button class="login__btn" type="submit" [disabled]="loading || loginForm.invalid">
+            <span *ngIf="!loading">Ingresar</span>
+            <span *ngIf="loading"><i class="fas fa-spinner fa-spin"></i> Cargando...</span>
           </button>
         </div>
       </form>

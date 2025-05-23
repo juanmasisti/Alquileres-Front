@@ -3,13 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { LoginComponent } from './pages/Login/Login.component';
 import { MaquinaryProfileComponent } from './pages/maquinary-profile/maquinary-profile.component';
 import { PersonProfileComponent } from './pages/person-profile/person-profile.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
 import { SetNewPasswordComponent } from './pages/set-new-password/set-new-password.component';
 import { Title } from '@angular/platform-browser';
+import { LoginComponent } from './pages/login/Login.component';
 
 export const routes: Routes = [
   {
@@ -33,9 +33,9 @@ export const routes: Routes = [
   },
 
   {
-    path: 'contacto',
+    path: 'quienes-somos',
     data: {
-      title: 'Contacto',
+      title: 'Quienes somos',
     },
     component: ContactComponent,
   },
@@ -61,7 +61,7 @@ export const routes: Routes = [
     component: MaquinaryProfileComponent,
   },
   {
-    path: 'perfil/id',
+    path: 'perfil',
     data: {
       title: 'Perfil',
     },

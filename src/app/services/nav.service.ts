@@ -20,20 +20,20 @@ export class NavService {
     { title: 'INICIO', path: '/', type: 'link', icon: 'fas fa-home' },
     {
       title: 'MAQUINARIAS',
-      path: '/maquinarias',
-      type: 'link',
+      path: 'maquinarias',
+      type: 'fragment',
       icon: 'fas fa-tools',
     },
     {
-      title: 'CÓMO ALQUILAR',
-      path: '/como-alquilar',
+      title: 'QUIENES SOMOS',
+      path: '/quienes-somos',
       type: 'link',
       icon: 'fas fa-question-circle',
     },
     {
       title: 'CONTACTO',
-      path: '/contacto',
-      type: 'link',
+      path: 'footer',
+      type: 'fragment',
       icon: 'fas fa-envelope',
     },
   ];
