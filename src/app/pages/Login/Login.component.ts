@@ -94,6 +94,7 @@ export class LoginComponent implements OnInit {
       next: (res: LoginResModel) => {
         sessionStorage.setItem('token', res.token);
         sessionStorage.setItem('rol', res.rol);
+        sessionStorage.setItem('id', res.id);
         this.router.navigate(['/inicio']);
       },
       error: (err) => {
