@@ -30,6 +30,7 @@ export class AuthService {
     sessionStorage.removeItem(this.tokenKey);
   }
 
+   //@TODO ver como obtener datos del payload del token
   getUserRole(): string | null {
     const token = this.getToken();
     if (!token) return null;
@@ -38,6 +39,7 @@ export class AuthService {
     return payload.rol || null;
   }
 
+   //@TODO ver como obtener datos del payload del token
   getUserEmail(): string | null { 
     const token = this.getToken();
     if (!token) return null;
@@ -45,4 +47,14 @@ export class AuthService {
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.email || null;
   }
+
+  //@TODO ver como obtener datos del payload del token
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.id || null;
+  }
+
 }

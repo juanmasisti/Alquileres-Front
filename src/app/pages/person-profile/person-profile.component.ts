@@ -4,6 +4,8 @@ import { FooterComponent } from 'src/app/shared/components/footer/footer.compone
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
 import { ManageComponent } from './manage/manage.component';
 import { RouterLink } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/models/user.model';
 import {
   ReactiveFormsModule,
   FormGroup,
@@ -40,15 +42,12 @@ export class PersonProfileComponent implements OnInit {
   private readonly DNI_REGEX = /^\d{7,8}$/;
   private readonly PHONE_REGEX = /^\+54\s\d{2,4}\s\d{6,8}$/;
 
-  // Datos de ejemplo (aca irian los datos actuales del usuario)
-  name: string = 'Virginia';
-  lastName: string = 'Lopez';
-  email: string = 'eMail@test.com';
-  phone: string = '2212345678';
-  DNI: string = '44254667';
-  BirthDate: string = '17/03/1999';
+  user!: User;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
+    this.userService.getProfile().subscribe((user: User) => {
+      this.user = user;
+    });
     this.personDataForm = this.fb.group({
       name: [
         '',
