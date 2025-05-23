@@ -5,5 +5,6 @@ export interface LoginReqModel {
 
 export interface LoginResModel {
     token: string,
-    rol: string
+    rol: string,
+    id: string
 }
