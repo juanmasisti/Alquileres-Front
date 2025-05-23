@@ -239,7 +239,7 @@
   cursor: pointer;
 
   i {
-    font-size: 2.5rem;
+    font-size: 3rem;
     color: $primary-color;
   }
 
@@ -248,7 +248,7 @@
     top: 120%;
     right: 0;
     background-color: $white;
-    border: 1px solid $gray-light;
+    border: 2px solid $secondary-color;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 0.5rem 0;
@@ -263,6 +263,7 @@
         align-items: center;
         padding: 10px 16px;
         color: $gray-dark;
+        font-weight: 600;
         font-size: 0.95rem;
         text-decoration: none;
         transition: background-color 0.2s ease;

@@ -7,7 +7,10 @@
 
     <!-- Menú Desktop -->
     <ul class="desktop-menu">
-      <li *ngFor="let item of menuItems" [class.active]="isActive(item.path || '')">
+      <li
+        *ngFor="let item of menuItems"
+        [class.active]="isActive(item.path || '')"
+      >
         <a
           (click)="item.type === 'fragment' && navigate(item)"
           [routerLink]="item.path"
@@ -35,8 +38,7 @@
         </a>
       </div>
 
-     
-     <!--Profile icon -->
+      <!--Profile icon -->
       <div class="profile-icon" *ngIf="isAuthenticated()">
         <a (click)="toggleDropdown()" aria-label="Perfil" tabindex="0">
           <i class="fas fa-user-circle fa-lg"></i>
@@ -44,9 +46,19 @@
 
         <!-- Dropdown de usuario -->
         <ul class="dropdown-menu" *ngIf="dropdownOpen">
-          <li><a routerLink="/perfil"><i class="fas fa-user"></i> Mi perfil</a></li>
-          <li><a routerLink="/gestiones"><i class="fas fa-cogs"></i> Gestiones</a></li>
-          <li><a (click)="openLogoutModal()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+          <li>
+            <a routerLink="/perfil"><i class="fas fa-user"></i> Mi perfil</a>
+          </li>
+          <li>
+            <a routerLink="/gestiones"
+              ><i class="fa-solid fa-gear"></i> Gestiones</a
+            >
+          </li>
+          <li>
+            <a (click)="openLogoutModal()"
+              ><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a
+            >
+          </li>
         </ul>
       </div>
 
@@ -60,7 +72,7 @@
       </button>
     </div>
   </div>
-  
+
   <!-- Menú Mobile -->
   <div class="mobile-menu" [class.active]="mobileMenuOpen">
     <div class="mobile-menu-container">
@@ -102,12 +114,10 @@
       </div>
     </div>
   </div>
-  
 </nav>
 
-
 <!-- Modal de cierre de sesión -->
- <div class="modal-overlay" *ngIf="showLogoutModal">
+<div class="modal-overlay" *ngIf="showLogoutModal">
   <div class="modal">
     <p>¿Estás seguro de que deseas cerrar sesión?</p>
     <div class="modal-actions">
