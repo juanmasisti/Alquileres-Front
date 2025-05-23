@@ -236,11 +236,17 @@
 
 .profile-icon {
   position: relative;
+  margin-top: 10px;
   cursor: pointer;
 
   i {
     font-size: 3rem;
     color: $primary-color;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
   .dropdown-menu {
@@ -279,7 +285,6 @@
       }
     }
   }
-
 }
 
 
