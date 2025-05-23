@@ -160,6 +160,9 @@ small {
     }
 }
 
-.input__active {
-    border: 1px solid $primary-color;
+input.readonly:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: inherit !important;
 }
+

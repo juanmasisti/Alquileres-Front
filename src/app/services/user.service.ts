@@ -13,14 +13,32 @@ export class UserService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getProfile(): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${this.authService.getUserId()}`);
+    return this.http.get<User>(
+      `${this.baseUrl}/${this.authService.getUserId()}`
+    );
   }
 
   updateProfile(user: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/${this.authService.getUserId()}`, user);
+    return this.http.put<User>(
+      `${this.baseUrl}/${this.authService.getUserId()}`,
+      user
+    );
   }
 
-  changePassword(data: { currentPassword: string, newPassword: string }): Observable<any> {
+  changePassword(data: {
+    currentPassword: string;
+    newPassword: string;
+  }): Observable<any> {
     return this.http.post(`${this.baseUrl}/cambiar-password`, data);
   }
+
+
+  ValidToken(body: { email: string; token: string }): Observable<any> {
+    return this.http.get(`${this.baseUrl}/valid-token`);
+  }
+
+  RecoverPassword(body: { email: string }): Observable<any> { 
+    return this.http.post(`${this.baseUrl}/recovery-password`, body);
+  }
+
 }

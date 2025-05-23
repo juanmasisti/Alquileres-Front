@@ -11,7 +11,8 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-set-new-password',
@@ -27,14 +28,64 @@ import { RouterLink, RouterModule } from '@angular/router';
 })
 export class SetNewPasswordComponent implements OnInit {
   NewPassForm: FormGroup;
+  cambioExitoso = false;
+  changeError: string | null = null;
 
-  constructor(private fb: FormBuilder) {
-    this.NewPassForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8)]],
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private UserService: UserService
+  ) {
+    this.NewPassForm = this.fb.group(
+      {
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        confirm_password: ['', [Validators.required, Validators.minLength(8)]],
+      },
+      { validators: this.passwordsMatchValidator }
+    );
+  }
+
+  ngOnInit() {
+    this.NewPassForm.get('confirm_password')?.valueChanges.subscribe(() => {
+      this.NewPassForm.updateValueAndValidity({ onlySelf: true });
     });
   }
 
-  ngOnInit() {}
+  passwordsMatchValidator: ValidatorFn = (
+    form: AbstractControl
+  ): ValidationErrors | null => {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirm_password')?.value;
+    if (!password || !confirmPassword) return null;
+
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  };
+
+  registrarUsuario() {
+    if (this.NewPassForm.invalid) {
+      this.markAllAsTouched();
+      return;
+    }
+
+    const formData = this.NewPassForm.value;
+
+    this.UserService.RecoverPassword(formData).subscribe({
+      next: () => {
+        this.cambioExitoso = true; // mostrar modal
+      },
+    });
+  }
+
+  irALogin() {
+    this.cambioExitoso = false;
+    this.router.navigate(['/ingresar']);
+  }
+
+  private markAllAsTouched() {
+    Object.values(this.NewPassForm.controls).forEach((control) => {
+      control.markAsTouched();
+    });
+  }
 
   changePass() {
     const formData = this.NewPassForm.value;

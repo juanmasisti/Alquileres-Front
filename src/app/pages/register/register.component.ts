@@ -41,8 +41,8 @@ export class RegisterComponent implements OnInit {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   private readonly DNI_REGEX = /^\d{7,8}$/;
   private readonly PHONE_REGEX = /\d*$/;
-  private readonly router = inject(Router)
-  
+  private readonly router = inject(Router);
+
   constructor(
     private fb: FormBuilder,
     private registerService: RegisterService
@@ -173,29 +173,29 @@ export class RegisterComponent implements OnInit {
     this.minDate = minDate.toISOString().split('T')[0];
   }
 
- registrarUsuario() {
-  if (this.registerForm.invalid) {
-    this.markAllAsTouched();
-    return;
+  registrarUsuario() {
+    if (this.registerForm.invalid) {
+      this.markAllAsTouched();
+      return;
+    }
+
+    const formData = this.registerForm.value;
+
+    this.registerService.register(formData).subscribe({
+      next: () => {
+        this.registroExitoso = true; // mostrar modal
+      },
+      error: (err) => {
+        this.registerError = err?.error?.message || 'Credenciales inválidas.';
+        console.error(err);
+      },
+    });
   }
 
-  const formData = this.registerForm.value;
-
-  this.registerService.register(formData).subscribe({
-    next: () => {
-      this.registroExitoso = true; // mostrar modal
-    },
-    error: (err) => {
-      this.registerError = err?.error?.message || 'Credenciales inválidas.';
-      console.error(err);
-    }
-  });
-}
-
-irALogin() {
-  this.registroExitoso = false;
-  this.router.navigate(['/ingresar']);
-}
+  irALogin() {
+    this.registroExitoso = false;
+    this.router.navigate(['/ingresar']);
+  }
 
   private markAllAsTouched() {
     Object.values(this.registerForm.controls).forEach((control) => {

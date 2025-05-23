@@ -19,8 +19,9 @@
               id="name"
               type="text"
               formControlName="name"
-              placeholder="name"
+              placeholder="Nombre"
               [readonly]="!isEditing"
+              [class.readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -42,11 +43,12 @@
           <div class="form-group form__title">
             <!-- <label for="lastName">Apellido</label> -->
             <input
-              id="lastName"
+              id="Apellido"
               type="text"
               formControlName="lastName"
-              placeholder="lastName"
+              placeholder="Apellido"
               [readonly]="!isEditing"
+              [class.readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -70,8 +72,9 @@
               id="email"
               type="email"
               formControlName="email"
-              placeholder="email "
+              placeholder="Email "
               [readonly]="!isEditing"
+              [class.readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -92,8 +95,9 @@
               type="tel"
               formControlName="phone"
               mask="+00 000 0000000"
-              placeholder="phone"
+              placeholder="Telefono"
               [readonly]="!isEditing"
+              [class.readonly]="!isEditing"
             />
             <!-- mask="+00 000 0000000" en el input PARA FORZAR EL INPUT A ESA FORMA-->
             <small
@@ -105,7 +109,7 @@
               @if (personDataForm.get('phone')?.errors?.['required']) { El
               numero de telefono es obligatorio. } @else if
               (personDataForm.get('phone')?.errors?.['invalidPhone']) { El
-              formato de telefono no es válido. Ej: +54 9 11 1234-5678 }
+              formato de telefono no es válido. Ej: 0221 1234567 }
             </small>
           </div>
           <!-- DNI -->
@@ -118,6 +122,7 @@
               placeholder="DNI"
               input__active
               [readonly]="!isEditing"
+              [class.readonly]="!isEditing"
             />
             <small
               *ngIf="
@@ -141,6 +146,7 @@
               [min]="minDate"
               [max]="maxDate"
               [readonly]="!isEditing"
+              [class.readonly]="!isEditing"
             />
             <small
               *ngIf="
