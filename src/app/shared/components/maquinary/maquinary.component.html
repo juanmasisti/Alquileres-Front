@@ -42,7 +42,7 @@
       </select>
     </div>
 
-    <div class="filtro-group" *ngIf="estados.length">
+    <div class="filtro-group" *ngIf="estados.length > 1">
       <label class="filtro-label">Estado</label>
       <select class="filtro-select" [(ngModel)]="filters.state" (change)="fetchMachines()">
         <option value="">Todos los estados</option>
@@ -70,11 +70,14 @@
 
     <div class="maquinarias-grid" *ngIf="!isLoading && maquinarias.length > 0">
       <article class="maquinaria-card" *ngFor="let m of maquinarias; trackBy: trackByMaquinariaId">
-        <div class="card-image">
+        <div class="card-image" [ngClass]="{
+            'rented': m.state === 'Eliminado',
+          }">
           <img [src]="m.imagen || 'assets/images/maquinaria-default.jpg'" [alt]="m.nombre">
           <span class="card-badge" [ngClass]="{
             'available': m.state === 'Disponible',
-            'maintenance': m.state === 'Mantenimiento'
+            'maintenance': m.state === 'Mantenimiento',
+            'rented': m.state === 'Eliminado',
           }">
             {{ m.state }}
           </span>
@@ -83,6 +86,10 @@
         <div class="card-body">
           <h4 class="card-title">{{ m.nombre }}</h4>
           <div class="card-specs">
+            <div class="spec-item">
+              <i [class]="getCategoryIcon(m.categoria)"></i>
+              <span>{{ m.categoria }}</span>
+            </div>
             <div class="spec-item">
               <i class="fas fa-tag"></i>
               <span>{{ m.marca }} {{ m.modelo }}</span>

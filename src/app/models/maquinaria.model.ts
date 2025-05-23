@@ -46,8 +46,8 @@ export interface Maquinaria {
 // Filtros aplicables
 export interface MaquinariaFilters {
   text?: string;
-  categoria?: MaquinariaCategory;
-  sucursal?: Location;
-  politica?: ReturnPolicy;
-  state?: MaquinariaState;
+  categoria?: MaquinariaCategory | '';
+  sucursal?: Location | '';
+  politica?: ReturnPolicy | '';
+  state?: MaquinariaState | '';
 }

@@ -28,8 +28,10 @@ export class UserService {
   changePassword(data: {
     currentPassword: string;
     newPassword: string;
+    mail: string;
+    token: string;
   }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/cambiar-password`, data);
+    return this.http.post(`${this.baseUrl}/change-password`, data);
   }
 
 

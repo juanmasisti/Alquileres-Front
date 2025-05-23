@@ -19,7 +19,13 @@ import { MaquinariaService } from 'src/app/services/maquinaria.service';
 export class MaquinaryComponent implements OnInit {
 
   maquinarias: Maquinaria[] = [];
-  filters: MaquinariaFilters = {};
+  filters: MaquinariaFilters = {
+    text: '',
+    categoria: '',
+    sucursal: '',
+    politica: '',
+    state: ''
+  };  
   categorias: string[] = [];
   politicas: string[] = [];
   sucursales: string[] = [];
@@ -35,6 +41,7 @@ export class MaquinaryComponent implements OnInit {
       this.loadFilterOptions();
       this.setupSearchDebounce();
       this.fetchMachines();
+      
     }
 
  fetchMachines(): void {
@@ -70,13 +77,32 @@ export class MaquinaryComponent implements OnInit {
   }
 
   clearFilters() {
-    this.filters = {};
+    //this.filters = {};
     this.fetchMachines();
+    this.filters = {
+      text: '',
+      categoria: '',
+      sucursal: '',
+      politica: '',
+      state: ''
+    };
   }
 
    trackByMaquinariaId(index: number, maquinaria: Maquinaria): number {
     return maquinaria.id!;
   }
+
+  getCategoryIcon(categoria: string): string {
+  switch (categoria) {
+    case 'Jardinería': return 'fas fa-seedling';
+    case 'Construcción': return 'fas fa-hard-hat';
+    case 'Agricultura': return 'fas fa-tractor';
+    case 'Minería': return 'fas fa-mountain';
+    case 'Logística': return 'fas fa-dolly';
+    case 'Transporte': return 'fas fa-truck';
+    default: return 'fas fa-cogs';
+  }
+}
 
 }
 
