@@ -10,7 +10,7 @@ import { PasswordRecoveryComponent } from './pages/password-recovery/password-re
 import { SetNewPasswordComponent } from './pages/set-new-password/set-new-password.component';
 import { TestComponent } from './pages/testear/testear.component';
 import { Title } from '@angular/platform-browser';
-import { LoginComponent } from './pages/login/Login.component';
+import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
   {
