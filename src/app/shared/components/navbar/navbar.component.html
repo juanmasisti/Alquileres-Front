@@ -37,6 +37,12 @@
           <span>Registrarse</span>
         </a>
       </div>
+      <!--Mensaje de bienvenida-->
+      <div>
+        <p>
+          Bienvenido <strong> {{ rol }} {{name}} </strong>
+        </p>
+      </div>
 
       <!--Profile icon -->
       <div class="profile-icon" *ngIf="isAuthenticated()">
