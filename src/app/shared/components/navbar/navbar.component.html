@@ -38,9 +38,9 @@
         </a>
       </div>
       <!--Mensaje de bienvenida-->
-      <div>
+      <div *ngIf="isAuthenticated()">
         <p>
-          Bienvenido <strong> {{ rol }} {{name}} </strong>
+          Bienvenido <strong> {{ rol }} {{ name }} </strong>
         </p>
       </div>
 
