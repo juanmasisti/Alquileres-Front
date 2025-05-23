@@ -8,6 +8,7 @@ import { PersonProfileComponent } from './pages/person-profile/person-profile.co
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
 import { SetNewPasswordComponent } from './pages/set-new-password/set-new-password.component';
+import { TestComponent } from './pages/testear/testear.component';
 import { Title } from '@angular/platform-browser';
 import { LoginComponent } from './pages/login/Login.component';
 
@@ -87,6 +88,13 @@ export const routes: Routes = [
       title: 'Recuperar clave',
     },
     component: SetNewPasswordComponent,
+  },
+  {
+    path: 'test',
+    data: {
+      title: 'test',
+    },
+    component: TestComponent,
   },
 ];
 @NgModule({
