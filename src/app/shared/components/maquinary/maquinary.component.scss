@@ -210,6 +210,10 @@
     height: 200px;
     overflow: hidden;
 
+      &.rented {
+        opacity: 0.7;
+      }
+
     img {
       width: 100%;
       height: 100%;
@@ -236,11 +240,11 @@
       }
 
       &.rented {
-        background: $warning-color;
+        background-color: red;
       }
 
       &.maintenance {
-        background: $danger-color;
+        background: $warning-color;
       }
     }
   }
