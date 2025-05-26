@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+<section class="container">
+  <div class="main__container">
+    <h1>Codigo de verificacion</h1>
+    <p>
+      Ingresa el codigo de <b>8 digitos</b> que te enviamos a
+      <b>{{ email }}</b>.
+    </p>
+    <form [formGroup]="CodeForm" (ngSubmit)="IngresarAdmin()">
+      <!-- CODIGO -->
+      <div class="form-group">
+        <input
+          id="code"
+          type="number"
+          formControlName="code"
+          placeholder="XXXXXXXX"
+          pattern="\d*"
+          inputmode="numeric"
+          maxlength="8"
+        />
+        <small
+          *ngIf="CodeForm.get('code')?.touched && CodeForm.get('code')?.errors"
+        >
+          <span
+            *ngIf="CodeForm.get('code')?.errors?.['required']"
+            class="error"
+          >
+            El campo es obligatorio.
+          </span>
+          <span *ngIf="CodeForm.get('code')?.errors?.['pattern']" class="error">
+            El código debe contener 8 digitos.
+          </span>
+        </small>
+      </div>
+      <!-- Botón -->
+      <div class="form-group" style="align-items: center">
+        <button
+          class="submit__btn"
+          type="submit"
+          [disabled]="loading || CodeForm.invalid"
+        >
+          <span *ngIf="!loading">Ingresar codigo</span>
+          <span *ngIf="loading"
+            ><i class="fas fa-spinner fa-spin"></i> Validando...</span
+          >
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+<app-footer></app-footer>

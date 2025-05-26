@@ -11,6 +11,7 @@ import { SetNewPasswordComponent } from './pages/set-new-password/set-new-passwo
 import { TestComponent } from './pages/testear/testear.component';
 import { Title } from '@angular/platform-browser';
 import { LoginComponent } from './pages/login/login.component';
+import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo.component';
 
 export const routes: Routes = [
   {
@@ -95,6 +96,13 @@ export const routes: Routes = [
       title: 'test',
     },
     component: TestComponent,
+  },
+  {
+    path: 'ingresar-codigo/token',
+    data: {
+      title: 'Ingresar código',
+    },
+    component: IngresarCodigoComponent,
   },
 ];
 @NgModule({

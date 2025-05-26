@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  private readonly router = inject(Router)
+  private readonly router = inject(Router);
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
     };
   }
 
-  ngOnInit() {} 
+  ngOnInit() {}
 
   private markAllAsTouched() {
     Object.values(this.loginForm.controls).forEach((control) => {
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
- ingresar() {
+  ingresar() {
     if (this.loginForm.invalid) {
       this.markAllAsTouched();
       return;
@@ -95,7 +95,12 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('token', res.token);
         sessionStorage.setItem('rol', res.rol);
         sessionStorage.setItem('id', res.id);
-        this.router.navigate(['/inicio']);
+        if (res.rol === 'admin' || res.rol === 'empleado') {
+          //cambiar por el token verdadero cuando se implemente
+          this.router.navigate(['/ingresar-codigo/token']);
+        } else {
+          this.router.navigate(['/inicio']);
+        }
       },
       error: (err) => {
         console.error('Login error:', err);
@@ -104,7 +109,7 @@ export class LoginComponent implements OnInit {
       },
       complete: () => {
         this.loading = false;
-      }
+      },
     });
   }
 }
