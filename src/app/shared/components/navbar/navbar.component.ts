@@ -3,6 +3,7 @@ import { Menu, NavService } from '../../../services/nav.service';
 import { CommonModule } from '@angular/common';
 import { Route, Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-navbar',
@@ -25,11 +26,21 @@ export class NavbarComponent implements OnInit {
     private navService: NavService,
     private router: Router,
     private authService: AuthService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private userService: UserService 
   ) {}
 
   ngOnInit(): void {
     this.rol = sessionStorage.getItem('rol');
+    // obtener el nombre del usuario desde el servicio
+     this.userService.getProfile().subscribe({
+    next: (user) => {
+      this.name = user.nombre;
+    },
+    error: (err) => {
+      console.error('Error al obtener perfil del usuario:', err);
+    }
+  });
     this.checkViewport();
     this.navService.items.subscribe((items) => {
       this.menuItems = items;

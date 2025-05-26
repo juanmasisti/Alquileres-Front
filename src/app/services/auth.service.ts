@@ -14,6 +14,10 @@ export class AuthService {
     return this.http.post<LoginResModel>(`${environment.apiUrl}/login`, data).pipe(delay(1000));
   }
 
+  loginTwoFactor(data: { email: string; token: string }): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/login/auth`, data).pipe(delay(1000));
+  }
+
   saveToken(token: string): void {
     sessionStorage.setItem(this.tokenKey, token);
   }
@@ -32,14 +36,9 @@ export class AuthService {
 
    //@TODO ver como obtener datos del payload del token
   getUserRole(): string | null {
-    const token = this.getToken();
-    if (!token) return null;
-
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.rol || null;
+    return sessionStorage.getItem('id');
   }
 
-   //@TODO ver como obtener datos del payload del token
   getUserEmail(): string | null { 
     const token = this.getToken();
     if (!token) return null;
@@ -48,13 +47,9 @@ export class AuthService {
     return payload.email || null;
   }
 
-  //@TODO ver como obtener datos del payload del token
-  getUserId(): number | null {
-    const token = this.getToken();
-    if (!token) return null;
-
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.id || null;
+  getUserId(): string | null {
+    return sessionStorage.getItem('id');
   }
+
 
 }
