@@ -202,3 +202,68 @@
     font-size: 1rem;
   }
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+
+  .modal {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 1rem;
+
+      input[type="date"] {
+        margin-top: 0.5rem;
+        padding: 0.4rem;
+        width: 100%;
+        font-size: 1rem;
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+
+      .btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.95rem;
+
+        &.cancel {
+          background-color: #ccc;
+          color: #333;
+        }
+
+        &.confirm {
+          background-color: #dc3545;
+          color: white;
+        }
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+}

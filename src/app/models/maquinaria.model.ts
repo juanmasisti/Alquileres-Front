@@ -30,7 +30,7 @@ export enum Location {
 
 // Modelo principal
 export interface Maquinaria {
-  id?: number;
+  id: number;
   nombre: string;
   marca: string;
   modelo: string;

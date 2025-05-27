@@ -50,9 +50,25 @@
           <p><strong>Año de adquisición:</strong> {{ maquinaria.anio_adquisicion }}</p>
         </div>
 
-        <button class="rent-btn">
+        <button class="rent-btn" (click)="abrirModal()">
           <i class="fas fa-calendar-check"></i> Reservar ahora
         </button>
+
+        <!-- Modal -->
+
+        <div *ngIf="mostrarModal" class="modal-overlay">
+        <div class="modal">
+          <label>
+            Fecha:
+            <input type="date" [(ngModel)]="fechaSeleccionada">
+          </label>
+
+          <div class="modal-actions">
+            <div *ngIf="mostrarPagar" id="walletBrick_container"></div>
+            <button class="btn cancel" (click)="cerrarModal()">Cancelar</button>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
