@@ -127,3 +127,29 @@
     align-items: center;
     text-align: center;
 }
+
+.password-container {
+  position: relative;
+  width: 100%;
+  
+  input {
+    padding-right: 35px; // Espacio para el icono
+  }
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: $primary-color;
+  
+  i {
+    font-size: 1rem;
+  }
+  
+  &:hover {
+    color: $secondary-color;
+  }
+}

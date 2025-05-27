@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Menu, NavService } from '../../../services/nav.service';
 import { CommonModule } from '@angular/common';
-import { Route, Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Route, Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -25,11 +27,21 @@ export class NavbarComponent implements OnInit {
     private navService: NavService,
     private router: Router,
     private authService: AuthService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private userService: UserService 
   ) {}
 
   ngOnInit(): void {
     this.rol = sessionStorage.getItem('rol');
+    // obtener el nombre del usuario desde el servicio
+     this.userService.getProfile().subscribe({
+    next: (user) => {
+      this.name = user.nombre;
+    },
+    error: (err) => {
+      console.error('Error al obtener perfil del usuario:', err);
+    }
+  });
     this.checkViewport();
     this.navService.items.subscribe((items) => {
       this.menuItems = items;
@@ -94,8 +106,34 @@ export class NavbarComponent implements OnInit {
 
   navigate(item: Menu): void {
     if (item.type === 'fragment') {
-      this.scrollToFragment(item.path || '');
+      const fragment = item.path || '';
+      const currentUrl = this.router.url.split('#')[0];
+      const targetUrl = fragment.includes('/') ? fragment.split('#')[0] : '/';
+
+      if (fragment === 'footer') {
+        // Contacto está en todas las páginas, no navegamos
+        this.scrollToFragment(fragment);
+        return;
+      }
+
+      if (currentUrl !== targetUrl) {
+        this.router.navigate([targetUrl]).then(() => {
+          this.scrollOnNavigationEnd(fragment);
+        });
+      } else {
+        this.scrollToFragment(fragment);
+      }
     }
+  }
+
+  
+  private scrollOnNavigationEnd(fragment: string): void {
+    const sub = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.scrollToFragment(fragment);
+        sub.unsubscribe(); // evitamos múltiples suscripciones
+      });
   }
 
   private scrollToFragment(fragment: string): void {
