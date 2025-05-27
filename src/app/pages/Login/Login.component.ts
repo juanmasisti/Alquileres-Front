@@ -31,6 +31,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   loginError: string | null = null;
+  showPassword: boolean = true;
+
 
   // Expresiones regulares
   private readonly EMAIL_REGEX =
@@ -99,7 +101,7 @@ export class LoginComponent implements OnInit {
           //cambiar por el token verdadero cuando se implemente
           this.router.navigate(['/ingresar-codigo/token']);
         } else {
-          this.router.navigate(['/inicio']);
+          this.router.navigate(['/']);
         }
       },
       error: (err) => {
@@ -111,5 +113,9 @@ export class LoginComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }
