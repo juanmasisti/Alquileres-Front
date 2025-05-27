@@ -9,14 +9,9 @@ import { ChangePasswordComponent } from './pages/change-password/change-password
 import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
 import { SetNewPasswordComponent } from './pages/set-new-password/set-new-password.component';
 import { TestComponent } from './pages/testear/testear.component';
-<<<<<<< HEAD
+import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo.component';
 import { MercadoPagoComponent } from './pages/mercadoPago/mercadoPago.component';
 import { LoginComponent } from './pages/Login/Login.component';
-=======
-import { Title } from '@angular/platform-browser';
-import { LoginComponent } from '../app/pages/login/login.component';
-import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo.component';
->>>>>>> 34315b3e4ccc87c57546d654eee5ef0c3c1e93fa
 
 export const routes: Routes = [
   {
