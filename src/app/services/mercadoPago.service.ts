@@ -17,8 +17,8 @@ export class MercadoPagoService {
 
   getPreferenceId(pagoData: PagoModel): Observable<any> {
       let params: HttpParams = new HttpParams()
-      params = params.set('title', pagoData.title)
-      params = params.set('price', pagoData.price)
+      params = params.set('id', pagoData.id)
+      params = params.set('days', pagoData.days)
       return this.http.get<any>(this.baseUrl, { params });
   }
 }

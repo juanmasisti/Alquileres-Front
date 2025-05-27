@@ -1,4 +1,4 @@
 export interface PagoModel {
-    title: string,
-    price: number
+    id: number,
+    days: number
 }
