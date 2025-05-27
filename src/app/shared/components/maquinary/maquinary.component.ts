@@ -10,26 +10,22 @@ import { MaquinariaService } from 'src/app/services/maquinaria.service';
   selector: 'app-maquinary',
   templateUrl: './maquinary.component.html',
   styleUrls: ['./maquinary.component.scss'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink
-  ]
+  imports: [CommonModule, FormsModule, RouterLink],
 })
 export class MaquinaryComponent implements OnInit {
-
   maquinarias: Maquinaria[] = [];
   filters: MaquinariaFilters = {
     text: '',
     categoria: '',
     sucursal: '',
     politica: '',
-    state: ''
-  };  
+    state: '',
+  };
   categorias: string[] = [];
   politicas: string[] = [];
   sucursales: string[] = [];
   estados: string[] = [];
+  isAdmin: boolean = false;
 
   isLoading = false;
   private searchText$ = new Subject<string>();
@@ -38,13 +34,13 @@ export class MaquinaryComponent implements OnInit {
   constructor(private maquinariaService: MaquinariaService) {}
 
   ngOnInit() {
-      this.loadFilterOptions();
-      this.setupSearchDebounce();
-      this.fetchMachines();
-      
-    }
+    this.loadFilterOptions();
+    this.setupSearchDebounce();
+    this.fetchMachines();
+    this.isAdmin = sessionStorage.getItem('rol') === 'admin';
+  }
 
- fetchMachines(): void {
+  fetchMachines(): void {
     this.isLoading = true;
     this.maquinariaService.getAll(this.filters).subscribe({
       next: (data) => {
@@ -53,27 +49,33 @@ export class MaquinaryComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
-   onSearchChange(): void {
+  onSearchChange(): void {
     this.searchText$.next(this.filters.text || '');
   }
 
   loadFilterOptions() {
-    this.maquinariaService.getCategorias().subscribe(data => this.categorias = data);
-    this.maquinariaService.getPoliticas().subscribe(data => this.politicas = data);
-    this.maquinariaService.getSucursales().subscribe(data => this.sucursales = data);
-    this.maquinariaService.getEstados().subscribe(data => this.estados = data);
+    this.maquinariaService
+      .getCategorias()
+      .subscribe((data) => (this.categorias = data));
+    this.maquinariaService
+      .getPoliticas()
+      .subscribe((data) => (this.politicas = data));
+    this.maquinariaService
+      .getSucursales()
+      .subscribe((data) => (this.sucursales = data));
+    this.maquinariaService
+      .getEstados()
+      .subscribe((data) => (this.estados = data));
   }
 
   private setupSearchDebounce(): void {
-    this.searchText$.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
-    ).subscribe(() => this.fetchMachines());
+    this.searchText$
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => this.fetchMachines());
   }
 
   clearFilters() {
@@ -84,25 +86,30 @@ export class MaquinaryComponent implements OnInit {
       categoria: '',
       sucursal: '',
       politica: '',
-      state: ''
+      state: '',
     };
   }
 
-   trackByMaquinariaId(index: number, maquinaria: Maquinaria): number {
+  trackByMaquinariaId(index: number, maquinaria: Maquinaria): number {
     return maquinaria.id!;
   }
 
   getCategoryIcon(categoria: string): string {
-  switch (categoria) {
-    case 'Jardinería': return 'fas fa-seedling';
-    case 'Construcción': return 'fas fa-hard-hat';
-    case 'Agricultura': return 'fas fa-tractor';
-    case 'Minería': return 'fas fa-mountain';
-    case 'Logística': return 'fas fa-dolly';
-    case 'Transporte': return 'fas fa-truck';
-    default: return 'fas fa-cogs';
+    switch (categoria) {
+      case 'Jardinería':
+        return 'fas fa-seedling';
+      case 'Construcción':
+        return 'fas fa-hard-hat';
+      case 'Agricultura':
+        return 'fas fa-tractor';
+      case 'Minería':
+        return 'fas fa-mountain';
+      case 'Logística':
+        return 'fas fa-dolly';
+      case 'Transporte':
+        return 'fas fa-truck';
+      default:
+        return 'fas fa-cogs';
+    }
   }
 }
-
-}
-

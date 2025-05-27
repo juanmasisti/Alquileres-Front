@@ -3,20 +3,19 @@
   <div class="main__container">
     <h1>Codigo de verificacion</h1>
     <p>
-      Ingresa el codigo de <b>8 digitos</b> que te enviamos a
-      <b>{{ email }}</b>.
+      Ingresa el codigo de <b>4 caracteres</b> que te enviamos a
+      <b>{{ email }}</b
+      >.
     </p>
     <form [formGroup]="CodeForm" (ngSubmit)="IngresarAdmin()">
       <!-- CODIGO -->
       <div class="form-group">
         <input
           id="code"
-          type="number"
+          type="text"
           formControlName="code"
-          placeholder="XXXXXXXX"
-          pattern="\d*"
-          inputmode="numeric"
-          maxlength="8"
+          placeholder="XXXX"
+          maxlength="4"
         />
         <small
           *ngIf="CodeForm.get('code')?.touched && CodeForm.get('code')?.errors"
@@ -28,9 +27,13 @@
             El campo es obligatorio.
           </span>
           <span *ngIf="CodeForm.get('code')?.errors?.['pattern']" class="error">
-            El código debe contener 8 digitos.
+            El código debe contener 4 caracteres.
           </span>
         </small>
+      </div>
+      <!-- Mensaje de error global -->
+      <div *ngIf="loginError" class="form-group">
+        <small style="color: red" class="error">{{ loginError }}</small>
       </div>
       <!-- Botón -->
       <div class="form-group" style="align-items: center">

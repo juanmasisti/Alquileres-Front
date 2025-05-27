@@ -27,20 +27,20 @@ export class NavbarComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private elementRef: ElementRef,
-    private userService: UserService 
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.rol = sessionStorage.getItem('rol');
     // obtener el nombre del usuario desde el servicio
-     this.userService.getProfile().subscribe({
-    next: (user) => {
-      this.name = user.nombre;
-    },
-    error: (err) => {
-      console.error('Error al obtener perfil del usuario:', err);
-    }
-  });
+    this.userService.getProfile().subscribe({
+      next: (user) => {
+        this.name = user.nombre;
+      },
+      error: (err) => {
+        console.error('Error al obtener perfil del usuario:', err);
+      },
+    });
     this.checkViewport();
     this.navService.items.subscribe((items) => {
       this.menuItems = items;
@@ -136,6 +136,7 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     this.closeDropdown();
     this.showLogoutModal = false;
+    this.router.navigate(['/inicio']);
   }
 
   cancelLogout() {

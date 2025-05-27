@@ -12,6 +12,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-ingresar-codigo',
@@ -28,23 +29,44 @@ import { Router, RouterModule } from '@angular/router';
 export class IngresarCodigoComponent implements OnInit {
   CodeForm: FormGroup;
   loading = false;
+  loginError: string | null = null;
   email = 'EmailEjemplo@test.com';
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.CodeForm = this.fb.group({
-      code: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
+      code: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]{4}$/)]],
     });
   }
 
   ngOnInit() {}
 
-  private markAllAsTouched() {
-    Object.values(this.CodeForm.controls).forEach((control) => {
-      control.markAsTouched();
-    });
-  }
-
   IngresarAdmin() {
     this.loading = true;
+    this.loginError = null;
+
+    const email = localStorage.getItem('email');
+    const code = this.CodeForm.value.code;
+
+    this.authService.loginTwoFactor({ email: email || '', code }).subscribe({
+      next: (response) => {
+        console.log('Login exitoso: ', response);
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('rol', response.rol);
+        sessionStorage.setItem('id', response.id);
+        this.router.navigate(['/inicio']);
+      },
+      error: (error) => {
+        console.error('Error al iniciar sesión: ', error);
+        this.loginError = 'Código incorrecto o expirado. Inténtalo de nuevo.';
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 }

@@ -52,6 +52,9 @@
 
         <!-- Dropdown de usuario -->
         <ul class="dropdown-menu" *ngIf="dropdownOpen">
+          <li class="li__rol">
+            <p>{{ rol?.toUpperCase() }}</p>
+          </li>
           <li>
             <a routerLink="/perfil"><i class="fas fa-user"></i> Mi perfil</a>
           </li>

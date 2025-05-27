@@ -451,3 +451,21 @@
     }
   }
 }
+
+.li__rol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $primary-color;
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  & p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    padding: 5px 0;
+    border-bottom: 1px solid $primary-color;
+  }
+}

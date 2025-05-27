@@ -38,9 +38,11 @@ export class LoginComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  private readonly router = inject(Router);
-
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: [
         '',
@@ -96,6 +98,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('rol', res.rol);
         sessionStorage.setItem('id', res.id);
         if (res.rol === 'admin' || res.rol === 'empleado') {
+          localStorage.setItem('email', formData.email);
           //cambiar por el token verdadero cuando se implemente
           this.router.navigate(['/ingresar-codigo/token']);
         } else {

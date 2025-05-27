@@ -14,7 +14,7 @@ export class AuthService {
     return this.http.post<LoginResModel>(`${environment.apiUrl}/login`, data).pipe(delay(1000));
   }
 
-  loginTwoFactor(data: { email: string; token: string }): Observable<any> {
+  loginTwoFactor(data: { email: string; code: string }): Observable<any> {
     return this.http.post(`${environment.apiUrl}/login/auth`, data).pipe(delay(1000));
   }
 

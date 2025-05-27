@@ -65,6 +65,13 @@
         <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
       </select>
     </div>
+
+    <div class="add__btn__container" *ngIf="isAdmin">
+      <!-- Botón con icono de maquinaria desde font awesome -->
+      <button class="add__btn">
+        <i class="fas fa-truck-monster"></i> AGREGAR MAQUINARIA
+      </button>
+    </div>
   </aside>
 
   <!-- Listado de Maquinarias -->
@@ -85,16 +92,30 @@
     </div>
 
     <div class="maquinarias-grid" *ngIf="!isLoading && maquinarias.length > 0">
-      <article class="maquinaria-card" *ngFor="let m of maquinarias; trackBy: trackByMaquinariaId">
-        <div class="card-image" [ngClass]="{
+      <article
+        class="maquinaria-card"
+        *ngFor="let m of maquinarias; trackBy: trackByMaquinariaId"
+      >
+        <div
+          class="card-image"
+          [ngClass]="{
             'rented': m.state === 'Eliminado',
-          }">
-          <img [src]="m.imagen || 'assets/images/maquinaria-default.jpg'" [alt]="m.nombre">
-          <span class="card-badge" [ngClass]="{
+          }"
+        >
+          <img
+            style="cursor: pointer"
+            [src]="m.imagen || 'assets/images/maquinaria-default.jpg'"
+            [alt]="m.nombre"
+            [routerLink]="['/maquinaria', m.id]"
+          />
+          <span
+            class="card-badge"
+            [ngClass]="{
             'available': m.state === 'Disponible',
             'maintenance': m.state === 'Mantenimiento',
             'rented': m.state === 'Eliminado',
-          }">
+          }"
+          >
             {{ m.state }}
           </span>
         </div>
