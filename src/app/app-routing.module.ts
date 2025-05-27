@@ -10,7 +10,6 @@ import { PasswordRecoveryComponent } from './pages/password-recovery/password-re
 import { SetNewPasswordComponent } from './pages/set-new-password/set-new-password.component';
 import { TestComponent } from './pages/testear/testear.component';
 import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo.component';
-import { MercadoPagoComponent } from './pages/mercadoPago/mercadoPago.component';
 import { LoginComponent } from './pages/Login/Login.component';
 
 export const routes: Routes = [
@@ -32,13 +31,6 @@ export const routes: Routes = [
       title: 'Manny Maquinarias',
     },
     component: HomeComponent,
-  },
-  {
-    path: 'mercadoPago',
-    data: {
-      title: 'Mercado pago',
-    },
-    component: MercadoPagoComponent,
   },
   {
     path: 'quienes-somos',
