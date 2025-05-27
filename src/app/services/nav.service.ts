@@ -36,6 +36,12 @@ export class NavService {
       type: 'fragment',
       icon: 'fas fa-envelope',
     },
+    {
+      title: 'MERCADO PAGO',
+      path: '/mercadoPago',
+      type: 'fragment',
+      icon: 'fa fa-credit-card-alt',
+    },
   ];
 
   items = new BehaviorSubject<Menu[]>(this.MENUITEMS);

@@ -9,8 +9,8 @@ import { ChangePasswordComponent } from './pages/change-password/change-password
 import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
 import { SetNewPasswordComponent } from './pages/set-new-password/set-new-password.component';
 import { TestComponent } from './pages/testear/testear.component';
-import { Title } from '@angular/platform-browser';
-import { LoginComponent } from './pages/login/login.component';
+import { MercadoPagoComponent } from './pages/mercadoPago/mercadoPago.component';
+import { LoginComponent } from './pages/Login/Login.component';
 
 export const routes: Routes = [
   {
@@ -32,7 +32,13 @@ export const routes: Routes = [
     },
     component: HomeComponent,
   },
-
+  {
+    path: 'mercadoPago',
+    data: {
+      title: 'Mercado pago',
+    },
+    component: MercadoPagoComponent,
+  },
   {
     path: 'quienes-somos',
     data: {
