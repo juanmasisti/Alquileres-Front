@@ -26,7 +26,11 @@
         />
         <span
           class="status-badge"
-          [ngClass]="getStatusClass(maquinaria.state!)"
+          [ngClass]="{
+            'available': maquinaria.state === 'Disponible',
+            'maintenance': maquinaria.state === 'Mantenimiento',
+            'rented': maquinaria.state === 'Eliminado',
+          }"
           *ngIf="isAdmin"
         >
           {{ maquinaria.state }}
