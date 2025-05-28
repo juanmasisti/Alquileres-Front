@@ -38,7 +38,6 @@ export class MaquinariaModalComponent {
 
   ngOnInit(): void {
     this.maquinariaForm = this.fb.group({
-      //image: [''],
       inventario: ['', Validators.required],
       nombre: ['', Validators.required],
       marca: ['', Validators.required],
@@ -48,28 +47,35 @@ export class MaquinariaModalComponent {
       sucursal: ['', Validators.required],
       politica: ['', Validators.required],
       categoria: ['', Validators.required],
-
-      //state: ['', Validators.required],
     });
 
     console.log('Controles del formulario:', this.maquinariaForm.controls);
   }
 
+  addImage(event: any) {
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      this.selectedFile = file
+    }
+  }
+
   guardarMaquinaria() {
+
     if (this.maquinariaForm.invalid) {
       this.maquinariaForm.markAllAsTouched();
       return;
     }
 
-    const formValue = this.maquinariaForm.value;
+    const formData = new FormData()
+    const maqData = this.maquinariaForm.value;
 
-    //const formData = new FormData();
-    const formData = this.maquinariaForm.value;
+    Object.entries(maqData).forEach(([key, value]) => formData.append(key, value as any))
+
+    if(this.selectedFile) formData.set('image', this.selectedFile, this.selectedFile.name)
 
     this.loading = true;
     this.createError = null;
 
-    console.log('Datos del formulario:', formData);
     this.maquinariaService.create(formData).subscribe({
       next: (response) => {
         console.log('Maquinaria creada con éxito:', response);
