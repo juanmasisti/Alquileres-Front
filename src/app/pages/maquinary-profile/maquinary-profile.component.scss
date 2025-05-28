@@ -98,11 +98,13 @@
   &.available {
     background: $success-color;
   }
+
   &.rented {
-    background: $warning-color;
+    background-color: red;
   }
+
   &.maintenance {
-    background: $danger-color;
+    background: $warning-color;
   }
 }
 
