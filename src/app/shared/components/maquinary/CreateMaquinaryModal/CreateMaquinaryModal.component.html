@@ -1,14 +1,22 @@
 <div class="form__container">
   <h1>GUARDAR NUEVA MAQUINARIA</h1>
-  <form [formGroup]="maquinariaForm" (ngSubmit)="guardarMaquinaria()">
+  <form
+    [formGroup]="maquinariaForm"
+    (ngSubmit)="guardarMaquinaria()"
+    class="form-grid"
+  >
     <!-- Imagen -->
-    <!-- <div class="form-group">
-      <input
-        type="text"
-        placeholder="URL de la imagen"
-        formControlName="imagen"
-      />
-    </div> -->
+    <div class="form-group">
+      <input type="file" required accept="image/*" class="input-file" />
+      <!-- <small
+        *ngIf="
+          maquinariaForm.get('image')?.touched &&
+          maquinariaForm.get('image')?.invalid
+        "
+      >
+        El nombre es requerido.
+      </small> -->
+    </div>
     <!-- Nombre -->
     <div class="form-group">
       <input type="text" placeholder="Nombre" formControlName="nombre" />
@@ -48,10 +56,13 @@
     <!-- Año de adquisición -->
     <div class="form-group">
       <input
-        type="date"
+        type="number"
         placeholder="Año de adquisición"
         formControlName="anio_adquisicion"
-        [max]="hoy"
+        min="1900"
+        max="{{ currentYear }}"
+        [maxLength]="4"
+        (blur)="corregirAnio()"
       />
       <small
         *ngIf="
@@ -144,13 +155,15 @@
         El estado es requerido.
       </small>
     </div> -->
-    <!-- Marca -->
+
+    <!-- n de inventario -->
     <div class="form-group">
       <input
         type="number"
         placeholder="N° de inventario"
-        formControlName="
-      inventario"
+        id="inventario"
+        min="1"
+        formControlName="inventario"
       />
       <small
         *ngIf="

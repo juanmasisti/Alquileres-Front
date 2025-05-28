@@ -19,9 +19,6 @@ import { MaquinariaService } from '../../../../services/maquinaria.service';
 })
 export class MaquinariaModalComponent {
   maquinariaForm!: FormGroup;
-  img_default: string =
-    'https://img.pikbest.com/illustration/20250510/powerful-yellow-bulldozer-heavy-machinery-icon-side-view-for-engineering_11706143.jpg!sw800';
-
   loading = false;
   createError: string | null = null;
 
@@ -30,7 +27,8 @@ export class MaquinariaModalComponent {
   policies = Object.values(ReturnPolicy);
   categories = Object.values(MaquinariaCategory);
   states = Object.values(MaquinariaState);
-  hoy!: string;
+  currentYear: number = new Date().getFullYear();
+  selectedFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +38,8 @@ export class MaquinariaModalComponent {
 
   ngOnInit(): void {
     this.maquinariaForm = this.fb.group({
-      //imagen: [''],
+      //image: [''],
+      inventario: ['', Validators.required],
       nombre: ['', Validators.required],
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
@@ -49,11 +48,11 @@ export class MaquinariaModalComponent {
       sucursal: ['', Validators.required],
       politica: ['', Validators.required],
       categoria: ['', Validators.required],
-      inventario: ['', Validators.required],
+
       //state: ['', Validators.required],
     });
-    const today = new Date();
-    this.hoy = today.toISOString().split('T')[0];
+
+    console.log('Controles del formulario:', this.maquinariaForm.controls);
   }
 
   guardarMaquinaria() {
@@ -62,27 +61,40 @@ export class MaquinariaModalComponent {
       return;
     }
 
-    const formValue = { ...this.maquinariaForm.value };
+    const formValue = this.maquinariaForm.value;
 
-    // Si no se proporciona imagen, usar la predeterminada
-    /* if (!formValue.imagen || formValue.imagen.trim() === '') {
-      formValue.imagen = this.img_default;
-    } */
+    //const formData = new FormData();
+    const formData = this.maquinariaForm.value;
 
     this.loading = true;
     this.createError = null;
 
-    this.maquinariaService.create(formValue).subscribe({
+    console.log('Datos del formulario:', formData);
+    this.maquinariaService.create(formData).subscribe({
       next: (response) => {
         console.log('Maquinaria creada con éxito:', response);
         this.maquinariaForm.reset();
+        this.selectedFile = null;
       },
       error: (err) => {
         console.error('Error al crear maquinaria:', err);
-        this.createError = err?.error?.message || 'Credenciales inválidas.';
+        this.createError = err?.error?.message || 'Error desconocido.';
         this.loading = false;
       },
     });
+  }
+
+  corregirAnio() {
+    const control = this.maquinariaForm.get('anio_adquisicion');
+    let value = Number(control?.value);
+
+    if (isNaN(value)) return;
+
+    if (value < 1900) {
+      control?.setValue(1900);
+    } else if (value > this.currentYear) {
+      control?.setValue(this.currentYear);
+    }
   }
 
   cerrar() {
