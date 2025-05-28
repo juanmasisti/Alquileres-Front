@@ -162,8 +162,9 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     this.closeDropdown();
     this.showLogoutModal = false;
-    this.router.navigate(['/inicio']);
     sessionStorage.clear();
+    this.router.navigate(['/inicio']);
+    
   }
 
   cancelLogout() {

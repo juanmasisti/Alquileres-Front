@@ -7,7 +7,13 @@
   >
     <!-- Imagen -->
     <div class="form-group">
-      <input type="file" required accept="image/*" (change)="addImage($event)" class="input-file" />
+      <input
+        type="file"
+        required
+        accept="image/*"
+        (change)="addImage($event)"
+        class="input-file"
+      />
       <!-- <small
         *ngIf="
           maquinariaForm.get('image')?.touched &&
@@ -156,22 +162,27 @@
       </small>
     </div> -->
 
-    <!-- n de inventario -->
+    <!-- N° de inventario -->
     <div class="form-group">
       <input
-        type="number"
+        type="text"
+        pattern="[a-zA-Z0-9]+"
         placeholder="N° de inventario"
         id="inventario"
-        min="1"
         formControlName="inventario"
       />
       <small
         *ngIf="
-          maquinariaForm.get('marca')?.touched &&
-          maquinariaForm.get('marca')?.invalid
+          maquinariaForm.get('inventario')?.touched &&
+          maquinariaForm.get('inventario')?.errors as errors
         "
       >
-        El numero de inventario es requerida.
+        <span *ngIf="errors['required']"
+          >El número de inventario es requerido.</span
+        >
+        <span *ngIf="errors['pattern']"
+          >Solo se permite un codigo alfanumerico,</span
+        >
       </small>
     </div>
 

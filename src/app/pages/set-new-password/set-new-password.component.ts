@@ -11,8 +11,9 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, Route, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { PasswordService } from 'src/app/services/password.service';
 
 @Component({
   selector: 'app-set-new-password',
@@ -30,11 +31,14 @@ export class SetNewPasswordComponent implements OnInit {
   NewPassForm: FormGroup;
   cambioExitoso = false;
   changeError: string | null = null;
+  token: string | null = null;
+  email: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private UserService: UserService
+    private PasswordService: PasswordService,
+    private route: ActivatedRoute
   ) {
     this.NewPassForm = this.fb.group(
       {
@@ -49,6 +53,10 @@ export class SetNewPasswordComponent implements OnInit {
     this.NewPassForm.get('confirm_password')?.valueChanges.subscribe(() => {
       this.NewPassForm.updateValueAndValidity({ onlySelf: true });
     });
+    this.route.queryParams.subscribe((params) => {
+      this.token = params['token'];
+      this.email = params['email'];
+    });
   }
 
   passwordsMatchValidator: ValidatorFn = (
@@ -61,15 +69,21 @@ export class SetNewPasswordComponent implements OnInit {
     return password === confirmPassword ? null : { passwordMismatch: true };
   };
 
-  registrarUsuario() {
+  changePass() {
     if (this.NewPassForm.invalid) {
       this.markAllAsTouched();
       return;
     }
 
     const formData = this.NewPassForm.value;
-
-    this.UserService.RecoverPassword(formData).subscribe({
+    if (!this.token || !this.email) {
+      return;
+    }
+    this.PasswordService.changePassword({
+      token: this.token,
+      email: this.email,
+      newPassword: formData.password,
+    }).subscribe({
       next: () => {
         this.cambioExitoso = true; // mostrar modal
       },
@@ -85,14 +99,5 @@ export class SetNewPasswordComponent implements OnInit {
     Object.values(this.NewPassForm.controls).forEach((control) => {
       control.markAsTouched();
     });
-  }
-
-  changePass() {
-    const formData = this.NewPassForm.value;
-    console.log('Nueva Contraseña', formData);
-
-    alert(
-      'La contraseña se ha cambiado correctamente. Por favor, inicie sesión nuevamente.'
-    );
   }
 }

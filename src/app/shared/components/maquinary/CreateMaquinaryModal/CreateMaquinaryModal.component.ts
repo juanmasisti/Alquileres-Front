@@ -1,6 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   Location,
@@ -22,6 +29,7 @@ export class MaquinariaModalComponent {
   maquinariaForm!: FormGroup;
   loading = false;
   createError: string | null = null;
+  alfa_regex: RegExp = /^[a-zA-Z0-9]+$/;
 
   // Enums expuestos al HTML
   locations = Object.values(Location);
@@ -32,7 +40,7 @@ export class MaquinariaModalComponent {
   selectedFile: File | null = null;
 
   private readonly router = inject(Router);
-  
+
   constructor(
     private fb: FormBuilder,
     private maquinariaService: MaquinariaService,
@@ -41,7 +49,7 @@ export class MaquinariaModalComponent {
 
   ngOnInit(): void {
     this.maquinariaForm = this.fb.group({
-      inventario: ['', Validators.required],
+      inventario: ['', Validators.required, Validators.pattern],
       nombre: ['', Validators.required],
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
@@ -55,26 +63,38 @@ export class MaquinariaModalComponent {
     console.log('Controles del formulario:', this.maquinariaForm.controls);
   }
 
+  private validateRegex(regex: RegExp, errorKey: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null; // No validar si está vacío (dejamos eso a Validators.required)
+      }
+      const isValid = regex.test(control.value);
+      return isValid ? null : { [errorKey]: { value: control.value } };
+    };
+  }
+
   addImage(event: any) {
     if (event.target.files && event.target.files.length) {
       const [file] = event.target.files;
-      this.selectedFile = file
+      this.selectedFile = file;
     }
   }
 
   guardarMaquinaria() {
-
     if (this.maquinariaForm.invalid) {
       this.maquinariaForm.markAllAsTouched();
       return;
     }
 
-    const formData = new FormData()
+    const formData = new FormData();
     const maqData = this.maquinariaForm.value;
 
-    Object.entries(maqData).forEach(([key, value]) => formData.append(key, value as any))
+    Object.entries(maqData).forEach(([key, value]) =>
+      formData.append(key, value as any)
+    );
 
-    if(this.selectedFile) formData.set('image', this.selectedFile, this.selectedFile.name)
+    if (this.selectedFile)
+      formData.set('image', this.selectedFile, this.selectedFile.name);
 
     this.loading = true;
     this.createError = null;
@@ -84,7 +104,7 @@ export class MaquinariaModalComponent {
         console.log('Maquinaria creada con éxito:', response);
         this.maquinariaForm.reset();
         this.selectedFile = null;
-        this.cerrar()
+        this.cerrar();
       },
       error: (err) => {
         console.error('Error al crear maquinaria:', err);

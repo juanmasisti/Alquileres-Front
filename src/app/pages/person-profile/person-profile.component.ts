@@ -26,11 +26,10 @@ import {
     NavbarComponent,
     FooterComponent,
     RouterLink,
-    ManageComponent,
   ],
 })
 export class PersonProfileComponent implements OnInit {
-  personDataForm: FormGroup;
+  personDataForm!: FormGroup;
   minDate!: string;
   maxDate!: string;
   // Expresiones regulares (las mismas que antes)
@@ -44,13 +43,20 @@ export class PersonProfileComponent implements OnInit {
 
   user!: User;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder, private userService: UserService) {}
+
+  ngOnInit() {
     this.userService.getProfile().subscribe((user: User) => {
       this.user = user;
+      console.log('Usuario obtenido:', this.user);
+      this.inicializarFormulario();
     });
+  }
+
+  inicializarFormulario() {
     this.personDataForm = this.fb.group({
-      name: [
-        '',
+      firstName: [
+        { value: this.user.nombre, disabled: true },
         [
           Validators.required,
           Validators.minLength(2),
@@ -59,7 +65,7 @@ export class PersonProfileComponent implements OnInit {
         ],
       ],
       lastName: [
-        '',
+        { value: this.user.apellido, disabled: true },
         [
           Validators.required,
           Validators.minLength(2),
@@ -68,45 +74,8 @@ export class PersonProfileComponent implements OnInit {
         ],
       ],
       email: [
-        '',
-        [
-          Validators.required,
-          Validators.email,
-          this.validateRegex(this.EMAIL_REGEX, 'invalidEmail'),
-        ],
-      ],
-      phone: [
-        '',
-        [
-          Validators.required,
-          this.validateRegex(this.PHONE_REGEX, 'invalidPhone'),
-        ],
-      ],
-      dni: [
-        '',
-        [Validators.required, this.validateRegex(this.DNI_REGEX, 'invalidDni')],
-      ],
-      birthDate: ['', [Validators.required, this.validateAgeRange(18, 80)]],
-    });
-  }
-
-  ngOnInit() {
-    this.personDataForm = this.fb.group({
-      name: [
-        { value: this.user.nombre, disabled: true },
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(50),
-        ],
-      ],
-      lastName: [
-        { value: this.user.apellido, disabled: true },
-        [Validators.required],
-      ],
-      email: [
         { value: this.user.email, disabled: true },
-        [Validators.required],
+        [Validators.required, Validators.email],
       ],
       phone: [
         { value: this.user.telefono, disabled: true },
