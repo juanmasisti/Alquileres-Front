@@ -37,7 +37,9 @@ export class MaquinaryComponent implements OnInit {
     this.loadFilterOptions();
     this.setupSearchDebounce();
     this.fetchMachines();
-    this.isAdmin = sessionStorage.getItem('rol') === 'admin';
+    this.isAdmin =
+      sessionStorage.getItem('rol') === 'admin' ||
+      sessionStorage.getItem('rol') === 'empleado';
   }
 
   fetchMachines(): void {

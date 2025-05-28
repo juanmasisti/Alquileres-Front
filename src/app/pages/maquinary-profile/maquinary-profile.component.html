@@ -17,15 +17,25 @@
   <div *ngIf="maquinaria && !isLoading" class="main__container">
     <div class="info__container">
       <div class="image__container">
-        <img [src]="maquinaria.imagen || 'https://img.interempresas.net/fotos/2791134.jpeg'" [alt]="maquinaria.nombre" />
-        <span class="status-badge" [ngClass]="getStatusClass(maquinaria.state!)">
+        <img
+          [src]="
+            maquinaria.imagen ||
+            'https://img.interempresas.net/fotos/2791134.jpeg'
+          "
+          [alt]="maquinaria.nombre"
+        />
+        <span
+          class="status-badge"
+          [ngClass]="getStatusClass(maquinaria.state!)"
+          *ngIf="isAdmin"
+        >
           {{ maquinaria.state }}
         </span>
       </div>
-      
+
       <div class="description__container">
         <h2 class="title">{{ maquinaria.nombre }}</h2>
-        
+
         <div class="price">
           <h3>${{ maquinaria.precio | number }}</h3>
           <p>por día</p>
@@ -37,17 +47,22 @@
             <p><strong>Estado:</strong> {{ maquinaria.state }}</p>
           </div>
           <div>
-            <p><strong>Política:</strong> {{ maquinaria.politica }} de devolución</p>
+            <p>
+              <strong>Política:</strong> {{ maquinaria.politica }} de devolución
+            </p>
             <p><strong>Sucursal:</strong> {{ maquinaria.sucursal }}</p>
           </div>
         </div>
-        
+
         <h3>ESPECIFICACIONES</h3>
-        
+
         <div class="specifications">
           <p><strong>Marca:</strong> {{ maquinaria.marca }}</p>
           <p><strong>Modelo:</strong> {{ maquinaria.modelo }}</p>
-          <p><strong>Año de adquisición:</strong> {{ maquinaria.anio_adquisicion }}</p>
+          <p>
+            <strong>Año de adquisición:</strong>
+            {{ maquinaria.anio_adquisicion }}
+          </p>
         </div>
 
         <button class="rent-btn" (click)="abrirModal()">
@@ -57,18 +72,20 @@
         <!-- Modal -->
 
         <div *ngIf="mostrarModal" class="modal-overlay">
-        <div class="modal">
-          <label>
-            Fecha:
-            <input type="date" [(ngModel)]="fechaSeleccionada">
-          </label>
+          <div class="modal">
+            <label>
+              Fecha:
+              <input type="date" [(ngModel)]="fechaSeleccionada" />
+            </label>
 
-          <div class="modal-actions">
-            <div *ngIf="mostrarPagar" id="walletBrick_container"></div>
-            <button class="btn cancel" (click)="cerrarModal()">Cancelar</button>
+            <div class="modal-actions">
+              <div *ngIf="mostrarPagar" id="walletBrick_container"></div>
+              <button class="btn cancel" (click)="cerrarModal()">
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>

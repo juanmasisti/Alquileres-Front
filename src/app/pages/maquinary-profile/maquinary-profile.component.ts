@@ -17,19 +17,21 @@ declare var MercadoPago: any;
   templateUrl: './maquinary-profile.component.html',
   styleUrls: ['./maquinary-profile.component.scss'],
   imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule],
-  standalone: true
+  standalone: true,
 })
 export class MaquinaryProfileComponent implements OnInit {
-
   maquinaria: Maquinaria | null = null;
   isLoading = true;
   error: string | null = null;
   mostrarModal = false;
   mostrarPagar = false;
   fechaSeleccionada: any = null;
-  
-  private bricksBuilder: any = null
-  private mp: any = null
+  isAdmin =
+    sessionStorage.getItem('rol') === 'admin' ||
+    sessionStorage.getItem('rol') === 'empleado';
+
+  private bricksBuilder: any = null;
+  private mp: any = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,8 +42,8 @@ export class MaquinaryProfileComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
 
-    this.initMercadoPago()
-    
+    this.initMercadoPago();
+
     if (id) {
       this.loadMaquinaria(+id);
     } else {
@@ -58,22 +60,25 @@ export class MaquinaryProfileComponent implements OnInit {
   private initBricks() {
     this.bricksBuilder = this.mp.bricks();
   }
-  
-  private renderWalletBrick = async (bricksBuilder:any, preferenceId: string) => {
-    await bricksBuilder.create("wallet", "walletBrick_container", {
+
+  private renderWalletBrick = async (
+    bricksBuilder: any,
+    preferenceId: string
+  ) => {
+    await bricksBuilder.create('wallet', 'walletBrick_container', {
       initialization: {
         preferenceId: preferenceId,
         redirectMode: 'self',
       },
       customization: {
-        theme:'default',
+        theme: 'default',
         customStyle: {
           borderRadius: '10px',
           verticalPadding: '10px',
           horizontalPadding: '10px',
           hideValueProp: true,
-        }
-      }
+        },
+      },
     });
   };
 
@@ -87,51 +92,54 @@ export class MaquinaryProfileComponent implements OnInit {
         this.error = 'Error al cargar los detalles de la maquinaria';
         this.isLoading = false;
         console.error(err);
-      }
+      },
     });
   }
 
   abrirModal() {
-    this.mostrarModal = true
-    this.showMercadoPago()
+    this.mostrarModal = true;
+    this.showMercadoPago();
   }
 
   cerrarModal() {
-    this.mostrarModal = false
-    this.mostrarPagar = false
+    this.mostrarModal = false;
+    this.mostrarPagar = false;
   }
 
   showMercadoPago() {
     // Cuando haya seleccionado las fechas, se ejecuta esta funcion
     // si las cambia, se oculta y se vuelve a ejecutar esta funcion
 
-    if(!this.maquinaria) return
+    if (!this.maquinaria) return;
 
     const item: PagoModel = {
       id: this.maquinaria.id,
-      days: 3 // mas facil xq aun no se concreto la reserva, eso iria x otra ruta
-              // Tambien depende si se concreto o no el pago el registro de la reserva
-    }
+      days: 3, // mas facil xq aun no se concreto la reserva, eso iria x otra ruta
+      // Tambien depende si se concreto o no el pago el registro de la reserva
+    };
 
-
-    this.mercadoPagoService.getPreferenceId(item).subscribe(({
+    this.mercadoPagoService.getPreferenceId(item).subscribe({
       next: (res) => {
-        this.initBricks()
-        this.renderWalletBrick(this.bricksBuilder, res.id)
-        this.mostrarPagar = true
+        this.initBricks();
+        this.renderWalletBrick(this.bricksBuilder, res.id);
+        this.mostrarPagar = true;
       },
       error(err) {
-        console.log(err)
+        console.log(err);
       },
-    }));
+    });
   }
 
   getStatusClass(status: string): string {
-    switch(status.toLowerCase()) {
-      case 'disponible': return 'available';
-      case 'alquilada': return 'rented';
-      case 'mantenimiento': return 'maintenance';
-      default: return '';
+    switch (status.toLowerCase()) {
+      case 'disponible':
+        return 'available';
+      case 'alquilada':
+        return 'rented';
+      case 'mantenimiento':
+        return 'maintenance';
+      default:
+        return '';
     }
   }
 }
