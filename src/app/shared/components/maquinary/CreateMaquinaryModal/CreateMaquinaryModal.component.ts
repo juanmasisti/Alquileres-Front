@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import {
 } from '../../../../models/maquinaria.model';
 import { CommonModule } from '@angular/common';
 import { MaquinariaService } from '../../../../services/maquinaria.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-CreateMaquinaryModal',
@@ -30,6 +31,8 @@ export class MaquinariaModalComponent {
   currentYear: number = new Date().getFullYear();
   selectedFile: File | null = null;
 
+  private readonly router = inject(Router);
+  
   constructor(
     private fb: FormBuilder,
     private maquinariaService: MaquinariaService,
@@ -81,6 +84,7 @@ export class MaquinariaModalComponent {
         console.log('Maquinaria creada con éxito:', response);
         this.maquinariaForm.reset();
         this.selectedFile = null;
+        this.cerrar()
       },
       error: (err) => {
         console.error('Error al crear maquinaria:', err);
