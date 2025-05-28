@@ -72,7 +72,7 @@
 
     <div class="add__btn__container" *ngIf="isAdmin">
       <!-- Botón con icono de maquinaria desde font awesome -->
-      <button class="add__btn">
+      <button class="add__btn" (click)="abrirModalMaquinaria()">
         <i class="fas fa-truck-monster"></i> AGREGAR MAQUINARIA
       </button>
     </div>

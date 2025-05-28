@@ -1,0 +1,75 @@
+@use "index" as *;
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 10px;
+  background-color: $section-color;
+}
+
+.form__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  border: 2px solid $primary-color;
+  background-color: $section-color;
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  width: 80%;
+  padding: 0 0 5px;
+  color: $primary-color;
+  border-bottom: $primary-color 1px solid;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  background-color: $section-color;
+}
+
+input,
+select {
+  padding: 0.6rem;
+  border: 1px solid $primary-color;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+select {
+  appearance: none;
+}
+
+select:focus,
+input:focus {
+  outline: 1px solid $primary-color;
+}
+
+small {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+button[type="submit"] {
+  padding: 0.75rem;
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: $secondary-color;
+  scale: 1.02;
+  transition: 0.2s ease-in-out;
+}

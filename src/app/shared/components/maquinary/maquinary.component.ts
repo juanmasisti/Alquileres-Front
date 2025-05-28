@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { Maquinaria, MaquinariaFilters } from 'src/app/models/maquinaria.model';
 import { MaquinariaService } from 'src/app/services/maquinaria.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MaquinariaModalComponent } from './CreateMaquinaryModal/CreateMaquinaryModal.component';
 
 @Component({
   selector: 'app-maquinary',
@@ -31,7 +33,10 @@ export class MaquinaryComponent implements OnInit {
   private searchText$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
-  constructor(private maquinariaService: MaquinariaService) {}
+  constructor(
+    private maquinariaService: MaquinariaService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadFilterOptions();
@@ -113,5 +118,9 @@ export class MaquinaryComponent implements OnInit {
       default:
         return 'fas fa-cogs';
     }
+  }
+
+  abrirModalMaquinaria(): void {
+    this.dialog.open(MaquinariaModalComponent, {});
   }
 }
