@@ -57,7 +57,7 @@ export class IngresarCodigoComponent implements OnInit {
         sessionStorage.setItem('token', response.token);
         sessionStorage.setItem('rol', response.rol);
         sessionStorage.setItem('id', response.id);
-        this.router.navigate(['/inicio']);
+        this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error al iniciar sesión: ', error);
