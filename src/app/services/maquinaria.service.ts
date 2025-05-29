@@ -120,10 +120,7 @@ export class MaquinariaService {
     return this.http.get<{disponible: boolean}>(`${this.baseUrl}/${id}/disponibilidad`, { params });
   }
 
-  // actualizarEstado(id: number, estado: string): Observable<any> {
-  //   return this.http.patch(`${this.baseUrl}/${id}/estado`, { estado });
-  // }
-    actualizarEstado(id: number, estado: string): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${id}/esconder`, {estado});
+  actualizarEstado(id: number, estado: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${id}/estado`, { estado });
   }
 }
