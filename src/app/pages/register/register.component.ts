@@ -180,6 +180,8 @@ export class RegisterComponent implements OnInit {
     }
 
     const formData = this.registerForm.value;
+    
+    this.registerError = ''
 
     this.registerService.register(formData).subscribe({
       next: () => {
