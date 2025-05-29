@@ -148,6 +148,17 @@ export class MaquinaryProfileComponent implements OnInit {
     this.maquinariaService.getFechasOcupadas(id).subscribe({
       next: (res: any) => {
         this.fechasOcupadas = res;
+
+        this.fechasOcupadas.forEach(({ fecha_fin, fecha_inicio }) => {
+          const inicio_formated = DateTime.fromISO(fecha_inicio);
+          const fin_formated = DateTime.fromISO(fecha_fin)
+          console.log(
+            `---- Fecha ocupada ----\n`,
+            `Inicio: ${inicio_formated.day}-${inicio_formated.month}-${inicio_formated.year}\n`,
+            `Fin: ${fin_formated.day}-${fin_formated.month}-${fin_formated.year}\n`,
+          ) 
+        })
+
       },
       error: (err: any) => {
         console.error('Error cargando fechas ocupadas', err);
@@ -167,7 +178,7 @@ export class MaquinaryProfileComponent implements OnInit {
 
       const msInDay = 1000 * 60 * 60 * 24;
       const diffInMs = finish.getTime() - start.getTime();
-      const diffInDays = Math.floor(diffInMs / msInDay) + 1;
+      const diffInDays = Math.ceil((finish.getTime() - start.getTime()) / msInDay);
 
       if (diffInDays <= 0) {
         this.diasSeleccionados = 0;
@@ -197,26 +208,19 @@ export class MaquinaryProfileComponent implements OnInit {
   isDateEnabled = (date: Date | null): boolean => {
     if (!date) return false;
 
-    const format = DateTime.fromISO(date.toString())
+    const formatDate = DateTime.fromISO(date.toString())
+    let ocupada = false
 
-    // Si la fecha está dentro de un rango ocupado, devolver false
-
-    const isOcupada = this.fechasOcupadas.some(({ fecha_inicio, fecha_fin }) => {
-      const inicio_formated = DateTime.fromISO(fecha_inicio);
-      const fin_formated = DateTime.fromISO(fecha_fin)
-
-      const start_diff = inicio_formated.diff(format, 'days')
-      const end_diff = fin_formated.diff(format, 'days')
-
-      if (inicio_formated.month == format.month && fin_formated.month == format.month &&
-        inicio_formated.year == format.year && fin_formated.year == format.year
-      ) {
-        return start_diff.days < 0 && end_diff.days < 0;
+    for (const { fecha_inicio, fecha_fin } of this.fechasOcupadas) {
+      const inicio = DateTime.fromISO(fecha_inicio).startOf('day');
+      const fin = DateTime.fromISO(fecha_fin).startOf('day');
+      if (formatDate >= inicio && formatDate <= fin) {
+        ocupada = true;
+        break;
       }
-      return false;
-    });
+    }
 
-    return !isOcupada;
+    return !ocupada;
   };
 
   abrirModal() {
