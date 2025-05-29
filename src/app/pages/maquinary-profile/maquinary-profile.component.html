@@ -38,8 +38,16 @@
       </div>
 
       <div class="description__container">
-        <h2 class="title">{{ maquinaria.nombre }}</h2>
-
+        <h2 class="title">
+          {{ maquinaria.nombre }}
+          <ng-container *ngIf="isAdmin">
+            <select [ngModel]="maquinaria.state" (ngModelChange)="onStateChange($event)" class="state-selector">
+              <option value="Disponible">Disponible</option>
+              <option value="Mantenimiento">Mantenimiento</option>
+              <option value="Eliminado">Eliminado</option>
+            </select>
+          </ng-container>
+        </h2>
         <div class="price">
           <h3>${{ maquinaria.precio | number }}</h3>
           <p>por día</p>
@@ -99,7 +107,7 @@
                 placeholder="Hasta"
                 [(ngModel)]="endDate"
                 (ngModelChange)="onDateChanged()"
-                name="endDate"
+                name="endDate"     
             />
             </mat-date-range-input>
 

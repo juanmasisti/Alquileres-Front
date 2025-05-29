@@ -9,6 +9,9 @@ import { MatCalendarCellClassFunction, MatDatepickerModule } from '@angular/mate
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { LuxonDateModule, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
 
 import { DateTime } from 'luxon';
@@ -19,7 +22,8 @@ import { MaquinariaService } from 'src/app/services/maquinaria.service';
 import { MercadoPagoService } from 'src/app/services/mercadoPago.service';
 import { PagoModel } from 'src/app/models/pago.model';
 import { environment } from 'src/environments/environment';
-import { Maquinaria } from 'src/app/models/maquinaria.model';
+import { Maquinaria, MaquinariaState } from 'src/app/models/maquinaria.model';
+import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 
 declare var MercadoPago: any;
 
@@ -75,7 +79,9 @@ export class MaquinaryProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private maquinariaService: MaquinariaService,
-    private mercadoPagoService: MercadoPagoService
+    private mercadoPagoService: MercadoPagoService,
+    private dialog: MatDialog
+    , private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -233,6 +239,37 @@ formatearFecha(date: Date | null): string {
       },
     });
   }
+
+onStateChange(nuevoEstado: MaquinariaState) {
+  if (this.maquinaria!.state === nuevoEstado) return;
+
+  const dialogRef = this.dialog.open(ConfirmModalComponent, {
+    width: '400px',
+    data: {
+      title: 'Confirmar cambio de estado',
+      description: `¿Estás seguro de cambiar el estado a "${nuevoEstado}"?`,
+      confirmText: 'Sí, cambiar',
+      cancelText: 'Cancelar'
+    }
+  });
+
+  dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+    if (confirmado) {
+      this.maquinariaService.actualizarEstado(this.maquinaria!.id, nuevoEstado).subscribe({
+        next: () => {
+          this.maquinaria!.state = nuevoEstado; // ✅ Solo lo cambiamos si se confirma
+          this.snackBar.open('Estado actualizado correctamente.', 'Cerrar', { duration: 3000 });
+        },
+        error: (err) => {
+          console.error('Error al actualizar el estado:', err);
+          this.snackBar.open('Ocurrió un error al actualizar el estado.', 'Cerrar', { duration: 3000 });
+        }
+      });
+    }
+  });
+}
+
+
 
 getStatusClass(status: string): string {
     switch(status.toLowerCase()) {
