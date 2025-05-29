@@ -16,3 +16,7 @@
 body {
     background-color: $background-color;
 }
+
+.cdk-overlay-container {
+  z-index: 3000 !important; // o un valor superior al z-index de tu modal
+}

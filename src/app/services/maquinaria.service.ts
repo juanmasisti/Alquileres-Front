@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Maquinaria, MaquinariaFilters } from '../models/maquinaria.model';
+import { Maquinaria, MaquinariaFilters, PeriodoOcupadoResponse } from '../models/maquinaria.model';
 
 @Injectable({ providedIn: 'root' })
 export class MaquinariaService {
@@ -104,5 +104,19 @@ export class MaquinariaService {
    */
   getEstados(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/estados`);
+  }
+
+  // Obtener todas las fechas ocupadas
+  getFechasOcupadas(id: number): Observable<PeriodoOcupadoResponse[]> {
+  return this.http.get<PeriodoOcupadoResponse[]>(`${this.baseUrl}/${id}/fechasOcupadas`);
+}
+
+  // Verificar disponibilidad en un rango específico
+  getDisponibilidad(id: number, fechaInicio: string, fechaFin: string): Observable<{disponible: boolean}> {
+    const params = new HttpParams()
+      .set('fecha_inicio', fechaInicio)
+      .set('fecha_fin', fechaFin);
+
+    return this.http.get<{disponible: boolean}>(`${this.baseUrl}/${id}/disponibilidad`, { params });
   }
 }

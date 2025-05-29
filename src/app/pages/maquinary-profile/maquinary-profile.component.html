@@ -54,21 +54,56 @@
           <i class="fas fa-calendar-check"></i> Reservar ahora
         </button>
 
-        <!-- Modal -->
-
-        <div *ngIf="mostrarModal" class="modal-overlay">
+      <!-- Modal -->
+      <div *ngIf="mostrarModal" class="modal-overlay">
         <div class="modal">
-          <label>
-            Fecha:
-            <input type="date" [(ngModel)]="fechaSeleccionada">
-          </label>
+          <label for="dateRangePicker">Seleccioná el rango de fechas:</label>
 
-          <div class="modal-actions">
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Rango de fechas</mat-label>
+           <mat-date-range-input 
+              [rangePicker]="picker"
+              [min]="minDate"
+              [dateFilter]="isDateEnabled"
+              name="rangoFechas">
+              
+              <input
+                matStartDate
+                placeholder="Desde"
+                [(ngModel)]="beginDate"
+                (ngModelChange)="onDateChanged()"
+                name="beginDate"
+            />
+
+              <input
+                matEndDate
+                placeholder="Hasta"
+                [(ngModel)]="endDate"
+                (ngModelChange)="onDateChanged()"
+                name="endDate"
+            />
+            </mat-date-range-input>
+
+
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker [dateClass]="dateClass"></mat-date-range-picker>
+          </mat-form-field>
+
+          <!-- Mostrar cantidad de días y precio -->
+          <div *ngIf="beginDate && endDate" class="summary">
+            <p><strong>Desde:</strong> {{ beginDate | date: 'shortDate' }}</p>
+            <p><strong>Hasta:</strong> {{ endDate | date: 'shortDate' }}</p>
+            <p><strong>Días seleccionados:</strong> {{ diasSeleccionados }}</p>
+            <p><strong>Precio total:</strong> ${{ precioTotal }}</p>
+          </div>
+
+          <div class="modal-actions mt-3">
             <div *ngIf="mostrarPagar" id="walletBrick_container"></div>
             <button class="btn cancel" (click)="cerrarModal()">Cancelar</button>
           </div>
         </div>
       </div>
+      
       </div>
     </div>
   </div>

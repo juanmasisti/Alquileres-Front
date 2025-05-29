@@ -1,14 +1,25 @@
+// maquinary-profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MaquinariaService } from '../../services/maquinaria.service';
-import { Maquinaria } from '../../models/maquinaria.model';
-import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
-import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { environment } from 'src/environments/environment';
+
+// Angular Material imports para datepicker + Luxon adapter
+import { MatCalendarCellClassFunction, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { LuxonDateModule, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
+
+import { DateTime } from 'luxon';
+
+import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
+import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
+import { MaquinariaService } from 'src/app/services/maquinaria.service';
 import { MercadoPagoService } from 'src/app/services/mercadoPago.service';
 import { PagoModel } from 'src/app/models/pago.model';
+import { environment } from 'src/environments/environment';
+import { Maquinaria } from 'src/app/models/maquinaria.model';
 
 declare var MercadoPago: any;
 
@@ -16,8 +27,18 @@ declare var MercadoPago: any;
   selector: 'app-maquinary-profile',
   templateUrl: './maquinary-profile.component.html',
   styleUrls: ['./maquinary-profile.component.scss'],
-  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule],
-  standalone: true
+  standalone: true,
+  imports: [
+    NavbarComponent,
+    FooterComponent,
+    CommonModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    LuxonDateModule,
+  ],
 })
 export class MaquinaryProfileComponent implements OnInit {
 
@@ -26,10 +47,27 @@ export class MaquinaryProfileComponent implements OnInit {
   error: string | null = null;
   mostrarModal = false;
   mostrarPagar = false;
-  fechaSeleccionada: any = null;
-  
-  private bricksBuilder: any = null
-  private mp: any = null
+  diasSeleccionados: number = 0;
+  precioTotal: number = 0;
+  beginDate?: Date;
+  endDate?: Date;
+
+  dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
+    const startDate = new Date(Date.now());
+    const endDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 días a partir de hoy
+
+    if (view === 'month') {
+      return cellDate >= startDate && cellDate <= endDate ? 'custom-date-class' : '';
+    }
+    return '';
+  }
+
+  fechasOcupadas: { fecha_inicio: string, fecha_fin: string }[] = [];
+
+  minDate = new Date(); // Fecha mínima para el datepicker (hoy)
+
+  private bricksBuilder: any = null;
+  private mp: any = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,9 +77,8 @@ export class MaquinaryProfileComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+    this.initMercadoPago();
 
-    this.initMercadoPago()
-    
     if (id) {
       this.loadMaquinaria(+id);
     } else {
@@ -58,24 +95,24 @@ export class MaquinaryProfileComponent implements OnInit {
   private initBricks() {
     this.bricksBuilder = this.mp.bricks();
   }
-  
-  private renderWalletBrick = async (bricksBuilder:any, preferenceId: string) => {
-    await bricksBuilder.create("wallet", "walletBrick_container", {
+
+  private async renderWalletBrick(preferenceId: string) {
+    await this.bricksBuilder.create('wallet', 'walletBrick_container', {
       initialization: {
-        preferenceId: preferenceId,
+        preferenceId,
         redirectMode: 'self',
       },
       customization: {
-        theme:'default',
+        theme: 'default',
         customStyle: {
           borderRadius: '10px',
           verticalPadding: '10px',
           horizontalPadding: '10px',
           hideValueProp: true,
-        }
-      }
+        },
+      },
     });
-  };
+  }
 
   private loadMaquinaria(id: number): void {
     this.maquinariaService.getById(id).subscribe({
@@ -87,51 +124,115 @@ export class MaquinaryProfileComponent implements OnInit {
         this.error = 'Error al cargar los detalles de la maquinaria';
         this.isLoading = false;
         console.error(err);
-      }
+      },
+    });
+
+    this.maquinariaService.getFechasOcupadas(id).subscribe({
+      next: (res: any) => {
+        this.fechasOcupadas = res;
+      },
+      error: (err: any) => {
+        console.error('Error cargando fechas ocupadas', err);
+      },
     });
   }
 
+  // Cuando el usuario selecciona rango en el datepicker
+ onDateChanged(): void {
+  if (this.beginDate && this.endDate) {
+    // Normalizamos las fechas eliminando la parte de la hora
+    const start = new Date(this.beginDate);
+    const finish = new Date(this.endDate);
+
+    start.setHours(0, 0, 0, 0);
+    finish.setHours(0, 0, 0, 0);
+
+    const msInDay = 1000 * 60 * 60 * 24;
+    const diffInMs = finish.getTime() - start.getTime();
+    const diffInDays = Math.floor(diffInMs / msInDay) + 1;
+
+    if (diffInDays <= 0) {
+      this.diasSeleccionados = 0;
+      this.precioTotal = 0;
+      this.mostrarPagar = false;
+      return;
+    }
+
+    this.diasSeleccionados = diffInDays;
+    const precioDia = this.maquinaria?.precio ?? 0;
+    this.precioTotal = this.diasSeleccionados * precioDia;
+
+    this.mostrarPagar = false;
+    this.showMercadoPago(this.diasSeleccionados);
+
+    console.log('Desde:', start);
+    console.log('Hasta:', finish);
+    console.log('Días:', this.diasSeleccionados);
+    console.log('Precio:', this.precioTotal);
+  } else {
+    this.diasSeleccionados = 0;
+    this.precioTotal = 0;
+    this.mostrarPagar = false;
+  }
+}
+
+
+
+isDateEnabled = (date: Date | null): boolean => {
+  if (!date) return false;
+
+  const luxonDate = DateTime.fromJSDate(date).startOf('day');
+
+  // Si la fecha está dentro de un rango ocupado, devolver false
+  const isOcupada = this.fechasOcupadas.some(({ fecha_inicio, fecha_fin }) => {
+    const inicio = DateTime.fromISO(fecha_inicio).startOf('day');
+    const fin = DateTime.fromISO(fecha_fin).startOf('day');
+    return luxonDate >= inicio && luxonDate <= fin;
+  });
+
+  return !isOcupada;
+};
+
+formatearFecha(date: Date | null): string {
+  return date ? DateTime.fromJSDate(date).toFormat('dd/MM/yyyy') : '';
+}
+
+
   abrirModal() {
-    this.mostrarModal = true
-    this.showMercadoPago()
+    this.mostrarModal = true;
   }
 
   cerrarModal() {
-    this.mostrarModal = false
-    this.mostrarPagar = false
+    this.mostrarModal = false;
+    this.mostrarPagar = false;
   }
 
-  showMercadoPago() {
-    // Cuando haya seleccionado las fechas, se ejecuta esta funcion
-    // si las cambia, se oculta y se vuelve a ejecutar esta funcion
-
-    if(!this.maquinaria) return
+  showMercadoPago(dias: number) {
+    if (!this.maquinaria || !dias) return;
 
     const item: PagoModel = {
       id: this.maquinaria.id,
-      days: 3 // mas facil xq aun no se concreto la reserva, eso iria x otra ruta
-              // Tambien depende si se concreto o no el pago el registro de la reserva
-    }
+      days: dias,
+    };
 
-
-    this.mercadoPagoService.getPreferenceId(item).subscribe(({
+    this.mercadoPagoService.getPreferenceId(item).subscribe({
       next: (res) => {
-        this.initBricks()
-        this.renderWalletBrick(this.bricksBuilder, res.id)
-        this.mostrarPagar = true
+        this.initBricks();
+        this.renderWalletBrick(res.id);
+        this.mostrarPagar = true;
       },
-      error(err) {
-        console.log(err)
+      error: (err) => {
+        console.error('Error con MercadoPago', err);
       },
-    }));
+    });
   }
 
-  getStatusClass(status: string): string {
+getStatusClass(status: string): string {
     switch(status.toLowerCase()) {
       case 'disponible': return 'available';
       case 'alquilada': return 'rented';
       case 'mantenimiento': return 'maintenance';
       default: return '';
     }
-  }
+  }    
 }

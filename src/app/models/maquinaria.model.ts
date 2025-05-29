@@ -51,3 +51,8 @@ export interface MaquinariaFilters {
   politica?: ReturnPolicy | '';
   state?: MaquinariaState | '';
 }
+
+export interface PeriodoOcupadoResponse {
+  fecha_inicio: string;
+  fecha_fin: string;
+}
