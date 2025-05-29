@@ -214,10 +214,10 @@ formatearFecha(date: Date | null): string {
   }
 
   cerrarModal() {
-    this.mostrarModal = false;
-    this.mostrarPagar = false;
-    this.mostrarModal = false;
-    this.mostrarPagar = false;
+    this.mostrarModal = this.mostrarPagar = false;
+    this.diasSeleccionados = 0;
+    this.precioTotal = 0;
+    this.beginDate = this.endDate = undefined
   }
 
   showMercadoPago(dias: number) {
