@@ -24,6 +24,7 @@ import { PagoModel } from 'src/app/models/pago.model';
 import { environment } from 'src/environments/environment';
 import { Maquinaria, MaquinariaState } from 'src/app/models/maquinaria.model';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 declare var MercadoPago: any;
 
@@ -78,11 +79,16 @@ export class MaquinaryProfileComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private authService: AuthService,
     private maquinariaService: MaquinariaService,
     private mercadoPagoService: MercadoPagoService,
     private dialog: MatDialog
     , private snackBar: MatSnackBar
   ) {}
+
+  hasToken() {
+    return !!this.authService.getToken()
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');

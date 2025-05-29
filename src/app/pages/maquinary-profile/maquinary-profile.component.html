@@ -77,7 +77,7 @@
           </p>
         </div>
 
-        <button class="rent-btn" (click)="abrirModal()">
+        <button class="rent-btn" *ngIf="hasToken()" (click)="abrirModal()">
           <i class="fas fa-calendar-check"></i> Reservar ahora
         </button>
 
