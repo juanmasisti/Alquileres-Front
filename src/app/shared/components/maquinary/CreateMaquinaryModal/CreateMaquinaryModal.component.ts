@@ -49,7 +49,7 @@ export class MaquinariaModalComponent {
 
   ngOnInit(): void {
     this.maquinariaForm = this.fb.group({
-      inventario: ['', Validators.required, Validators.pattern],
+      inventario: ['', [Validators.required, Validators.pattern(this.alfa_regex)]],
       nombre: ['', Validators.required],
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
