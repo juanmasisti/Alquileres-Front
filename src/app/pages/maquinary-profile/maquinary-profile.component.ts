@@ -197,13 +197,23 @@ export class MaquinaryProfileComponent implements OnInit {
   isDateEnabled = (date: Date | null): boolean => {
     if (!date) return false;
 
-    const luxonDate = DateTime.fromJSDate(date).startOf('day');
+    const format = DateTime.fromISO(date.toString())
 
     // Si la fecha está dentro de un rango ocupado, devolver false
+
     const isOcupada = this.fechasOcupadas.some(({ fecha_inicio, fecha_fin }) => {
-      const inicio = DateTime.fromISO(fecha_inicio).startOf('day');
-      const fin = DateTime.fromISO(fecha_fin).startOf('day');
-      return luxonDate >= inicio && luxonDate <= fin;
+      const inicio_formated = DateTime.fromISO(fecha_inicio);
+      const fin_formated = DateTime.fromISO(fecha_fin)
+
+      const start_diff = inicio_formated.diff(format, 'days')
+      const end_diff = fin_formated.diff(format, 'days')
+
+      if (inicio_formated.month == format.month && fin_formated.month == format.month &&
+        inicio_formated.year == format.year && fin_formated.year == format.year
+      ) {
+        return start_diff.days < 0 && end_diff.days < 0;
+      }
+      return false;
     });
 
     return !isOcupada;
