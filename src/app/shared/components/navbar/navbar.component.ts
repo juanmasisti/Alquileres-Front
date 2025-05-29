@@ -39,7 +39,7 @@ export class NavbarComponent implements OnInit {
         this.name = user.nombre;
       },
       error: (err) => {
-        console.error('Error al obtener perfil del usuario:', err);
+        console.log('Error al obtener perfil del usuario:', err);
       },
     });
     this.checkViewport();
