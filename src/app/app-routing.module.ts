@@ -10,7 +10,7 @@ import { PasswordRecoveryComponent } from './pages/password-recovery/password-re
 import { SetNewPasswordComponent } from './pages/set-new-password/set-new-password.component';
 import { TestComponent } from './pages/testear/testear.component';
 import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo.component';
-import { LoginComponent } from './pages/Login/Login.component';
+import { LoginComponent } from './pages/login/Login.component';
 
 export const routes: Routes = [
   {
@@ -82,7 +82,7 @@ export const routes: Routes = [
     component: PasswordRecoveryComponent,
   },
   {
-    path: 'recuperar-clave/token',
+    path: 'recovery',
     data: {
       title: 'Recuperar clave',
     },

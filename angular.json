@@ -31,7 +31,11 @@
               "src/assets"
             ],
             "styles": [
+<<<<<<< HEAD
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+=======
+              "@angular/material/prebuilt-themes/cyan-orange.css",
+>>>>>>> b4785d2c77517a9c678bb6e83fcfbfdbd7017460
               "src/styles.scss"
             ],
             "scripts": [],
@@ -111,6 +115,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/cyan-orange.css",
               "src/styles.scss"
             ],
             "scripts": [],

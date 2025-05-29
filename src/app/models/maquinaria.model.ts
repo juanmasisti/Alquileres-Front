@@ -26,7 +26,7 @@ export enum Location {
   Tandil = 'Tandil',
   Ensenada = 'Ensenada',
   BahiaBlanca = 'Bahía Blanca'
-}
+} 
 
 // Modelo principal
 export interface Maquinaria {

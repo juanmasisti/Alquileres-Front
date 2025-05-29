@@ -17,8 +17,11 @@
     "@angular/core": "^19.2.10",
     "@angular/forms": "^19.2.10",
     "@angular/material": "^19.2.17",
+<<<<<<< HEAD
     "@angular/material-luxon-adapter": "^19.2.17",
     "@angular/material-moment-adapter": "^19.2.17",
+=======
+>>>>>>> b4785d2c77517a9c678bb6e83fcfbfdbd7017460
     "@angular/platform-browser": "^19.2.10",
     "@angular/platform-browser-dynamic": "^19.2.10",
     "@angular/router": "^19.2.10",

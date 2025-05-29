@@ -39,7 +39,7 @@ export class NavbarComponent implements OnInit {
         this.name = user.nombre;
       },
       error: (err) => {
-        console.error('Error al obtener perfil del usuario:', err);
+        console.log('Error al obtener perfil del usuario:', err);
       },
     });
     this.checkViewport();
@@ -126,10 +126,9 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  
   private scrollOnNavigationEnd(fragment: string): void {
     const sub = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
         this.scrollToFragment(fragment);
         sub.unsubscribe(); // evitamos múltiples suscripciones
@@ -163,7 +162,9 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     this.closeDropdown();
     this.showLogoutModal = false;
+    sessionStorage.clear();
     this.router.navigate(['/inicio']);
+    
   }
 
   cancelLogout() {

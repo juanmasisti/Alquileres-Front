@@ -26,11 +26,10 @@ import {
     NavbarComponent,
     FooterComponent,
     RouterLink,
-    ManageComponent,
   ],
 })
 export class PersonProfileComponent implements OnInit {
-  personDataForm: FormGroup;
+  personDataForm!: FormGroup;
   minDate!: string;
   maxDate!: string;
   // Expresiones regulares (las mismas que antes)
@@ -42,15 +41,23 @@ export class PersonProfileComponent implements OnInit {
   private readonly DNI_REGEX = /^\d{7,8}$/;
   private readonly PHONE_REGEX = /^\+54\s\d{2,4}\s\d{6,8}$/;
 
+  loading: boolean = false
   user!: User;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder, private userService: UserService) {}
+
+  ngOnInit() {
     this.userService.getProfile().subscribe((user: User) => {
       this.user = user;
+      console.log('Usuario obtenido:', this.user);
+      this.inicializarFormulario();
     });
+  }
+
+  inicializarFormulario() {
     this.personDataForm = this.fb.group({
-      name: [
-        '',
+      nombre: [
+        { value: this.user.nombre, disabled: true },
         [
           Validators.required,
           Validators.minLength(2),
@@ -58,8 +65,8 @@ export class PersonProfileComponent implements OnInit {
           this.validateRegex(this.NAME_REGEX, 'invalidName'),
         ],
       ],
-      lastName: [
-        '',
+      apellido: [
+        { value: this.user.apellido, disabled: true },
         [
           Validators.required,
           Validators.minLength(2),
@@ -68,52 +75,15 @@ export class PersonProfileComponent implements OnInit {
         ],
       ],
       email: [
-        '',
-        [
-          Validators.required,
-          Validators.email,
-          this.validateRegex(this.EMAIL_REGEX, 'invalidEmail'),
-        ],
-      ],
-      phone: [
-        '',
-        [
-          Validators.required,
-          this.validateRegex(this.PHONE_REGEX, 'invalidPhone'),
-        ],
-      ],
-      dni: [
-        '',
-        [Validators.required, this.validateRegex(this.DNI_REGEX, 'invalidDni')],
-      ],
-      birthDate: ['', [Validators.required, this.validateAgeRange(18, 80)]],
-    });
-  }
-
-  ngOnInit() {
-    this.personDataForm = this.fb.group({
-      name: [
-        { value: this.user.nombre, disabled: true },
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(50),
-        ],
-      ],
-      lastName: [
-        { value: this.user.apellido, disabled: true },
-        [Validators.required],
-      ],
-      email: [
         { value: this.user.email, disabled: true },
-        [Validators.required],
+        [Validators.required, Validators.email],
       ],
-      phone: [
+      telefono: [
         { value: this.user.telefono, disabled: true },
         [Validators.required],
       ],
       dni: [{ value: this.user.dni, disabled: true }, [Validators.required]],
-      birthDate: [
+      nacimiento: [
         { value: this.user.nacimiento, disabled: true },
         [Validators.required],
       ],
@@ -178,9 +148,43 @@ export class PersonProfileComponent implements OnInit {
   editarDatos() {
     if (this.isEditing) {
       if (this.personDataForm.valid) {
-        console.log(this.personDataForm.value);
+
+        const newUser: Partial<User> = {}
+        const dataEntries = Object.entries(this.personDataForm.value)
+        let hasChanged = false
+        
+        for (const [key, value] of dataEntries) {
+          if ((this.user as any)[key] != value) {
+            hasChanged = true
+            break
+          }
+        }
+
+        if (!hasChanged) {
+          this.isEditing = false;
+          this.loading = false
+          return
+        }
+
+        dataEntries.forEach(([key, value]) => (newUser as any)[key] = value)
+
         this.personDataForm.disable();
         this.isEditing = false;
+        this.loading = true;
+        
+        this.userService.updateProfile(newUser).subscribe({
+          next: () => {
+            this.loading = false;
+          },
+          error: (err) => {
+            dataEntries.forEach(([key, value]) => {
+              const obj = this.personDataForm.get(key)
+              console.log((this.user as any)[key])
+              if (obj) obj.setValue((this.user as any)[key])
+            })
+            this.loading = false
+          },
+        })
       } else {
         this.personDataForm.markAllAsTouched();
       }

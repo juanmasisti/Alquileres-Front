@@ -1,0 +1,199 @@
+<div class="form__container">
+  <h1>GUARDAR NUEVA MAQUINARIA</h1>
+  <form
+    [formGroup]="maquinariaForm"
+    (ngSubmit)="guardarMaquinaria()"
+    class="form-grid"
+  >
+    <!-- Imagen -->
+    <div class="form-group">
+      <input
+        type="file"
+        required
+        accept="image/*"
+        (change)="addImage($event)"
+        class="input-file"
+      />
+      <!-- <small
+        *ngIf="
+          maquinariaForm.get('image')?.touched &&
+          maquinariaForm.get('image')?.invalid
+        "
+      >
+        El nombre es requerido.
+      </small> -->
+    </div>
+    <!-- Nombre -->
+    <div class="form-group">
+      <input type="text" placeholder="Nombre" formControlName="nombre" />
+      <small
+        *ngIf="
+          maquinariaForm.get('nombre')?.touched &&
+          maquinariaForm.get('nombre')?.invalid
+        "
+      >
+        El nombre es requerido.
+      </small>
+    </div>
+    <!-- Marca -->
+    <div class="form-group">
+      <input type="text" placeholder="Marca" formControlName="marca" />
+      <small
+        *ngIf="
+          maquinariaForm.get('marca')?.touched &&
+          maquinariaForm.get('marca')?.invalid
+        "
+      >
+        La marca es requerida.
+      </small>
+    </div>
+    <!-- Modelo -->
+    <div class="form-group">
+      <input type="text" placeholder="Modelo" formControlName="modelo" />
+      <small
+        *ngIf="
+          maquinariaForm.get('modelo')?.touched &&
+          maquinariaForm.get('modelo')?.invalid
+        "
+      >
+        El modelo es requerido.
+      </small>
+    </div>
+    <!-- Año de adquisición -->
+    <div class="form-group">
+      <input
+        type="number"
+        placeholder="Año de adquisición"
+        formControlName="anio_adquisicion"
+        min="1900"
+        max="{{ currentYear }}"
+        [maxLength]="4"
+        (blur)="corregirAnio()"
+      />
+      <small
+        *ngIf="
+          maquinariaForm.get('anio_adquisicion')?.touched &&
+          maquinariaForm.get('anio_adquisicion')?.invalid
+        "
+      >
+        El año de adquisición es requerido.
+      </small>
+    </div>
+    <!-- Precio por día -->
+    <div class="form-group">
+      <input
+        type="number"
+        placeholder="Precio por día"
+        formControlName="precio"
+      />
+      <small
+        *ngIf="
+          maquinariaForm.get('precio')?.touched &&
+          maquinariaForm.get('precio')?.errors
+        "
+      >
+        @if (maquinariaForm.get('precio')?.errors?.['required']) { El precio es
+        requerido. } @if (maquinariaForm.get('precio')?.errors?.['min']) { El
+        precio debe ser mayor a 0. }
+      </small>
+    </div>
+    <!-- Sucursal -->
+    <div class="form-group">
+      <select formControlName="sucursal">
+        <option value="" disabled selected>Seleccionar sucursal</option>
+        <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+      </select>
+      <small
+        *ngIf="
+          maquinariaForm.get('sucursal')?.touched &&
+          maquinariaForm.get('sucursal')?.invalid
+        "
+      >
+        La sucursal es requerida.
+      </small>
+    </div>
+    <!-- Política -->
+    <div class="form-group">
+      <select formControlName="politica">
+        <option value="" disabled selected>
+          Seleccionar política de devolución
+        </option>
+        <option *ngFor="let pol of policies" [value]="pol">{{ pol }}</option>
+      </select>
+      <small
+        *ngIf="
+          maquinariaForm.get('politica')?.touched &&
+          maquinariaForm.get('politica')?.invalid
+        "
+      >
+        La política de devolución es requerida.
+      </small>
+    </div>
+    <div class="form-group">
+      <!-- Categoría -->
+      <select formControlName="categoria">
+        <option value="" disabled selected>Seleccionar categoría</option>
+        <option *ngFor="let cat of categories" [value]="cat">
+          {{ cat }}
+        </option>
+      </select>
+      <small
+        *ngIf="
+          maquinariaForm.get('categoria')?.touched &&
+          maquinariaForm.get('categoria')?.invalid
+        "
+      >
+        La categoría es requerida.
+      </small>
+    </div>
+    <!-- Estado -->
+    <!-- <div class="form-group">
+      <select formControlName="state">
+        <option value="" disabled selected>Seleccionar estado</option>
+        <option *ngFor="let st of states" [value]="st">{{ st }}</option>
+      </select>
+      <small
+        *ngIf="
+          maquinariaForm.get('state')?.touched &&
+          maquinariaForm.get('state')?.invalid
+        "
+      >
+        El estado es requerido.
+      </small>
+    </div> -->
+
+    <!-- N° de inventario -->
+    <div class="form-group">
+      <input
+        type="text"
+        pattern="[a-zA-Z0-9]+"
+        placeholder="N° de inventario"
+        id="inventario"
+        formControlName="inventario"
+      />
+      <small
+        *ngIf="
+          maquinariaForm.get('inventario')?.touched &&
+          maquinariaForm.get('inventario')?.errors as errors
+        "
+      >
+        <span *ngIf="errors['required']"
+          >El número de inventario es requerido.</span
+        >
+        <span *ngIf="errors['pattern']"
+          >Solo se permite un codigo alfanumerico,</span
+        >
+      </small>
+    </div>
+
+    <button type="submit" [disabled]="loading || maquinariaForm.invalid">
+      <span *ngIf="!loading">CREAR MAQUINARIA</span>
+      <span *ngIf="loading"
+        ><i class="fas fa-spinner fa-spin"></i> Cargando...</span
+      >
+    </button>
+  </form>
+  <div *ngIf="createError" class="form-group">
+    <small style="color: red">{{ createError }}</small>
+  </div>
+</div>

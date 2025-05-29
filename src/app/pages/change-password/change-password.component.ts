@@ -15,6 +15,7 @@ import { PasswordService } from 'src/app/services/password.service';
 import { UserService } from 'src/app/services/user.service';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-change-password',
@@ -30,8 +31,15 @@ import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.compone
 })
 export class ChangePasswordComponent implements OnInit {
   changePassForm: FormGroup;
+  cambioExitoso = false;
+  isAuthenticated = sessionStorage.getItem('token') !== null;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private passwordService: PasswordService, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private passwordService: PasswordService,
+    private authService: AuthService
+  ) {
     this.changePassForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
@@ -66,19 +74,25 @@ export class ChangePasswordComponent implements OnInit {
     // const serialized = JSON.stringify(formData);
     // console.log('JSON serializado:', serialized);
 
-    
     this.passwordService.changePassword(formData).subscribe({
       next: (response) => {
         console.log('Respuesta del servidor:', response);
-        // Aquí puedes manejar la respuesta del servidor
+        this.cambioExitoso = true;
       },
       error: (error) => {
         console.error('Error al cambiar la contraseña:', error);
         // Aquí puedes manejar el error
-      }
+      },
     });
     // Leerlo inmediatamente para verificar
     /* const saved = sessionStorage.getItem('registroUsuario');
     console.log('Leído desde sessionStorage:', saved); */
+  }
+
+  irALogin() {
+    this.cambioExitoso = false;
+    sessionStorage.clear(); // Limpiar sessionStorage al ir al login
+    this.authService.logout();
+    this.router.navigate(['/ingresar']);
   }
 }

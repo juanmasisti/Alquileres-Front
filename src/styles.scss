@@ -16,7 +16,12 @@
 body {
     background-color: $background-color;
 }
+<<<<<<< HEAD
 
 .cdk-overlay-container {
   z-index: 3000 !important; // o un valor superior al z-index de tu modal
 }
+=======
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+>>>>>>> b4785d2c77517a9c678bb6e83fcfbfdbd7017460

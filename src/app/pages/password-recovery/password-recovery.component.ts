@@ -11,6 +11,9 @@ import {
 } from '@angular/forms';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
+import { UserService } from 'src/app/services/user.service';
+import { PasswordService } from '../../services/password.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-password-recovery',
@@ -21,16 +24,21 @@ import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.compone
     FooterComponent,
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
   ],
 })
 export class PasswordRecoveryComponent implements OnInit {
   EmailForm: FormGroup;
+  mailEnviado = false;
 
   // Expresiones regulares
   private readonly EMAIL_REGEX =
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private passwordService: PasswordService
+  ) {
     this.EmailForm = this.fb.group({
       email: [
         '',
@@ -61,7 +69,12 @@ export class PasswordRecoveryComponent implements OnInit {
 
   EnviarMail() {
     this.markAllAsTouched();
-    return;
+    const formData = this.EmailForm.value;
+    this.passwordService.recoverPassword(formData).subscribe({
+      next: () => {
+        this.mailEnviado = true; // mostrar modal
+      },
+    });
   }
 
   ngOnInit() {}

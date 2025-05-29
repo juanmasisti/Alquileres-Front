@@ -3,12 +3,10 @@
 <section class="container">
   <div class="main__container">
     <div class="info__container">
-      <div class="image__container">
-        <img src="../../../assets/images/ProfileIcon.png" alt="" />
-      </div>
       <form
         [formGroup]="personDataForm"
         (ngSubmit)="editarDatos()"
+        *ngIf="this.user != null"
         class="description__container"
       >
         <div class="name__container">
@@ -16,26 +14,27 @@
           <div class="form-group form__title">
             <!-- <label for="name">Nombre</label> -->
             <input
-              id="name"
+              id="nombre"
               type="text"
-              formControlName="name"
+              formControlName="nombre"
               placeholder="Nombre"
               [readonly]="!isEditing"
               [class.readonly]="!isEditing"
+              [ngClass]="isEditing ? 'input-activo' : ''"
             />
             <small
               *ngIf="
-                personDataForm.get('name')?.touched &&
-                personDataForm.get('name')?.errors
+                personDataForm.get('nombre')?.touched &&
+                personDataForm.get('nombre')?.errors
               "
             >
-              @if (personDataForm.get('name')?.errors?.['required']) { El nombre
+              @if (personDataForm.get('nombre')?.errors?.['required']) { El nombre
               es obligatorio. } @else if
-              (personDataForm.get('name')?.errors?.['minlength']) { Mínimo 2
+              (personDataForm.get('nombre')?.errors?.['minlength']) { Mínimo 2
               caracteres. } @else if
-              (personDataForm.get('name')?.errors?.['maxlength']) { Máximo 50
+              (personDataForm.get('nombre')?.errors?.['maxlength']) { Máximo 50
               caracteres. } @else if
-              (personDataForm.get('name')?.errors?.['invalidName']) { Solo se
+              (personDataForm.get('nombre')?.errors?.['invalidName']) { Solo se
               permiten letras y espacios. }
             </small>
           </div>
@@ -45,20 +44,21 @@
             <input
               id="Apellido"
               type="text"
-              formControlName="lastName"
+              formControlName="apellido"
               placeholder="Apellido"
               [readonly]="!isEditing"
               [class.readonly]="!isEditing"
+              [ngClass]="isEditing ? 'input-activo' : ''"
             />
             <small
               *ngIf="
-                personDataForm.get('lastName')?.touched &&
-                personDataForm.get('lastName')?.errors
+                personDataForm.get('apellido')?.touched &&
+                personDataForm.get('apellido')?.errors
               "
             >
-              @if (personDataForm.get('lastName')?.errors?.['required']) { El
+              @if (personDataForm.get('apellido')?.errors?.['required']) { El
               apellido es obligatorio. } @else if
-              (personDataForm.get('lastName')?.errors?.['invalidLastName']) {
+              (personDataForm.get('apellido')?.errors?.['invalidLastName']) {
               Solo se permiten letras y espacios. }
             </small>
           </div>
@@ -72,43 +72,33 @@
               id="email"
               type="email"
               formControlName="email"
-              placeholder="Email "
-              [readonly]="!isEditing"
-              [class.readonly]="!isEditing"
+              placeholder="Email"
+              [readonly]="true"
+              [class.readonly]="true"
             />
-            <small
-              *ngIf="
-                personDataForm.get('email')?.touched &&
-                personDataForm.get('email')?.errors
-              "
-            >
-              @if (personDataForm.get('email')?.errors?.['required']) { El email
-              es obligatorio. } @else if
-              (personDataForm.get('email')?.errors?.['invalidEmail']) { El
-              formato de correo no es válido. Ej: juanperez&#64;gmail.com }
-            </small>
           </div>
           <!-- Telefono -->
           <div class="form-group">
             <input
               id="phone"
               type="tel"
-              formControlName="phone"
+              formControlName="telefono"
               mask="+00 000 0000000"
               placeholder="Telefono"
               [readonly]="!isEditing"
               [class.readonly]="!isEditing"
+              [ngClass]="isEditing ? 'input-activo' : ''"
             />
             <!-- mask="+00 000 0000000" en el input PARA FORZAR EL INPUT A ESA FORMA-->
             <small
               *ngIf="
-                personDataForm.get('phone')?.touched &&
-                personDataForm.get('phone')?.errors
+                personDataForm.get('telefono')?.touched &&
+                personDataForm.get('telefono')?.errors
               "
             >
-              @if (personDataForm.get('phone')?.errors?.['required']) { El
+              @if (personDataForm.get('telefono')?.errors?.['required']) { El
               numero de telefono es obligatorio. } @else if
-              (personDataForm.get('phone')?.errors?.['invalidPhone']) { El
+              (personDataForm.get('telefono')?.errors?.['invalidPhone']) { El
               formato de telefono no es válido. Ej: 0221 1234567 }
             </small>
           </div>
@@ -123,6 +113,7 @@
               input__active
               [readonly]="!isEditing"
               [class.readonly]="!isEditing"
+              [ngClass]="isEditing ? 'input-activo' : ''"
             />
             <small
               *ngIf="
@@ -142,30 +133,34 @@
             <input
               id="birthDate"
               type="date"
-              formControlName="birthDate"
+              formControlName="nacimiento"
               [min]="minDate"
               [max]="maxDate"
               [readonly]="!isEditing"
               [class.readonly]="!isEditing"
+              [ngClass]="isEditing ? 'input-activo' : ''"
             />
             <small
               *ngIf="
-                personDataForm.get('birthDate')?.touched &&
-                personDataForm.get('birthDate')?.errors
+                personDataForm.get('nacimiento')?.touched &&
+                personDataForm.get('nacimiento')?.errors
               "
             >
-              @if (personDataForm.get('birthDate')?.errors?.['required']) { La
+              @if (personDataForm.get('nacimiento')?.errors?.['required']) { La
               fecha de nacimiento es obligatoria. } @else if
-              (personDataForm.get('birthDate')?.errors?.['tooYoung']) {
-              {{ personDataForm.get('birthDate')?.errors?.['tooYoung']?.message }}
-              } @else if (personDataForm.get('birthDate')?.errors?.['tooOld']) {
-              {{ personDataForm.get('birthDate')?.errors?.['tooOld']?.message }}
+              (personDataForm.get('nacimiento')?.errors?.['tooYoung']) {
+              {{ personDataForm.get('nacimiento')?.errors?.['tooYoung']?.message }}
+              } @else if (personDataForm.get('nacimiento')?.errors?.['tooOld']) {
+              {{ personDataForm.get('nacimiento')?.errors?.['tooOld']?.message }}
               }
             </small>
           </div>
         </div>
         <div class="buttons__container">
-          <button>{{ isEditing ? "GUARDAR" : "EDITAR DATOS" }}</button>
+          <button [disabled]="loading">
+            <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
+            {{ loading ? '' : isEditing ? "GUARDAR" : "EDITAR DATOS" }}
+          </button>
           <a
             [routerLink]="['/perfil/id/cambiar-clave']"
             routerLinkActive="router-link-active"

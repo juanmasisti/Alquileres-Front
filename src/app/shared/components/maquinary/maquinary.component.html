@@ -1,4 +1,8 @@
-<section class="maquinarias-container" id="maquinarias" data-fragment="maquinarias">
+<section
+  class="maquinarias-container"
+  id="maquinarias"
+  data-fragment="maquinarias"
+>
   <!-- Panel de Filtros -->
   <aside class="filtros-panel">
     <div class="filtros-header">
@@ -68,7 +72,7 @@
 
     <div class="add__btn__container" *ngIf="isAdmin">
       <!-- Botón con icono de maquinaria desde font awesome -->
-      <button class="add__btn">
+      <button class="add__btn" (click)="abrirModalMaquinaria()">
         <i class="fas fa-truck-monster"></i> AGREGAR MAQUINARIA
       </button>
     </div>
@@ -109,6 +113,7 @@
             [routerLink]="['/maquinaria', m.id]"
           />
           <span
+            *ngIf="isAdmin"
             class="card-badge"
             [ngClass]="{
             'available': m.state === 'Disponible',

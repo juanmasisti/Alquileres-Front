@@ -41,7 +41,6 @@ declare var MercadoPago: any;
   ],
 })
 export class MaquinaryProfileComponent implements OnInit {
-
   maquinaria: Maquinaria | null = null;
   isLoading = true;
   error: string | null = null;
@@ -51,6 +50,10 @@ export class MaquinaryProfileComponent implements OnInit {
   precioTotal: number = 0;
   beginDate?: Date;
   endDate?: Date;
+
+    isAdmin =
+    sessionStorage.getItem('rol') === 'admin' ||
+    sessionStorage.getItem('rol') === 'empleado';
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     const startDate = new Date(Date.now());
@@ -111,7 +114,8 @@ export class MaquinaryProfileComponent implements OnInit {
           hideValueProp: true,
         },
       },
-    });
+    })
+
   }
 
   private loadMaquinaria(id: number): void {
@@ -125,8 +129,9 @@ export class MaquinaryProfileComponent implements OnInit {
         this.isLoading = false;
         console.error(err);
       },
-    });
-
+      },
+    );
+    // Cargar fechas ocupadas
     this.maquinariaService.getFechasOcupadas(id).subscribe({
       next: (res: any) => {
         this.fechasOcupadas = res;
@@ -205,6 +210,8 @@ formatearFecha(date: Date | null): string {
   cerrarModal() {
     this.mostrarModal = false;
     this.mostrarPagar = false;
+    this.mostrarModal = false;
+    this.mostrarPagar = false;
   }
 
   showMercadoPago(dias: number) {
@@ -236,3 +243,4 @@ getStatusClass(status: string): string {
     }
   }    
 }
+

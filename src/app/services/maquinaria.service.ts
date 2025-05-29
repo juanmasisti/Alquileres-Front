@@ -39,7 +39,7 @@ export class MaquinariaService {
   /**
    * Crea una nueva maquinaria.
    */
-  create(maquinaria: Maquinaria): Observable<any> {
+  create(maquinaria: FormData): Observable<any> {
     return this.http.post(this.baseUrl, maquinaria);
   }
 
