@@ -84,7 +84,9 @@ export class MaquinaryProfileComponent implements OnInit {
     private mercadoPagoService: MercadoPagoService,
     private dialog: MatDialog
     , private snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.minDate.setDate(this.minDate.getDate() + 1)
+  }
 
   hasToken() {
     return !!this.authService.getToken()
@@ -127,7 +129,6 @@ export class MaquinaryProfileComponent implements OnInit {
         },
       },
     })
-
   }
 
   private loadMaquinaria(id: number): void {
@@ -155,65 +156,58 @@ export class MaquinaryProfileComponent implements OnInit {
   }
 
   // Cuando el usuario selecciona rango en el datepicker
- onDateChanged(): void {
-  if (this.beginDate && this.endDate) {
-    // Normalizamos las fechas eliminando la parte de la hora
-    const start = new Date(this.beginDate);
-    const finish = new Date(this.endDate);
+  onDateChanged(): void {
+    if (this.beginDate && this.endDate) {
+      // Normalizamos las fechas eliminando la parte de la hora
+      const start = new Date(this.beginDate);
+      const finish = new Date(this.endDate);
 
-    start.setHours(0, 0, 0, 0);
-    finish.setHours(0, 0, 0, 0);
+      start.setHours(0, 0, 0, 0);
+      finish.setHours(0, 0, 0, 0);
 
-    const msInDay = 1000 * 60 * 60 * 24;
-    const diffInMs = finish.getTime() - start.getTime();
-    const diffInDays = Math.floor(diffInMs / msInDay) + 1;
+      const msInDay = 1000 * 60 * 60 * 24;
+      const diffInMs = finish.getTime() - start.getTime();
+      const diffInDays = Math.floor(diffInMs / msInDay) + 1;
 
-    if (diffInDays <= 0) {
+      if (diffInDays <= 0) {
+        this.diasSeleccionados = 0;
+        this.precioTotal = 0;
+        this.mostrarPagar = false;
+        return;
+      }
+
+      this.diasSeleccionados = diffInDays;
+      const precioDia = this.maquinaria?.precio ?? 0;
+      this.precioTotal = this.diasSeleccionados * precioDia;
+
+      this.mostrarPagar = false;
+      this.showMercadoPago(this.diasSeleccionados);
+
+      console.log('Desde:', start);
+      console.log('Hasta:', finish);
+      console.log('Días:', this.diasSeleccionados);
+      console.log('Precio:', this.precioTotal);
+    } else {
       this.diasSeleccionados = 0;
       this.precioTotal = 0;
       this.mostrarPagar = false;
-      return;
     }
-
-    this.diasSeleccionados = diffInDays;
-    const precioDia = this.maquinaria?.precio ?? 0;
-    this.precioTotal = this.diasSeleccionados * precioDia;
-
-    this.mostrarPagar = false;
-    this.showMercadoPago(this.diasSeleccionados);
-
-    console.log('Desde:', start);
-    console.log('Hasta:', finish);
-    console.log('Días:', this.diasSeleccionados);
-    console.log('Precio:', this.precioTotal);
-  } else {
-    this.diasSeleccionados = 0;
-    this.precioTotal = 0;
-    this.mostrarPagar = false;
   }
-}
 
+  isDateEnabled = (date: Date | null): boolean => {
+    if (!date) return false;
 
+    const luxonDate = DateTime.fromJSDate(date).startOf('day');
 
-isDateEnabled = (date: Date | null): boolean => {
-  if (!date) return false;
+    // Si la fecha está dentro de un rango ocupado, devolver false
+    const isOcupada = this.fechasOcupadas.some(({ fecha_inicio, fecha_fin }) => {
+      const inicio = DateTime.fromISO(fecha_inicio).startOf('day');
+      const fin = DateTime.fromISO(fecha_fin).startOf('day');
+      return luxonDate >= inicio && luxonDate <= fin;
+    });
 
-  const luxonDate = DateTime.fromJSDate(date).startOf('day');
-
-  // Si la fecha está dentro de un rango ocupado, devolver false
-  const isOcupada = this.fechasOcupadas.some(({ fecha_inicio, fecha_fin }) => {
-    const inicio = DateTime.fromISO(fecha_inicio).startOf('day');
-    const fin = DateTime.fromISO(fecha_fin).startOf('day');
-    return luxonDate >= inicio && luxonDate <= fin;
-  });
-
-  return !isOcupada;
-};
-
-formatearFecha(date: Date | null): string {
-  return date ? DateTime.fromJSDate(date).toFormat('dd/MM/yyyy') : '';
-}
-
+    return !isOcupada;
+  };
 
   abrirModal() {
     this.mostrarModal = true;
