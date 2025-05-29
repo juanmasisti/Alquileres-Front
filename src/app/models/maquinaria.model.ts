@@ -25,7 +25,10 @@ export enum Location {
   LaPlata = 'La Plata',
   Tandil = 'Tandil',
   Ensenada = 'Ensenada',
-  BahiaBlanca = 'Bahía Blanca'
+  BahíaBlanca = 'Bahía Blanca',
+  LosHornos = 'Los Hornos',
+  Quilmes = 'Quilmes',
+  Zarate = 'Zárate'
 } 
 
 // Modelo principal

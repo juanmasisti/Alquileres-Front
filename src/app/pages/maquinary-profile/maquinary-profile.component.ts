@@ -88,8 +88,8 @@ export class MaquinaryProfileComponent implements OnInit {
     this.minDate.setDate(this.minDate.getDate() + 1)
   }
 
-  hasToken() {
-    return !!this.authService.getToken()
+  isClient() {
+    return !!this.authService.getToken() && !this.isAdmin;
   }
 
   ngOnInit() {
