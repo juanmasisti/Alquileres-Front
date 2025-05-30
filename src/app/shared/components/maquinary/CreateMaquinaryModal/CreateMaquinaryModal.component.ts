@@ -18,6 +18,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { MaquinariaService } from '../../../../services/maquinaria.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-CreateMaquinaryModal',
@@ -38,18 +39,23 @@ export class MaquinariaModalComponent {
   states = Object.values(MaquinariaState);
   currentYear: number = new Date().getFullYear();
   selectedFile: File | null = null;
+  cargaExitoso = false;
 
   private readonly router = inject(Router);
 
   constructor(
     private fb: FormBuilder,
     private maquinariaService: MaquinariaService,
-    public dialogRef: MatDialogRef<MaquinariaModalComponent>
+    public dialogRef: MatDialogRef<MaquinariaModalComponent>,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.maquinariaForm = this.fb.group({
-      inventario: ['', [Validators.required, Validators.pattern(this.alfa_regex)]],
+      inventario: [
+        '',
+        [Validators.required, Validators.pattern(this.alfa_regex)],
+      ],
       nombre: ['', Validators.required],
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
@@ -74,10 +80,8 @@ export class MaquinariaModalComponent {
   }
 
   addImage(event: any) {
-    if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
-      this.selectedFile = file;
-    }
+    const file = event.target.files?.[0];
+    this.selectedFile = file ?? null;
   }
 
   guardarMaquinaria() {
@@ -104,7 +108,7 @@ export class MaquinariaModalComponent {
         console.log('Maquinaria creada con éxito:', response);
         this.maquinariaForm.reset();
         this.selectedFile = null;
-        this.cerrar();
+        this.cargaExitoso = true;
       },
       error: (err) => {
         console.error('Error al crear maquinaria:', err);
@@ -112,6 +116,11 @@ export class MaquinariaModalComponent {
         this.loading = false;
       },
     });
+  }
+
+  recargar() {
+    this.cerrar();
+    window.location.reload();
   }
 
   corregirAnio() {
@@ -129,5 +138,23 @@ export class MaquinariaModalComponent {
 
   cerrar() {
     this.dialogRef.close();
+  }
+
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (file && file.type !== 'image/png') {
+      this.snackBar.open('Solo se permiten archivos PNG', 'Cerrar', {
+        duration: 10000, // 3 segundos
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-center'],
+      });
+
+      (event.target as HTMLInputElement).value = '';
+      return;
+    }
+
+    this.selectedFile = file ?? null;
   }
 }

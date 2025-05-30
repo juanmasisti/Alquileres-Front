@@ -1,173 +1,156 @@
-@use 'index' as *;
+@use "index" as *;
 
 .container {
-    display: flex;
-    justify-content: center;
-    height: 100vh;
-    
+  display: flex;
+  justify-content: center;
 
-    width: 100%;
-    padding: 100px 0;
+  width: 100%;
+  padding: 100px 0;
+  margin-bottom: 300px;
 }
 
 .main__container {
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-    background-color: $section-color;
-    border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+  background-color: $section-color;
+  border-radius: 10px;
 
-    width: 80%;
+  width: 80%;
 
-    padding: 50px;
+  padding: 50px;
 }
 
-
-
 .info__container {
-    display: flex;
-    justify-content: center;
-    
+  display: flex;
+  justify-content: center;
 }
 
 .image__container {
-    width: 30%;
+  width: 30%;
 
-    & img {
-        width: 100%;
-        
-
-    }
+  & img {
+    width: 100%;
+  }
 }
 
 .description__container {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
-
-
 .name__container {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    & input {
-        color: $primary-color;
-        border: none;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  & input {
+    color: $primary-color;
+    border: none;
 
-        background-color: transparent;
+    background-color: transparent;
 
-        width: 100%;
-        font-size: 2.5rem;
-        font-weight: 600;
-        margin-right:5px ;
-    }
-    & input::placeholder {
-        color: $primary-color;
-    }
-        & input:focus {
-            outline: none;
-        }
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-right: 5px;
+  }
+  & input::placeholder {
+    color: $primary-color;
+  }
+  & input:focus {
+    outline: none;
+  }
 }
 
 .data__title {
-    margin-left: 10px;
-    font-size: 20px;
-    font-weight: 5  00;
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: 5 00;
 }
 
 .description__info__container {
-    margin-left: 20px;
-    margin-top: 15px;
-    & input {
-        background-color: transparent;
-        border: none;
+  margin-left: 20px;
+  margin-top: 15px;
+  & input {
+    background-color: transparent;
+    border: none;
 
-        font-size: 18px;
-    
-    
-    
-    }
-        & input:focus {
-            outline: none;
-        }
-    
+    font-size: 18px;
+  }
+  & input:focus {
+    outline: none;
+  }
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 
-    margin-bottom: 15px; // ✅ Espacio total entre campos
+  margin-bottom: 15px; // ✅ Espacio total entre campos
 
-    input {
-        padding: 0 8px;
-        width: inherit;
-        &:focus {
-            outline: 1px solid $primary-color;
-            border-radius: 10px;
-        }
+  input {
+    padding: 0 8px;
+    width: inherit;
+    &:focus {
+      outline: 1px solid $primary-color;
+      border-radius: 10px;
     }
+  }
 
-    .input-activo {
-        outline: 1px solid #eb851050;
-        border-radius: 10px;
-    }
+  .input-activo {
+    outline: 1px solid #eb851050;
+    border-radius: 10px;
+  }
 }
 
 small {
-    color: $error-color;
-    font-weight: 600;
-    font-size: 0.75rem;
-    margin-top: 4px;
+  color: $error-color;
+  font-weight: 600;
+  font-size: 0.75rem;
+  margin-top: 4px;
 }
 .buttons__container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
 
+  & button {
+    height: 30px;
+    width: 100px;
 
-    & button {
-        height: 30px;
-        width: 100px;
+    background-color: white;
+    color: $primary-color;
 
-        background-color: white;
-        color: $primary-color;
+    font-size: 11px;
 
-        font-size: 11px;
+    border-radius: 10px;
+    border: 1px solid $primary-color;
+  }
+  & button:hover {
+    background-color: $primary-color;
+    color: white;
+    transition: all 0.2s ease-in-out;
 
-        border-radius: 10px;
-        border: 1px solid $primary-color;
-    }
-    & button:hover {
-        background-color: $primary-color;
-        color: white;
-        transition: all 0.2s ease-in-out;
+    cursor: pointer;
 
-        cursor: pointer;
+    scale: 1.1;
+  }
 
-        scale: 1.1;
-    }
+  & button:active {
+    scale: 0.9;
+  }
 
-    & button:active {
-        scale: 0.9;
-    }
-
-    & a {
-        
-        color: $primary-color;
-        font-weight: 600 ;
-    }
+  & a {
+    color: $primary-color;
+    font-weight: 600;
+  }
 }
 
 input.readonly:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border-color: inherit !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: inherit !important;
 }
-

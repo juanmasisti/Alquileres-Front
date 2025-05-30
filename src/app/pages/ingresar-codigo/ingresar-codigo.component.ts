@@ -30,7 +30,7 @@ export class IngresarCodigoComponent implements OnInit {
   CodeForm: FormGroup;
   loading = false;
   loginError: string | null = null;
-  email = 'EmailEjemplo@test.com';
+  email = localStorage.getItem('email');
 
   constructor(
     private fb: FormBuilder,
@@ -57,6 +57,7 @@ export class IngresarCodigoComponent implements OnInit {
         sessionStorage.setItem('token', response.token);
         sessionStorage.setItem('rol', response.rol);
         sessionStorage.setItem('id', response.id);
+        localStorage.removeItem('email');
         this.router.navigate(['/']);
       },
       error: (error) => {

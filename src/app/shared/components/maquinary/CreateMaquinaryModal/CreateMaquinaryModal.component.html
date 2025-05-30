@@ -10,18 +10,10 @@
       <input
         type="file"
         required
-        accept="image/*"
-        (change)="addImage($event)"
+        accept=".jpg, .jpeg, .png"
+        (change)="onFileSelected($event)"
         class="input-file"
       />
-      <!-- <small
-        *ngIf="
-          maquinariaForm.get('image')?.touched &&
-          maquinariaForm.get('image')?.invalid
-        "
-      >
-        El nombre es requerido.
-      </small> -->
     </div>
     <!-- Nombre -->
     <div class="form-group">
@@ -195,5 +187,16 @@
   </form>
   <div *ngIf="createError" class="form-group">
     <small style="color: red">{{ createError }}</small>
+  </div>
+</div>
+
+<!-- modal de registro exitoso -->
+<div class="modal-overlay" *ngIf="cargaExitoso">
+  <div class="modal">
+    <h4>¡Maquina agregada!</h4>
+    <p>La maquinaria ha sido agregada correctamente.</p>
+    <div class="modal-actions">
+      <button class="btn confirm" (click)="recargar()">De acuerdo</button>
+    </div>
   </div>
 </div>
