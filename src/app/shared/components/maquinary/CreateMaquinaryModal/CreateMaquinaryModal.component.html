@@ -1,4 +1,4 @@
-<div class="form__container">
+<div class="form__container" *ngIf="this.allowedExtensions.length != 0">
   <h1>GUARDAR NUEVA MAQUINARIA</h1>
   <form
     [formGroup]="maquinariaForm"
@@ -10,10 +10,13 @@
       <input
         type="file"
         required
-        accept=".jpg, .jpeg, .png"
-        (change)="onFileSelected($event)"
+        [accept]="allowedExtensions.join(',')"
+        (change)="addImage($event)"
         class="input-file"
       />
+      <small *ngIf="invalidFile">
+        La imagen es invalida.
+      </small>
     </div>
     <!-- Nombre -->
     <div class="form-group">

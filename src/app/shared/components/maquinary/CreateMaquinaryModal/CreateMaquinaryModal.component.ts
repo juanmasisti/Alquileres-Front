@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { MaquinariaService } from '../../../../services/maquinaria.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ImagesService } from 'src/app/services/images.service';
 
 @Component({
   selector: 'app-CreateMaquinaryModal',
@@ -31,6 +32,8 @@ export class MaquinariaModalComponent {
   loading = false;
   createError: string | null = null;
   alfa_regex: RegExp = /^[a-zA-Z0-9]+$/;
+  invalidFile: boolean = false
+  allowedExtensions: string[] = []
 
   // Enums expuestos al HTML
   locations = Object.values(Location);
@@ -47,10 +50,11 @@ export class MaquinariaModalComponent {
     private fb: FormBuilder,
     private maquinariaService: MaquinariaService,
     public dialogRef: MatDialogRef<MaquinariaModalComponent>,
-    private snackBar: MatSnackBar
+    private imagesService: ImagesService
   ) {}
 
   ngOnInit(): void {
+    this.setExtensions()
     this.maquinariaForm = this.fb.group({
       inventario: [
         '',
@@ -69,19 +73,24 @@ export class MaquinariaModalComponent {
     console.log('Controles del formulario:', this.maquinariaForm.controls);
   }
 
-  private validateRegex(regex: RegExp, errorKey: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) {
-        return null; // No validar si está vacío (dejamos eso a Validators.required)
+  private setExtensions() {
+    this.imagesService.getExtensions().subscribe({
+      next: (value) => {
+        this.allowedExtensions = value
       }
-      const isValid = regex.test(control.value);
-      return isValid ? null : { [errorKey]: { value: control.value } };
-    };
+    })
   }
 
   addImage(event: any) {
     const file = event.target.files?.[0];
-    this.selectedFile = file ?? null;
+    this.invalidFile = !file || this.allowedExtensions.find((ext) => file.name.endsWith(ext)) == null
+
+    if (this.invalidFile) {
+      (event.target as HTMLInputElement).value = '';
+      this.selectedFile = null
+    } else {
+      this.selectedFile = file
+    }
   }
 
   guardarMaquinaria() {
@@ -138,23 +147,5 @@ export class MaquinariaModalComponent {
 
   cerrar() {
     this.dialogRef.close();
-  }
-
-  onFileSelected(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
-
-    if (file && file.type !== 'image/png') {
-      this.snackBar.open('Solo se permiten archivos PNG', 'Cerrar', {
-        duration: 10000, // 3 segundos
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        panelClass: ['snackbar-center'],
-      });
-
-      (event.target as HTMLInputElement).value = '';
-      return;
-    }
-
-    this.selectedFile = file ?? null;
   }
 }
