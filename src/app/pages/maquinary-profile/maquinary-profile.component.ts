@@ -135,6 +135,9 @@ export class MaquinaryProfileComponent implements OnInit {
     this.maquinariaService.getById(id).subscribe({
       next: (data) => {
         this.maquinaria = data;
+        if (this.maquinaria.state == MaquinariaState.Disponible) {
+          this.setFechasOcupadas(id)
+        }
         this.isLoading = false;
       },
       error: (err) => {
@@ -144,26 +147,30 @@ export class MaquinaryProfileComponent implements OnInit {
       },
       },
     );
-    // Cargar fechas ocupadas
+  }
+
+  private setFechasOcupadas(id: number) {
     this.maquinariaService.getFechasOcupadas(id).subscribe({
       next: (res: any) => {
         this.fechasOcupadas = res;
-
-        this.fechasOcupadas.forEach(({ fecha_fin, fecha_inicio }) => {
-          const inicio_formated = DateTime.fromISO(fecha_inicio);
-          const fin_formated = DateTime.fromISO(fecha_fin)
-          console.log(
-            `---- Fecha ocupada ----\n`,
-            `Inicio: ${inicio_formated.day}-${inicio_formated.month}-${inicio_formated.year}\n`,
-            `Fin: ${fin_formated.day}-${fin_formated.month}-${fin_formated.year}\n`,
-          ) 
-        })
-
+        this.printFechasOcupadas()
       },
       error: (err: any) => {
         console.error('Error cargando fechas ocupadas', err);
       },
     });
+  }
+
+  private printFechasOcupadas() {
+    this.fechasOcupadas.forEach(({ fecha_fin, fecha_inicio }) => {
+      const inicio_formated = DateTime.fromISO(fecha_inicio);
+      const fin_formated = DateTime.fromISO(fecha_fin)
+      console.log(
+        `---- Fecha ocupada ----\n`,
+        `Inicio: ${inicio_formated.day}-${inicio_formated.month}-${inicio_formated.year}\n`,
+        `Fin: ${fin_formated.day}-${fin_formated.month}-${fin_formated.year}\n`,
+      ) 
+    })
   }
 
   // Cuando el usuario selecciona rango en el datepicker
@@ -257,7 +264,7 @@ export class MaquinaryProfileComponent implements OnInit {
   onStateChange(event: any) {
 
     const nuevoEstado = event.target.value
-    
+
     if (this.maquinaria == null) return
     if (this.maquinaria.state === nuevoEstado) return;
 
