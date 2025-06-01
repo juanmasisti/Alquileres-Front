@@ -254,38 +254,43 @@ export class MaquinaryProfileComponent implements OnInit {
     });
   }
 
-onStateChange(nuevoEstado: MaquinariaState) {
-  if (this.maquinaria!.state === nuevoEstado) return;
+  onStateChange(event: any) {
 
-  const dialogRef = this.dialog.open(ConfirmModalComponent, {
-    width: '400px',
-    data: {
-      title: 'Confirmar cambio de estado',
-      description: `¿Estás seguro de cambiar el estado a "${nuevoEstado}"?`,
-      confirmText: 'Sí, cambiar',
-      cancelText: 'Cancelar'
-    }
-  });
+    const nuevoEstado = event.target.value
+    
+    if (this.maquinaria == null) return
+    if (this.maquinaria.state === nuevoEstado) return;
 
-  dialogRef.afterClosed().subscribe((confirmado: boolean) => {
-    if (confirmado) {
-      this.maquinariaService.actualizarEstado(this.maquinaria!.id, nuevoEstado).subscribe({
-        next: () => {
-          this.maquinaria!.state = nuevoEstado; // ✅ Solo lo cambiamos si se confirma
-          this.snackBar.open('Estado actualizado correctamente.', 'Cerrar', { duration: 3000 });
-        },
-        error: (err) => {
-          console.error('Error al actualizar el estado:', err);
-          this.snackBar.open('Ocurrió un error al actualizar el estado.', 'Cerrar', { duration: 3000 });
-        }
-      });
-    }
-  });
-}
+    const prevState = this.maquinaria!.state
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmar cambio de estado',
+        description: `¿Estás seguro de cambiar el estado a "${nuevoEstado}"?`,
+        confirmText: 'Sí, cambiar',
+        cancelText: 'Cancelar'
+      }
+    });
 
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      if (confirmado) {
+        this.maquinariaService.actualizarEstado(this.maquinaria!.id, nuevoEstado).subscribe({
+          next: () => {
+            this.maquinaria!.state = nuevoEstado; // ✅ Solo lo cambiamos si se confirma
+            this.snackBar.open('Estado actualizado correctamente.', 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            console.error('Error al actualizar el estado:', err);
+            this.snackBar.open('Ocurrió un error al actualizar el estado.', 'Cerrar', { duration: 3000 });
+          }
+        });
+      } else {
+        event.target.value = prevState
+      }
+    });
+  }
 
-
-getStatusClass(status: string): string {
+  getStatusClass(status: string): string {
     switch(status.toLowerCase()) {
       case 'disponible': return 'available';
       case 'alquilada': return 'rented';
@@ -294,4 +299,3 @@ getStatusClass(status: string): string {
     }
   }    
 }
-
