@@ -51,14 +51,12 @@ export class MaquinaryProfileComponent implements OnInit {
   error: string | null = null;
   mostrarModal = false;
   mostrarPagar = false;
+  mostrarReservar: boolean = false
   diasSeleccionados: number = 0;
   precioTotal: number = 0;
   beginDate?: Date;
   endDate?: Date;
-
-    isAdmin =
-    sessionStorage.getItem('rol') === 'admin' ||
-    sessionStorage.getItem('rol') === 'empleado';
+  isAdmin = sessionStorage.getItem('rol') === 'admin'
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     const startDate = new Date(Date.now());
@@ -82,8 +80,8 @@ export class MaquinaryProfileComponent implements OnInit {
     private authService: AuthService,
     private maquinariaService: MaquinariaService,
     private mercadoPagoService: MercadoPagoService,
-    private dialog: MatDialog
-    , private snackBar: MatSnackBar
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
     this.minDate.setDate(this.minDate.getDate() + 1)
   }
@@ -135,7 +133,7 @@ export class MaquinaryProfileComponent implements OnInit {
     this.maquinariaService.getById(id).subscribe({
       next: (data) => {
         this.maquinaria = data;
-        if (this.maquinaria.state == MaquinariaState.Disponible) {
+        if (this.maquinaria.state == MaquinariaState.Disponible && this.isClient()) {
           this.setFechasOcupadas(id)
         }
         this.isLoading = false;
@@ -153,10 +151,12 @@ export class MaquinaryProfileComponent implements OnInit {
     this.maquinariaService.getFechasOcupadas(id).subscribe({
       next: (res: any) => {
         this.fechasOcupadas = res;
+        this.mostrarReservar = true
         this.printFechasOcupadas()
       },
       error: (err: any) => {
         console.error('Error cargando fechas ocupadas', err);
+        this.mostrarReservar = true
       },
     });
   }
