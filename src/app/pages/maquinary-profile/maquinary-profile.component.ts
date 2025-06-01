@@ -173,6 +173,23 @@ export class MaquinaryProfileComponent implements OnInit {
     })
   }
 
+  private containsOccupiedDatesInRange (start: Date, end: Date): boolean {
+  const startDate = DateTime.fromJSDate(start).startOf('day');
+  const endDate = DateTime.fromJSDate(end).startOf('day');
+
+  for (const { fecha_inicio, fecha_fin } of this.fechasOcupadas) {
+    const inicioOcupada = DateTime.fromISO(fecha_inicio).startOf('day');
+    const finOcupada = DateTime.fromISO(fecha_fin).startOf('day');
+
+    if (inicioOcupada <= endDate && finOcupada >= startDate) {
+      // Hay superposición entre el rango seleccionado y una fecha ocupada
+      return true;
+    }
+  }
+
+  return false;
+}
+
   // Cuando el usuario selecciona rango en el datepicker
   onDateChanged(): void {
     if (this.beginDate && this.endDate) {
@@ -183,8 +200,16 @@ export class MaquinaryProfileComponent implements OnInit {
       start.setHours(0, 0, 0, 0);
       finish.setHours(0, 0, 0, 0);
 
+    // ⚠ Verificamos si el rango cruza fechas ocupadas
+    if (this.containsOccupiedDatesInRange(start, finish)) {
+      this.snackBar.open('El rango contiene fechas ya reservadas', 'Cerrar', { duration: 3000 });
+      this.beginDate = this.endDate = undefined;
+      this.diasSeleccionados = this.precioTotal = 0;
+      this.mostrarPagar = false;
+      return;
+    }
+
       const msInDay = 1000 * 60 * 60 * 24;
-      const diffInMs = finish.getTime() - start.getTime();
       const diffInDays = Math.ceil((finish.getTime() - start.getTime()) / msInDay);
 
       if (diffInDays <= 0) {

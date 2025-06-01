@@ -98,6 +98,7 @@
                 matStartDate
                 placeholder="Desde"
                 [(ngModel)]="beginDate"
+                readonly
                 (ngModelChange)="onDateChanged()"
                 name="beginDate"
             />
@@ -106,23 +107,41 @@
                 matEndDate
                 placeholder="Hasta"
                 [(ngModel)]="endDate"
+                readonly
                 (ngModelChange)="onDateChanged()"
                 name="endDate"     
             />
             </mat-date-range-input>
 
 
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="picker" class="custom-datepicker-toggle"></mat-datepicker-toggle>
             <mat-date-range-picker #picker [dateClass]="dateClass"></mat-date-range-picker>
           </mat-form-field>
 
-          <!-- Mostrar cantidad de días y precio -->
-          <div *ngIf="beginDate && endDate" class="summary">
-            <p><strong>Desde:</strong> {{ beginDate | date: 'shortDate' }}</p>
-            <p><strong>Hasta:</strong> {{ endDate | date: 'shortDate' }}</p>
-            <p><strong>Días seleccionados:</strong> {{ diasSeleccionados }}</p>
-            <p><strong>Precio total:</strong> ${{ precioTotal }}</p>
-          </div>
+          <!-- Mostrar resumen de lo seleccionado -->
+        <div *ngIf="beginDate && endDate && precioTotal>0" class="summary-container">
+            <div class="summary-item">
+              <span class="summary-label">Desde:</span>
+              <span>{{ beginDate | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Hasta:</span>
+              <span>{{ endDate | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Precio por día:</span>
+              <span>${{ maquinaria.precio }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Días seleccionados:</span>
+              <span>{{ diasSeleccionados }}</span>
+            </div>
+            <div class="summary-item total">
+              <span class="summary-label">Precio total:</span>
+              <span>${{ precioTotal }}</span>
+            </div>
+        </div>
+
 
           <div class="modal-actions mt-3">
             <div *ngIf="mostrarPagar" id="walletBrick_container"></div>
