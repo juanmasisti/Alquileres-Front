@@ -33,6 +33,7 @@ export class ChangePasswordComponent implements OnInit {
   changePassForm: FormGroup;
   cambioExitoso = false;
   isAuthenticated = sessionStorage.getItem('token') !== null;
+  errorMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -43,13 +44,31 @@ export class ChangePasswordComponent implements OnInit {
     this.changePassForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
-    });
+      confirmNewPassword: [
+        '',
+        [Validators.required, Validators.minLength(8)],
+      ],
+    },
+    { validators: this.passwordsMatchValidator() } // validador para todo el grupo
+    );
   }
 
   private markAllAsTouched() {
     Object.values(this.changePassForm.controls).forEach((control) => {
       control.markAsTouched();
     });
+  }
+
+  private passwordsMatchValidator(): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const newPassword = formGroup.get('newPassword')?.value;
+      const confirmNewPassword = formGroup.get('confirmNewPassword')?.value;
+
+      if (newPassword && confirmNewPassword && newPassword !== confirmNewPassword) {
+        return { passwordsMismatch: true };
+      }
+      return null;
+    };
   }
 
   ngOnInit() {}
@@ -70,23 +89,18 @@ export class ChangePasswordComponent implements OnInit {
     //formData.token = sessionStorage.getItem('token') || '';
     console.log('Formulario válido:', formData);
 
-    //formData.password = formData.newPassword;
-    // const serialized = JSON.stringify(formData);
-    // console.log('JSON serializado:', serialized);
 
     this.passwordService.changePassword(formData).subscribe({
       next: (response) => {
         console.log('Respuesta del servidor:', response);
         this.cambioExitoso = true;
+        this.errorMessage = null; // limpiamos si antes hubo error
       },
       error: (error) => {
         console.error('Error al cambiar la contraseña:', error);
-        // Aquí puedes manejar el error
+        this.errorMessage = error?.error?.message || 'Error desconocido al cambiar la contraseña.';
       },
     });
-    // Leerlo inmediatamente para verificar
-    /* const saved = sessionStorage.getItem('registroUsuario');
-    console.log('Leído desde sessionStorage:', saved); */
   }
 
   irALogin() {

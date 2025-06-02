@@ -163,7 +163,7 @@ export class NavbarComponent implements OnInit {
     this.closeDropdown();
     this.showLogoutModal = false;
     sessionStorage.clear();
-    this.router.navigate(['/inicio']);
+    this.router.navigate(['']);
     
   }
 
