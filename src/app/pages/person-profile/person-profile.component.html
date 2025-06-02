@@ -28,8 +28,8 @@
                 personDataForm.get('nombre')?.errors
               "
             >
-              @if (personDataForm.get('nombre')?.errors?.['required']) { El nombre
-              es obligatorio. } @else if
+              @if (personDataForm.get('nombre')?.errors?.['required']) { El
+              nombre es obligatorio. } @else if
               (personDataForm.get('nombre')?.errors?.['minlength']) { Mínimo 2
               caracteres. } @else if
               (personDataForm.get('nombre')?.errors?.['maxlength']) { Máximo 50
@@ -98,7 +98,7 @@
               @if (personDataForm.get('telefono')?.errors?.['required']) { El
               numero de telefono es obligatorio. } @else if
               (personDataForm.get('telefono')?.errors?.['invalidPhone']) { El
-              formato de telefono no es válido. Ej: 0221 1234567 }
+              formato de telefono no es válido. Ej: +54 2211234567 }
             </small>
           </div>
           <!-- DNI -->
@@ -149,7 +149,8 @@
               fecha de nacimiento es obligatoria. } @else if
               (personDataForm.get('nacimiento')?.errors?.['tooYoung']) {
               {{ personDataForm.get('nacimiento')?.errors?.['tooYoung']?.message }}
-              } @else if (personDataForm.get('nacimiento')?.errors?.['tooOld']) {
+              } @else if (personDataForm.get('nacimiento')?.errors?.['tooOld'])
+              {
               {{ personDataForm.get('nacimiento')?.errors?.['tooOld']?.message }}
               }
             </small>
@@ -158,7 +159,7 @@
         <div class="buttons__container">
           <button [disabled]="loading">
             <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
-            {{ loading ? '' : isEditing ? "GUARDAR" : "EDITAR DATOS" }}
+            {{ loading ? "" : isEditing ? "GUARDAR" : "EDITAR DATOS" }}
           </button>
           <a
             [routerLink]="['/perfil/id/cambiar-clave']"
