@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
-import { ManageComponent } from './manage/manage.component';
 import { RouterLink } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user.model';

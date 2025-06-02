@@ -11,6 +11,7 @@ import { SetNewPasswordComponent } from './pages/set-new-password/set-new-passwo
 import { TestComponent } from './pages/testear/testear.component';
 import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo.component';
 import { LoginComponent } from './pages/login/Login.component';
+import { ManagementComponent } from './pages/management/management.component';
 
 export const routes: Routes = [
   {
@@ -101,6 +102,13 @@ export const routes: Routes = [
       title: 'Ingresar código',
     },
     component: IngresarCodigoComponent,
+  },
+  {
+    path: 'gestiones',
+    data: {
+      title: 'Gestiones',
+    },
+    component: ManagementComponent,
   },
 ];
 @NgModule({
