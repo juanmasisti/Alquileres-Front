@@ -13,7 +13,7 @@ export class ReservasService {
 
   constructor(private http: HttpClient) {}
 
-  getReservas(token: string): Observable<Reserva[]> {
+  getReservas(): Observable<Reserva[]> {
     return this.http.get<Reserva[]>(this.baseUrl);
   }
 

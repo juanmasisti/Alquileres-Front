@@ -13,7 +13,7 @@
 
     <div class="reservas-table">
       <div class="reservas-header">
-        <span>ID</span>
+        <span>CODIGO DE RESERVA</span>
         <span>MAQUINA</span>
         <span>DESDE</span>
         <span>HASTA</span>
@@ -26,11 +26,11 @@
 
       @for (r of reservas; track r.id) {
       <div class="reserva-row">
-        <span>{{ r.id }}</span>
+        <span>{{ r.codigo_reserva }}</span>
         <span>{{ r.maquinaria.nombre }}</span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
-        <span>${{ r.maquinaria.precio }}</span>
+        <span>${{ r.precio_total }}</span>
         <span>{{ r.sucursal }}</span>
         <a class="cancelar" href="">cancelar</a>
       </div>

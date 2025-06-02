@@ -20,6 +20,7 @@ export interface Reserva {
   fecha_inicio: Date;
   fecha_fin: Date;
   precio_dia: number;
+  precio_total: number;
   sucursal: Location;
   politica: ReturnPolicy;
   estado: ReservaState;

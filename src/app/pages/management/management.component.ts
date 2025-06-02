@@ -26,22 +26,19 @@ export class ManagementComponent implements OnInit {
   }
 
   fetchReservas(): void {
-    this.reservaService
-      .getReservas(sessionStorage.getItem('token') || '')
-      .subscribe({
-        next: (data) => {
-          this.reservas = data.sort((a, b) => {
-            return (
-              new Date(b.fecha_inicio).getTime() -
-              new Date(a.fecha_inicio).getTime()
-            );
-          });
-          console.log('Reservas fetched and sorted:', this.reservas);
-        },
-        error: (error) => {
-          console.error('Error fetching reservas:', error);
-        },
-      });
+    this.reservaService.getReservas().subscribe({
+      next: (data) => {
+        this.reservas = data.sort((a, b) => {
+          return (
+            new Date(b.fecha_inicio).getTime() -
+            new Date(a.fecha_inicio).getTime()
+          );
+        });
+        console.log('Reservas fetched and sorted:', this.reservas);
+      },
+      error: (error) => {
+        console.error('Error fetching reservas:', error);
+      },
+    });
   }
 }
-
