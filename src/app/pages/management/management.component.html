@@ -41,6 +41,7 @@
         <a
           class="cancelar"
           style="cursor: pointer"
+          *ngIf="r.estado == 'Activa'"
           (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
           >cancelar</a
         >
