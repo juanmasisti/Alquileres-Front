@@ -17,5 +17,7 @@ export class ReservasService {
     return this.http.get<Reserva[]>(this.baseUrl);
   }
 
-  
+  cancelarReserva(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${id}/cancelar`, {});
+  }
 }

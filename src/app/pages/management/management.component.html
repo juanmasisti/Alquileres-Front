@@ -3,13 +3,12 @@
 <section class="main__container">
   <div class="manage__container">
     <div class="title">
-      <h1>TUS GESTIONES</h1>
+      <h1>MIS GESTIONES</h1>
     </div>
 
-    <div class="reservas-tabs">
-      <button class="tab active">MIS RESERVAS</button>
-      <button class="tab">HISTORIAL</button>
-    </div>
+    <!-- <div class="reservas-tabs">
+      <button class="tab">RESERVAS</button>
+    </div> -->
 
     <div class="reservas-table">
       <div class="reservas-header">
@@ -19,6 +18,7 @@
         <span>HASTA</span>
         <span>PRECIO</span>
         <span>SUCURSAL</span>
+        <span>ESTADO</span>
         <span>CANCELAR</span>
       </div>
 
@@ -32,7 +32,13 @@
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
         <span>${{ r.precio_total }}</span>
         <span>{{ r.sucursal }}</span>
-        <a class="cancelar" href="">cancelar</a>
+        <span>{{ r.estado }}</span>
+        <a
+          class="cancelar"
+          style="cursor: pointer"
+          (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
+          >cancelar</a
+        >
       </div>
       }
     </div>
