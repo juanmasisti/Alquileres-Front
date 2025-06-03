@@ -13,6 +13,7 @@ import { NavbarComponent } from '../../shared/components/navbar/navbar.component
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { Router, RouterModule } from '@angular/router';
 import { RegisterService } from 'src/app/services/register.service';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 @Component({
   selector: 'app-register',
@@ -40,7 +41,6 @@ export class RegisterComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   private readonly DNI_REGEX = /^\d{7,8}$/;
-  private readonly PHONE_REGEX = /\d*$/;
   private readonly router = inject(Router);
 
   constructor(
@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          this.validateRegex(this.PHONE_REGEX, 'invalidPhone'),
+          this.validatePhone('invalidPhone'),
         ],
       ],
       password: [
@@ -86,7 +86,6 @@ export class RegisterComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(8),
-          // this.validateRegex(this.PASSWORD_REGEX, 'weakPassword')
         ],
       ],
       dni: [
@@ -96,6 +95,14 @@ export class RegisterComponent implements OnInit {
       nacimiento: ['', [Validators.required, this.validateAgeRange(18, 80)]],
     });
   }
+
+  private validatePhone(errorKey: string): ValidatorFn {
+      return (control: AbstractControl): ValidationErrors | null => {
+        if (!control.value) return null
+        const isValid = isValidPhoneNumber(control.value);
+        return isValid ? null : { [errorKey]: { value: control.value } };
+      };
+    }
 
   private validateRegex(regex: RegExp, errorKey: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {

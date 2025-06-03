@@ -17,6 +17,7 @@ import {
 } from '@angular/forms';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 @Component({
   selector: 'app-person-profile',
@@ -41,7 +42,6 @@ export class PersonProfileComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   private readonly DNI_REGEX = /^\d{7,8}$/;
-  private readonly PHONE_REGEX = /^\+54\d{2,4}\d{6,8}$/;
 
   loading: boolean = false;
   user!: User;
@@ -84,7 +84,7 @@ export class PersonProfileComponent implements OnInit {
         { value: this.user.telefono, disabled: true },
         [
           Validators.required,
-          this.validateRegex(this.PHONE_REGEX, 'invalidPhone'),
+          this.validatePhone('invalidPhone')
         ],
       ],
       dni: [
@@ -96,6 +96,14 @@ export class PersonProfileComponent implements OnInit {
         [Validators.required, this.validateAgeRange(18, 100)],
       ],
     });
+  }
+
+  private validatePhone(errorKey: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null
+      const isValid = isValidPhoneNumber(control.value);
+      return isValid ? null : { [errorKey]: { value: control.value } };
+    };
   }
 
   private validateRegex(regex: RegExp, errorKey: string): ValidatorFn {
