@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { catchError, Observable, throwError } from 'rxjs';
-import { UserService } from './user.service';
+import { Observable } from 'rxjs';
 import { Reserva } from '../models/reserva.model';
 
 @Injectable({

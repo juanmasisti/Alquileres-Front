@@ -1,4 +1,6 @@
 export interface PagoModel {
-    id: number,
-    days: number
+    maq_id: number,
+    days: number,
+    startDate: Date,
+    endDate: Date
 }

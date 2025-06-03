@@ -25,6 +25,7 @@ import { environment } from 'src/environments/environment';
 import { Maquinaria, MaquinariaState } from 'src/app/models/maquinaria.model';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { ReservasService } from 'src/app/services/reservas.service';
 
 declare var MercadoPago: any;
 
@@ -80,6 +81,7 @@ export class MaquinaryProfileComponent implements OnInit {
     private authService: AuthService,
     private maquinariaService: MaquinariaService,
     private mercadoPagoService: MercadoPagoService,
+    private reservaService: ReservasService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
@@ -111,7 +113,8 @@ export class MaquinaryProfileComponent implements OnInit {
     this.bricksBuilder = this.mp.bricks();
   }
 
-  private async renderWalletBrick(preferenceId: string) {
+  // https://www.mercadopago.com.ar/developers/es/docs/checkout-pro/additional-settings/user-interface/auxiliary-callbacks
+  private async renderWalletBrick(preferenceId: string, cb: Function = () => {}) {
     await this.bricksBuilder.create('wallet', 'walletBrick_container', {
       initialization: {
         preferenceId,
@@ -126,6 +129,9 @@ export class MaquinaryProfileComponent implements OnInit {
           hideValueProp: true,
         },
       },
+      callbacks: {
+       onSubmit: cb
+     },
     })
   }
 
@@ -267,11 +273,13 @@ export class MaquinaryProfileComponent implements OnInit {
   }
 
   showMercadoPago(dias: number) {
-    if (!this.maquinaria || !dias) return;
+    if (!this.maquinaria || !dias || !this.beginDate || !this.endDate) return;
 
     const item: PagoModel = {
-      id: this.maquinaria.id,
+      maq_id: this.maquinaria.id,
       days: dias,
+      startDate: this.beginDate,
+      endDate: this.endDate
     };
 
     this.mercadoPagoService.getPreferenceId(item).subscribe({
