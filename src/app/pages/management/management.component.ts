@@ -64,6 +64,7 @@ export class ManagementComponent implements OnInit {
         } del importe. $${precioTotal * (parseInt(maquina.politica) / 100)}.`,
         confirmText: 'Cancelar Reserva',
         cancelText: 'Atrás',
+        //icon: 'error',
       },
     });
 

@@ -1,6 +1,6 @@
 <div class="modal-backdrop">
   <div class="modal-container">
-    <div class="icon-wrapper" *ngIf="data.icon">
+     <div class="icon-wrapper" *ngIf="data.icon">
       <ng-container [ngSwitch]="data.icon">
         <i *ngSwitchCase="'success'" class="fas fa-circle-check success-icon"></i>
         <i *ngSwitchCase="'error'" class="fas fa-circle-xmark error-icon"></i>
@@ -8,20 +8,21 @@
         <i *ngSwitchDefault class="fas fa-circle-question default-icon"></i>
       </ng-container>
     </div>
-
     <h2 class="modal-title">{{ data.title }}</h2>
     <p class="modal-description">{{ data.description }}</p>
 
-    <div class="modal-actions" [class.single-button]="!data.cancelText">
+    <div
+      class="modal-actions"
+      [class.single-button]="!data.cancelText"
+    >
       <button
-        mat-button
-        color="warn"
+        class="btn cancel"
         *ngIf="data.cancelText"
         (click)="onCancel()"
       >
         {{ data.cancelText }}
       </button>
-      <button mat-raised-button color="orange" (click)="onConfirm()">
+      <button class="btn confirm" (click)="onConfirm()">
         {{ data.confirmText }}
       </button>
     </div>
