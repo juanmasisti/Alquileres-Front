@@ -173,13 +173,50 @@ export class PersonProfileComponent implements OnInit {
   isEditing = false;
 
   deleteProfile() {
-    this.userService.deleteProfile().subscribe({
-      next: () => {
-        sessionStorage.clear()
-        this.router.navigate(['inicio'])
-      }
-    })
-  }
+  const dialogRef = this.dialog.open(ConfirmModalComponent, {
+    data: {
+      title: '¿Estás seguro?',
+      description: 'Esta acción eliminará tu cuenta permanentemente.',
+      confirmText: 'Sí, eliminar',
+      cancelText: 'Cancelar',
+      //icon: 'error' // Mostramos ícono de advertencia
+    }
+  });
+
+  dialogRef.afterClosed().subscribe((confirmed: boolean) => { // nos subscribimos al observable que devuelve afterClosed
+    // confirmed será true si el usuario hizo clic en "Sí, eliminar"
+    // o false si hizo clic en "Cancelar"
+    if (confirmed) {
+      this.userService.deleteProfile().subscribe({ // nos subscribimos al observable que devuelve deleteProfile
+        // Si la eliminación es exitosa
+        next: () => {
+          this.dialog.open(ConfirmModalComponent, {
+            data: {
+              title: 'Cuenta eliminada',
+              description: 'Tu cuenta fue eliminada correctamente.',
+              confirmText: 'Aceptar',
+              icon: 'success'
+            }
+          }).afterClosed().subscribe(() => {
+            sessionStorage.clear();
+            this.router.navigate(['/']);
+          });
+        },
+        // Si ocurre un error al eliminar la cuenta
+        error: () => {
+          this.dialog.open(ConfirmModalComponent, {
+            data: {
+              title: 'Error al eliminar',
+              description: 'Ocurrió un error al intentar eliminar tu cuenta. Intentalo más tarde.',
+              confirmText: 'Aceptar',
+              icon: 'info'
+            }
+          });
+        }
+      });
+    }
+  });
+}
 
   editarDatos() {
     if (this.isEditing) {

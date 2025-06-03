@@ -3,6 +3,9 @@
 <section class="container">
   <div class="main__container">
     <div class="info__container">
+      <div class="icon__container">
+        <i class="fas fa-user-circle user-icon"></i>
+      </div>      
       <form
         [formGroup]="personDataForm"
         (ngSubmit)="editarDatos()"
@@ -166,13 +169,9 @@
             routerLinkActive="router-link-active"
             >Cambiar contraseña</a
           >
-          <a
-            class="cancelar"
-            style="cursor: pointer"
-            *ngIf="isClient()"
-            (click)="deleteProfile()"
-            >Eliminar cuenta</a
-          >
+          <a class="cancelar" *ngIf="isClient()" (click)="deleteProfile()">
+            <i class="fas fa-trash-alt"></i> Eliminar cuenta
+          </a>
         </div>
       </form>
     </div>

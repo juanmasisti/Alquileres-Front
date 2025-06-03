@@ -92,17 +92,43 @@ export class MaquinaryProfileComponent implements OnInit {
     return !!this.authService.getToken() && !this.isAdmin;
   }
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.initMercadoPago();
+ ngOnInit() {
+  const id = this.route.snapshot.paramMap.get('id');
+  this.initMercadoPago();
 
-    if (id) {
-      this.loadMaquinaria(+id);
-    } else {
-      this.error = 'No se encontró el ID de la maquinaria';
-      this.isLoading = false;
+  // Manejo del resultado de pago
+  this.route.queryParams.subscribe(params => {
+    const paymentResult = params['payment'];
+    if (paymentResult !== undefined) {
+      if (paymentResult === '1') {
+        this.dialog.open(ConfirmModalComponent, {
+          data: {
+            title: '¡Pago exitoso!',
+            message: 'El pago fue procesado correctamente.',
+            confirmText: 'Aceptar',
+            icon: 'check_circle'
+          }
+        });
+      } else if (paymentResult === '0') {
+        this.dialog.open(ConfirmModalComponent, {
+          data: {
+            title: 'Pago fallido',
+            message: 'Hubo un error al procesar el pago. Por favor, intente nuevamente.',
+            confirmText: 'Cerrar',
+            icon: 'error'
+          }
+        });
+      }
     }
+  });
+
+  if (id) {
+    this.loadMaquinaria(+id);
+  } else {
+    this.error = 'No se encontró el ID de la maquinaria';
+    this.isLoading = false;
   }
+}
 
   private initMercadoPago() {
     const publicKey = environment.mercadoPagoPublicKey;
