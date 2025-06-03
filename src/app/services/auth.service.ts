@@ -36,7 +36,7 @@ export class AuthService {
 
    //@TODO ver como obtener datos del payload del token
   getUserRole(): string | null {
-    return sessionStorage.getItem('id');
+    return sessionStorage.getItem('rol');
   }
 
   getUserEmail(): string | null { 
