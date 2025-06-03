@@ -24,6 +24,11 @@
 
       <!-- Ejemplo de reservas -->
 
+      <div *ngIf="!loading && reservas.length == 0" class="no-results">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>No se encontraron reservas</p>
+      </div>
+
       @for (r of reservas; track r.id) {
       <div class="reserva-row">
         <span>{{ r.codigo_reserva }}</span>

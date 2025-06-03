@@ -15,7 +15,9 @@ import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/c
   imports: [NavbarComponent, FooterComponent, CommonModule],
 })
 export class ManagementComponent implements OnInit {
+
   reservas: Reserva[] = [];
+  loading: boolean = true
 
   constructor(
     private reservaService: ReservasService,
@@ -40,10 +42,12 @@ export class ManagementComponent implements OnInit {
             new Date(a.fecha_inicio).getTime()
           );
         });
+        this.loading = false
         console.log('Reservas fetched and sorted:', this.reservas);
       },
       error: (error) => {
         console.error('Error fetching reservas:', error);
+        this.loading = false
       },
     });
   }
@@ -59,12 +63,11 @@ export class ManagementComponent implements OnInit {
         title: `¿Cancelar Reserva de ${maquina.nombre}?`,
         description: `Se cancelará la reserva de ${
           maquina.nombre
-        } con un costo total de $${precioTotal}. Y se te reembolsará el ${
+        } con un costo total de $${precioTotal}.\nY se te reembolsará el ${
           maquina.politica
         } del importe. $${precioTotal * (parseInt(maquina.politica) / 100)}.`,
         confirmText: 'Cancelar Reserva',
         cancelText: 'Atrás',
-        //icon: 'error',
       },
     });
 

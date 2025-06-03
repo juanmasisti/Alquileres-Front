@@ -88,3 +88,21 @@
 .cancelar:hover {
   text-decoration: underline;
 }
+
+.no-results {
+  flex: 1;
+  text-align: center;
+  padding: 3rem;
+
+  i {
+    font-size: 3rem;
+    color: $gray-light;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $gray-dark;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+}
