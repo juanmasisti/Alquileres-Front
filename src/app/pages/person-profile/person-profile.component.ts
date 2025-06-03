@@ -18,6 +18,7 @@ import {
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { isValidPhoneNumber } from 'libphonenumber-js';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-person-profile',
@@ -46,7 +47,16 @@ export class PersonProfileComponent implements OnInit {
   loading: boolean = false;
   user!: User;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private dialog: MatDialog,) {}
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private dialog: MatDialog,
+    private authService: AuthService
+  ) { }
+
+  isClient() {
+    return this.authService.getUserRole() == 'cliente'
+  }
 
   ngOnInit() {
     this.userService.getProfile().subscribe((user: User) => {

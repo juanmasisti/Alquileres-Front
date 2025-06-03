@@ -152,6 +152,22 @@ small {
     color: $primary-color;
     font-weight: 600;
   }
+
+  .cancelar {
+    border-radius: 8px;
+    border: 1px solid $primary-color;
+    background-color: #ffffff;
+    padding: 3px;
+    color: red;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .cancelar:hover {
+    scale: 1.1;
+    background-color: rgb(204, 26, 26);
+    color: white
+  }
 }
 
 input.readonly:focus {

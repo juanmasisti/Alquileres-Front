@@ -166,6 +166,12 @@
             routerLinkActive="router-link-active"
             >Cambiar contraseña</a
           >
+          <a
+            class="cancelar"
+            style="cursor: pointer"
+            *ngIf="isClient()"
+            >Eliminar cuenta</a
+          >
         </div>
       </form>
     </div>
