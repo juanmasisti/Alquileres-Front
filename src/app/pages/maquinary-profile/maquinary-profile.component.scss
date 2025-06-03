@@ -91,6 +91,16 @@ $summary-border: $gray-light;
   }
 }
 
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    color: $primary-color;
+    font-size: 1.1rem;
+  }
+
 .status-badge {
   position: absolute;
   top: 1rem;
@@ -253,6 +263,11 @@ $summary-border: $gray-light;
       }
     }
 
+    #walletBrick_container {
+      padding-top: 2px;
+      padding-bottom: 10px;
+    }
+
     .summary-container {
       background-color: $summary-bg;
       padding: 1rem;
@@ -263,6 +278,7 @@ $summary-border: $gray-light;
       color: $gray-dark;
       padding: 1.2rem 1.4rem;
       margin-bottom: 0.6rem;
+      margin-top: -10px;
 
       .summary-item {
         display: flex;

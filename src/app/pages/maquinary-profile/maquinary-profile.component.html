@@ -142,9 +142,11 @@
             </div>
         </div>
 
-
           <div class="modal-actions mt-3">
-            <div *ngIf="mostrarPagar" id="walletBrick_container"></div>
+            <div *ngIf="beginDate && endDate && precioTotal > 0 && !mostrarPagar" class="loading-spinner">
+              <i class="fas fa-circle-notch fa-spin"></i>
+            </div>
+            <div  id="walletBrick_container"></div>
             <button class="btn cancel" (click)="cerrarModal()">Cancelar</button>
           </div>
         </div>

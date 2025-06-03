@@ -75,13 +75,13 @@ export class MaquinaryProfileComponent implements OnInit {
 
   private bricksBuilder: any = null;
   private mp: any = null;
+  private paymentBrickController: any = null
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
     private maquinariaService: MaquinariaService,
     private mercadoPagoService: MercadoPagoService,
-    private reservaService: ReservasService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
@@ -114,8 +114,10 @@ export class MaquinaryProfileComponent implements OnInit {
   }
 
   // https://www.mercadopago.com.ar/developers/es/docs/checkout-pro/additional-settings/user-interface/auxiliary-callbacks
-  private async renderWalletBrick(preferenceId: string, cb: Function = () => {}) {
-    await this.bricksBuilder.create('wallet', 'walletBrick_container', {
+  private async renderWalletBrick(preferenceId: string, cb: Function = () => { }) {
+    if (this.creandoBrick) return
+    this.creandoBrick = true
+    this.paymentBrickController = await this.bricksBuilder.create('wallet', 'walletBrick_container', {
       initialization: {
         preferenceId,
         redirectMode: 'self',
@@ -130,7 +132,11 @@ export class MaquinaryProfileComponent implements OnInit {
         },
       },
       callbacks: {
-       onSubmit: cb
+        onSubmit: cb,
+        onReady: () => {
+          this.creandoBrick = false
+          this.mostrarPagar = true
+        }
      },
     })
   }
@@ -206,14 +212,16 @@ export class MaquinaryProfileComponent implements OnInit {
       start.setHours(0, 0, 0, 0);
       finish.setHours(0, 0, 0, 0);
 
-    // ⚠ Verificamos si el rango cruza fechas ocupadas
-    if (this.containsOccupiedDatesInRange(start, finish)) {
-      this.snackBar.open('El rango contiene fechas ya reservadas', 'Cerrar', { duration: 3000 });
-      this.beginDate = this.endDate = undefined;
-      this.diasSeleccionados = this.precioTotal = 0;
-      this.mostrarPagar = false;
-      return;
-    }
+      this.destroyMp()
+
+      // ⚠ Verificamos si el rango cruza fechas ocupadas
+      if (this.containsOccupiedDatesInRange(start, finish)) {
+        this.snackBar.open('El rango contiene fechas ya reservadas', 'Cerrar', { duration: 3000 });
+        this.beginDate = this.endDate = undefined;
+        this.diasSeleccionados = this.precioTotal = 0;
+        this.mostrarPagar = false;
+        return;
+      }
 
       const msInDay = 1000 * 60 * 60 * 24;
       const diffInDays = Math.ceil((finish.getTime() - start.getTime()) / msInDay);
@@ -272,6 +280,15 @@ export class MaquinaryProfileComponent implements OnInit {
     this.beginDate = this.endDate = undefined
   }
 
+  destroyMp() {
+    if (this.paymentBrickController != null) {
+      this.paymentBrickController.unmount()
+      this.paymentBrickController = null
+    }
+  }
+
+  private creandoBrick = false
+
   showMercadoPago(dias: number) {
     if (!this.maquinaria || !dias || !this.beginDate || !this.endDate) return;
 
@@ -282,11 +299,14 @@ export class MaquinaryProfileComponent implements OnInit {
       endDate: this.endDate
     };
 
+    if(this.creandoBrick) return
+
+    this.destroyMp()
+
     this.mercadoPagoService.getPreferenceId(item).subscribe({
-      next: (res) => {
+      next: async (res) => {
         this.initBricks();
-        this.renderWalletBrick(res.id);
-        this.mostrarPagar = true;
+        this.renderWalletBrick(res.id)
       },
       error: (err) => {
         console.error('Error con MercadoPago', err);
@@ -313,6 +333,7 @@ export class MaquinaryProfileComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      this.destroyMp()
       if (confirmado) {
         this.maquinariaService.actualizarEstado(this.maquinaria!.id, nuevoEstado).subscribe({
           next: () => {
