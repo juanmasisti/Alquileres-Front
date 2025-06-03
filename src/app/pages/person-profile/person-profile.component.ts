@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user.model';
 import {
@@ -51,6 +51,7 @@ export class PersonProfileComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private dialog: MatDialog,
+    private router: Router,
     private authService: AuthService
   ) { }
 
@@ -170,6 +171,15 @@ export class PersonProfileComponent implements OnInit {
   }
 
   isEditing = false;
+
+  deleteProfile() {
+    this.userService.deleteProfile().subscribe({
+      next: () => {
+        sessionStorage.clear()
+        this.router.navigate(['inicio'])
+      }
+    })
+  }
 
   editarDatos() {
     if (this.isEditing) {

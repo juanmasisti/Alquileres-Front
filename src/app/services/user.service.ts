@@ -37,9 +37,11 @@ export class UserService {
     );
   }
 
-
   ValidToken(body: { email: string; token: string }): Observable<any> {
     return this.http.get(`${this.baseUrl}/valid-token`);  
   }
 
+  deleteProfile(): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${this.authService.getUserId()}/deactivate`, '')
+  }
 }
