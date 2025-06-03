@@ -42,6 +42,6 @@ export class UserService {
   }
 
   deleteProfile(): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${this.authService.getUserId()}/deactivate`, '')
+    return this.http.delete(`${this.baseUrl}/${this.authService.getUserId()}/deactivate`)
   }
 }
