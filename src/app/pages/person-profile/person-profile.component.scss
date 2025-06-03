@@ -129,6 +129,11 @@ small {
     border-radius: 10px;
     border: 1px solid $primary-color;
   }
+  & button:disabled {
+     opacity: 0.6;
+     background-color: whitesmoke;
+     pointer-events: none;
+  }
   & button:hover {
     background-color: $primary-color;
     color: white;
@@ -153,4 +158,26 @@ input.readonly:focus {
   outline: none !important;
   box-shadow: none !important;
   border-color: inherit !important;
+}
+
+//iconos
+.icon-wrapper {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+
+  .success-icon {
+    color: #4caf50; // verde
+  }
+
+  .error-icon {
+    color: #f44336; // rojo
+  }
+
+  .info-icon {
+    color: #2196f3; // azul
+  }
+
+  .default-icon {
+    color: #9e9e9e; // gris
+  }
 }

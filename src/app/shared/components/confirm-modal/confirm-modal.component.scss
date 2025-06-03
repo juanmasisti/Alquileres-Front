@@ -38,6 +38,9 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  &.single-button {
+    justify-content: center;
+  }
 }
 
 .btn {

@@ -157,7 +157,7 @@
           </div>
         </div>
         <div class="buttons__container">
-          <button [disabled]="loading">
+          <button  [disabled]="loading || personDataForm.invalid">
             <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
             {{ loading ? "" : isEditing ? "GUARDAR" : "EDITAR DATOS" }}
           </button>

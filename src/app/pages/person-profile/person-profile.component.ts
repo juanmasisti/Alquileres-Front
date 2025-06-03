@@ -15,6 +15,8 @@ import {
   AbstractControl,
   MinLengthValidator,
 } from '@angular/forms';
+import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-person-profile',
@@ -39,12 +41,12 @@ export class PersonProfileComponent implements OnInit {
   private readonly PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   private readonly DNI_REGEX = /^\d{7,8}$/;
-  private readonly PHONE_REGEX = /^\+54\s\d{2,4}\s\d{6,8}$/;
+  private readonly PHONE_REGEX = /^\+54\d{2,4}\d{6,8}$/;
 
   loading: boolean = false;
   user!: User;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {}
+  constructor(private fb: FormBuilder, private userService: UserService, private dialog: MatDialog,) {}
 
   ngOnInit() {
     this.userService.getProfile().subscribe((user: User) => {
@@ -177,18 +179,40 @@ export class PersonProfileComponent implements OnInit {
         this.isEditing = false;
         this.loading = true;
 
-        this.userService.updateProfile(newUser).subscribe({
+       this.userService.updateProfile(newUser).subscribe({
           next: () => {
             this.loading = false;
+
+            this.dialog.open(ConfirmModalComponent, {
+              data: {
+                title: '¡Perfil actualizado!',
+                description: 'Tus datos fueron guardados correctamente.',
+                confirmText: 'Aceptar',
+                cancelText: '',
+                icon: 'success',
+              },
+              width: '400px'
+            });
           },
           error: (err) => {
+            // Revertir datos
             dataEntries.forEach(([key, value]) => {
               const obj = this.personDataForm.get(key);
-              console.log((this.user as any)[key]);
               if (obj) obj.setValue((this.user as any)[key]);
             });
+
             this.loading = false;
-          },
+
+            this.dialog.open(ConfirmModalComponent, {
+              data: {
+                title: 'Error al actualizar',
+                description: 'Ocurrió un error al guardar los cambios. Por favor, intentá nuevamente.',
+                confirmText: 'Cerrar',
+                cancelText: ''
+              },
+              width: '400px'
+            });
+          }
         });
       } else {
         this.personDataForm.markAllAsTouched();

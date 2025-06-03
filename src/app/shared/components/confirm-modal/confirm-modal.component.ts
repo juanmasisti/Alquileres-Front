@@ -8,6 +8,7 @@ interface ConfirmModalData {
   description: string;
   confirmText: string;
   cancelText: string;
+  icon?: string;
 }
 
 @Component({
@@ -21,7 +22,11 @@ export class ConfirmModalComponent {
   constructor(
     private dialogRef: MatDialogRef<ConfirmModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmModalData
-  ) {}
+  ) {
+    if (!this.data.cancelText) {
+    setTimeout(() => this.dialogRef.close(), 10000);
+  }
+  }
 
   onConfirm() {
     this.dialogRef.close(true);
