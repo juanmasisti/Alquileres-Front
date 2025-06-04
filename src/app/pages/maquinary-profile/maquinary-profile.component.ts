@@ -106,7 +106,7 @@ export class MaquinaryProfileComponent implements OnInit {
             title: '¡Pago exitoso!',
             message: 'El pago fue procesado correctamente.',
             confirmText: 'Aceptar',
-            icon: 'check_circle'
+            icon: 'success'
           }
         });
       } else if (paymentResult === '0') {
