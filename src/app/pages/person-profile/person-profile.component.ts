@@ -203,11 +203,11 @@ export class PersonProfileComponent implements OnInit {
           });
         },
         // Si ocurre un error al eliminar la cuenta
-        error: () => {
+        error: (error) => {
           this.dialog.open(ConfirmModalComponent, {
             data: {
               title: 'Error al eliminar',
-              description: 'Ocurrió un error al intentar eliminar tu cuenta. Intentalo más tarde.',
+              description: error.error.message || 'Ocurrió un error al eliminar tu cuenta. Por favor, intentá nuevamente.',
               confirmText: 'Aceptar',
               icon: 'info'
             }
