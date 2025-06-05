@@ -62,7 +62,7 @@ export class IngresarCodigoComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al iniciar sesión: ', error);
-        this.loginError = 'Código incorrecto o expirado. Inténtalo de nuevo.';
+        this.loginError = 'Código incorrecto. Inténtalo de nuevo.';
         this.loading = false;
       },
       complete: () => {
