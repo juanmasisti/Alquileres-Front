@@ -18,6 +18,7 @@ export class ManagementComponent implements OnInit {
 
   reservas: Reserva[] = [];
   loading: boolean = true
+  rol: string = sessionStorage.getItem('rol') ?? 'visitante'
 
   constructor(
     private reservaService: ReservasService,
@@ -57,15 +58,20 @@ export class ManagementComponent implements OnInit {
     maquina: Maquinaria,
     precioTotal: number
   ): void {
+    let politica = String(maquina.politica);
+    if (this.rol !== 'cliente') {
+      politica = '100%';
+    }
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
       data: {
         title: `¿Cancelar Reserva de ${maquina.nombre}?`,
-        description: `Se cancelará la reserva de ${
+        description: 
+        `Se cancelará la reserva de ${
           maquina.nombre
-        } con un costo total de $${precioTotal}.\nY se te reembolsará el ${
-          maquina.politica
-        } del importe. $${precioTotal * (parseInt(maquina.politica) / 100)}.`,
+        } con un costo total de $${precioTotal}.\nY se reembolsará el ${
+          politica
+        } del importe. $${precioTotal * (parseInt(politica) / 100)}.`,
         confirmText: 'Cancelar Reserva',
         cancelText: 'Atrás',
       },
