@@ -104,7 +104,7 @@ export class MaquinaryProfileComponent implements OnInit {
         this.dialog.open(ConfirmModalComponent, {
           data: {
             title: '¡Pago exitoso!',
-            message: 'El pago fue procesado correctamente.',
+            description: 'El pago fue procesado correctamente.',
             confirmText: 'Aceptar',
             icon: 'success'
           }
@@ -113,7 +113,7 @@ export class MaquinaryProfileComponent implements OnInit {
         this.dialog.open(ConfirmModalComponent, {
           data: {
             title: 'Pago fallido',
-            message: 'Hubo un error al procesar el pago. Por favor, intente nuevamente.',
+            description: 'Hubo un error al procesar el pago. Por favor, intente nuevamente.',
             confirmText: 'Cerrar',
             icon: 'error'
           }
@@ -247,6 +247,17 @@ export class MaquinaryProfileComponent implements OnInit {
         this.diasSeleccionados = this.precioTotal = 0;
         this.mostrarPagar = false;
         return;
+      }
+
+      // Verificar que no se seleccione mas de 30 dias
+      const maxDays = 30;
+      if (finish.getTime() - start.getTime() > maxDays * 24 * 60 * 60 * 1000) {
+        this.snackBar.open(`No se puede reservar por más de ${maxDays} días`, 'Cerrar', { duration: 3000 });
+        this.beginDate = this.endDate = undefined;
+        this.diasSeleccionados = this.precioTotal = 0;
+        this.mostrarPagar = false;
+        return;
+
       }
 
       const msInDay = 1000 * 60 * 60 * 24;

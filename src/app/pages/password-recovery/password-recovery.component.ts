@@ -14,6 +14,8 @@ import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.compone
 import { UserService } from 'src/app/services/user.service';
 import { PasswordService } from '../../services/password.service';
 import { Router, RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-password-recovery',
@@ -37,7 +39,8 @@ export class PasswordRecoveryComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private passwordService: PasswordService
+    private passwordService: PasswordService,
+    private dialog: MatDialog,
   ) {
     this.EmailForm = this.fb.group({
       email: [
@@ -74,8 +77,23 @@ export class PasswordRecoveryComponent implements OnInit {
       next: () => {
         this.mailEnviado = true; // mostrar modal
       },
+      error: (error) => {
+        console.error('Error al enviar el correo:', error);
+        // Aquí podrías manejar el error, por ejemplo, mostrar un mensaje al usuario
+        this.dialog.open(ConfirmModalComponent, {
+          data: {
+            title: 'Error',
+            message: '',
+            description: error.error.message || 'Error al enviar el correo electrónico.',
+            confirmText: 'Cerrar',
+            icon: 'error'
+
+      },
+    });
+      }
     });
   }
+
 
   ngOnInit() {}
 }
