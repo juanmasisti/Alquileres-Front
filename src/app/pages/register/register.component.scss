@@ -11,7 +11,11 @@
   justify-content: center;
   align-items: center;
   padding: 20px; // ✅ Para que no se pegue a los bordes en pantallas chicas
+
   box-sizing: border-box;
+  @media (max-width: 1300px) {
+    padding: 85px; // ✅ Menos padding en pantallas pequeñas
+  }
 }
 
 .container {
