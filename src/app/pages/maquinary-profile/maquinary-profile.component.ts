@@ -352,7 +352,7 @@ export class MaquinaryProfileComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Confirmar cambio de estado',
-        description: `¿Estás seguro de cambiar el estado a "${nuevoEstado}"?`,
+        description: `¿Estás seguro de cambiar el estado a "${nuevoEstado}"? Si hay reservas activas, se cancelarán.`,
         confirmText: 'Sí, cambiar',
         cancelText: 'Cancelar'
       }
