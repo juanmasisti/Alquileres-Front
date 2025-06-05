@@ -4,6 +4,8 @@
   data-fragment="maquinarias"
 >
   <!-- Panel de Filtros -->
+   <!-- Boton testeo maquinarias vacias -->
+ 
   <aside class="filtros-panel">
     <div class="filtros-header">
       <h4 class="filtros-title">Filtros</h4>
@@ -76,6 +78,11 @@
         <i class="fas fa-truck-monster"></i> AGREGAR MAQUINARIA
       </button>
     </div>
+
+    <button class="test-empty-machines" (click)="testEmptyMachines()">
+  {{ showEmptyList ? 'Volver al listado real' : 'Testear Maquinarias Vacías' }}
+</button>
+
   </aside>
 
   <!-- Listado de Maquinarias -->

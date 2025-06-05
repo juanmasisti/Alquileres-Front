@@ -16,6 +16,10 @@ import { MaquinariaModalComponent } from './CreateMaquinaryModal/CreateMaquinary
 })
 export class MaquinaryComponent implements OnInit {
   maquinarias: Maquinaria[] = [];
+  //test
+  showEmptyList = false;
+  private originalMaquinarias: Maquinaria[] = [];
+
   filters: MaquinariaFilters = {
     text: '',
     categoria: '',
@@ -122,5 +126,18 @@ export class MaquinaryComponent implements OnInit {
 
   abrirModalMaquinaria(): void {
     this.dialog.open(MaquinariaModalComponent, {});
+  }
+
+  testEmptyMachines(): void {
+    this.showEmptyList = !this.showEmptyList;
+
+    if (this.showEmptyList) {
+      // Guardamos el listado real
+      this.originalMaquinarias = this.maquinarias;
+      this.maquinarias = []; // Mostramos vacío
+    } else {
+      // Restauramos el listado real
+      this.maquinarias = this.originalMaquinarias;
+    }
   }
 }
