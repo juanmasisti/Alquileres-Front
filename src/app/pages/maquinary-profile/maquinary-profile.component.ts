@@ -347,12 +347,17 @@ export class MaquinaryProfileComponent implements OnInit {
     if (this.maquinaria == null) return
     if (this.maquinaria.state === nuevoEstado) return;
 
+    let desc = `¿Estás seguro de cambiar el estado a "${nuevoEstado}"?`
+    if (this.maquinaria.state === MaquinariaState.Disponible) {
+      desc += ` Si hay reservas activas, se cancelarán.`
+    }
+
     const prevState = this.maquinaria!.state
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
       data: {
         title: 'Confirmar cambio de estado',
-        description: `¿Estás seguro de cambiar el estado a "${nuevoEstado}"? Si hay reservas activas, se cancelarán.`,
+        description: desc,
         confirmText: 'Sí, cambiar',
         cancelText: 'Cancelar'
       }
