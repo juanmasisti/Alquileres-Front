@@ -59,7 +59,7 @@ export class ManagementComponent implements OnInit {
     precioTotal: number
   ): void {
     let politica = String(maquina.politica);
-    if (this.rol !== 'Cliente') {
+    if (this.rol !== 'cliente') {
       politica = '100%';
     }
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
