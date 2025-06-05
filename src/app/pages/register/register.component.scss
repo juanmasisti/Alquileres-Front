@@ -1,8 +1,8 @@
 @use "index" as *;
 
 .main__container {
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh; // ✅ Esto permite crecer si el contenido lo requiere
+  width: 100%;
   background-image: url('../../../assets/images/BG-img.png');
   background-size: cover;
   background-position: center;
@@ -10,15 +10,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px; // ✅ Para que no se pegue a los bordes en pantallas chicas
+  box-sizing: border-box;
 }
 
 .container {
   background-color: rgba(0, 0, 0, 0.3);
-  height: 100%;
   width: 100%;
+  max-width: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
 }
 
 .register__container {
