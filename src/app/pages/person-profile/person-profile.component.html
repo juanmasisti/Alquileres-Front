@@ -5,7 +5,7 @@
     <div class="info__container">
       <div class="icon__container">
         <i class="fas fa-user-circle user-icon"></i>
-      </div>      
+      </div>
       <form
         [formGroup]="personDataForm"
         (ngSubmit)="editarDatos()"
@@ -152,15 +152,12 @@
               fecha de nacimiento es obligatoria. } @else if
               (personDataForm.get('nacimiento')?.errors?.['tooYoung']) {
               {{ personDataForm.get('nacimiento')?.errors?.['tooYoung']?.message }}
-              } @else if (personDataForm.get('nacimiento')?.errors?.['tooOld'])
-              {
-              {{ personDataForm.get('nacimiento')?.errors?.['tooOld']?.message }}
               }
             </small>
           </div>
         </div>
         <div class="buttons__container">
-          <button  [disabled]="loading || personDataForm.invalid">
+          <button [disabled]="loading || personDataForm.invalid">
             <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
             {{ loading ? "" : isEditing ? "GUARDAR" : "EDITAR DATOS" }}
           </button>

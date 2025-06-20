@@ -104,7 +104,7 @@ export class PersonProfileComponent implements OnInit {
       ],
       nacimiento: [
         { value: this.user.nacimiento, disabled: true },
-        [Validators.required, this.validateAgeRange(18, 100)],
+        [Validators.required, this.validateAgeRange(18)],
       ],
     });
   }
@@ -127,7 +127,7 @@ export class PersonProfileComponent implements OnInit {
     };
   }
 
-  private validateAgeRange(minAge: number, maxAge: number): ValidatorFn {
+  private validateAgeRange(minAge: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {
         return null;
@@ -155,17 +155,6 @@ export class PersonProfileComponent implements OnInit {
           },
         };
       }
-
-      if (age > maxAge) {
-        return {
-          tooOld: {
-            requiredAge: maxAge,
-            actualAge: age,
-            message: `La edad máxima permitida es ${maxAge} años`,
-          },
-        };
-      }
-
       return null;
     };
   }

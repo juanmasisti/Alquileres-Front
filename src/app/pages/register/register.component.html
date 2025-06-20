@@ -19,8 +19,8 @@
               registerForm.get('nombre')?.errors
             "
           >
-            @if (registerForm.get('nombre')?.errors?.['required']) { El nombre es
-            obligatorio. } @else if
+            @if (registerForm.get('nombre')?.errors?.['required']) { El nombre
+            es obligatorio. } @else if
             (registerForm.get('nombre')?.errors?.['minlength']) { Mínimo 2
             caracteres. } @else if
             (registerForm.get('nombre')?.errors?.['maxlength']) { Máximo 50
@@ -90,10 +90,10 @@
               registerForm.get('telefono')?.errors
             "
           >
-            @if (registerForm.get('telefono')?.errors?.['required']) { El numero de
-            telefono es obligatorio. } @else if
-            (registerForm.get('telefono')?.errors?.['invalidPhone']) { El formato
-            de telefono no es válido. Ej: +54 9 11 1234-5678 }
+            @if (registerForm.get('telefono')?.errors?.['required']) { El numero
+            de telefono es obligatorio. } @else if
+            (registerForm.get('telefono')?.errors?.['invalidPhone']) { El
+            formato de telefono no es válido. Ej: +54 9 11 1234-5678 }
           </small>
         </div>
 
@@ -151,7 +151,6 @@
             type="date"
             formControlName="nacimiento"
             [min]="minDate"
-            [max]="maxDate"
           />
           <small
             *ngIf="
@@ -159,19 +158,17 @@
               registerForm.get('nacimiento')?.errors
             "
           >
-            @if (registerForm.get('nacimiento')?.errors?.['required']) { La fecha
-            de nacimiento es obligatoria. } @else if
+            @if (registerForm.get('nacimiento')?.errors?.['required']) { La
+            fecha de nacimiento es obligatoria. } @else if
             (registerForm.get('nacimiento')?.errors?.['tooYoung']) {
             {{ registerForm.get('nacimiento')?.errors?.['tooYoung']?.message }}
-            } @else if (registerForm.get('nacimiento')?.errors?.['tooOld']) {
-            {{ registerForm.get('nacimiento')?.errors?.['tooOld']?.message }}
             }
           </small>
         </div>
 
         <!-- Mensaje de error global -->
         <div *ngIf="registerError" class="form-group">
-          <small style="color: red;">{{ registerError }}</small>
+          <small style="color: red">{{ registerError }}</small>
         </div>
 
         <!-- Botón -->
@@ -196,15 +193,16 @@
 </section>
 <app-footer></app-footer>
 
-
 <!-- modal de registro exitoso -->
- <div class="modal-overlay" *ngIf="registroExitoso">
+<div class="modal-overlay" *ngIf="registroExitoso">
   <div class="modal">
     <h4>¡Registro exitoso!</h4>
     <p>Tu cuenta ha sido creada correctamente.</p>
     <p>Ahora podés iniciar sesión con tu correo y contraseña.</p>
     <div class="modal-actions">
-      <button class="btn confirm" (click)="irALogin()">Ir a iniciar sesión</button>
+      <button class="btn confirm" (click)="irALogin()">
+        Ir a iniciar sesión
+      </button>
     </div>
   </div>
 </div>

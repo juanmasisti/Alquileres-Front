@@ -6,9 +6,22 @@
       <h1>GESTIONES</h1>
     </div>
 
-    <!-- <div class="reservas-tabs">
-      <button class="tab">RESERVAS</button>
-    </div> -->
+    <div class="reservas-tabs">
+      <button
+        class="tab"
+        (click)="fetchReservas()"
+        [class.active]="activeTab === 'reservas'"
+      >
+        RESERVAS
+      </button>
+      <button
+        class="tab"
+        (click)="fetchAlquileres()"
+        [class.active]="activeTab === 'alquileres'"
+      >
+        ALQUILERES
+      </button>
+    </div>
 
     <div class="reservas-table">
       <div class="reservas-header">
@@ -19,17 +32,22 @@
         <span>PRECIO</span>
         <span>SUCURSAL</span>
         <span>ESTADO</span>
-        <span>CANCELAR</span>
+        <span>ACCIONES</span>
       </div>
 
       <!-- Ejemplo de reservas -->
 
-      <div *ngIf="!loading && reservas.length == 0" class="no-results">
+      <div *ngIf="!loading && lista.length == 0" class="no-results">
         <i class="fas fa-exclamation-circle"></i>
+        @if (activeTab === 'reservas') {
         <p>No se encontraron reservas</p>
+        } @else if (activeTab === 'alquileres') {
+        <p>No se encontraron alquileres</p>
+        }
       </div>
 
-      @for (r of reservas; track r.id) {
+      @for (r of lista; track r.id) { 
+        @if (activeTab === 'reservas') {
       <div class="reserva-row">
         <span>{{ r.codigo_reserva }}</span>
         <span>{{ r.maquinaria.nombre }}</span>
@@ -43,10 +61,21 @@
           style="cursor: pointer"
           *ngIf="r.estado == 'Activa'"
           (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
-          >cancelar</a
+          >Cancelar</a
         >
       </div>
-      }
+      } @else if (activeTab === 'alquileres') {
+      <div class="reserva-row">
+        <span>{{ r.codigo_reserva }}</span>
+        <span>{{ r.maquinaria.nombre }} </span>
+        <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
+        <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
+        <span>${{ r.precio }}</span>
+        <span>{{ r.sucursal }}</span>
+        <span>{{ r.estado }}</span>
+        <a class="cancelar" style="cursor: pointer">Valorar</a>
+      </div>
+      } }
     </div>
   </div>
 </section>

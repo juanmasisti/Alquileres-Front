@@ -74,35 +74,23 @@ export class RegisterComponent implements OnInit {
           this.validateRegex(this.EMAIL_REGEX, 'invalidEmail'),
         ],
       ],
-      telefono: [
-        '',
-        [
-          Validators.required,
-          this.validatePhone('invalidPhone'),
-        ],
-      ],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-        ],
-      ],
+      telefono: ['', [Validators.required, this.validatePhone('invalidPhone')]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       dni: [
         '',
         [Validators.required, this.validateRegex(this.DNI_REGEX, 'invalidDni')],
       ],
-      nacimiento: ['', [Validators.required, this.validateAgeRange(18, 80)]],
+      nacimiento: ['', [Validators.required, this.validateAgeRange(18)]],
     });
   }
 
   private validatePhone(errorKey: string): ValidatorFn {
-      return (control: AbstractControl): ValidationErrors | null => {
-        if (!control.value) return null
-        const isValid = isValidPhoneNumber(control.value);
-        return isValid ? null : { [errorKey]: { value: control.value } };
-      };
-    }
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      const isValid = isValidPhoneNumber(control.value);
+      return isValid ? null : { [errorKey]: { value: control.value } };
+    };
+  }
 
   private validateRegex(regex: RegExp, errorKey: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -114,7 +102,7 @@ export class RegisterComponent implements OnInit {
     };
   }
 
-  private validateAgeRange(minAge: number, maxAge: number): ValidatorFn {
+  private validateAgeRange(minAge: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {
         return null;
@@ -143,16 +131,6 @@ export class RegisterComponent implements OnInit {
         };
       }
 
-      if (age > maxAge) {
-        return {
-          tooOld: {
-            requiredAge: maxAge,
-            actualAge: age,
-            message: `La edad máxima permitida es ${maxAge} años`,
-          },
-        };
-      }
-
       return null;
     };
   }
@@ -170,14 +148,6 @@ export class RegisterComponent implements OnInit {
       today.getDate()
     );
     this.maxDate = maxDate.toISOString().split('T')[0];
-
-    // Edad máxima (80 años)
-    const minDate = new Date(
-      today.getFullYear() - 80,
-      today.getMonth(),
-      today.getDate()
-    );
-    this.minDate = minDate.toISOString().split('T')[0];
   }
 
   registrarUsuario() {
@@ -187,8 +157,8 @@ export class RegisterComponent implements OnInit {
     }
 
     const formData = this.registerForm.value;
-    
-    this.registerError = ''
+
+    this.registerError = '';
 
     this.registerService.register(formData).subscribe({
       next: () => {
