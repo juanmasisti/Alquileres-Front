@@ -1,0 +1,149 @@
+@use 'index' as *;
+
+.main__container {
+  min-height: 100vh;
+  margin-top: 80px; // para separar de navbar
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+  background-color: $background-color;
+}
+
+.manage__container {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 95%;
+  max-width: 1200px;
+  background-color: $section-color;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  font-size: 2.4rem;
+  color: $primary-color;
+  margin-bottom: 2rem;
+  border-bottom: 3px solid $primary-color;
+  padding-bottom: 0.5rem;
+}
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr 1.5fr;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.table-header {
+  font-weight: 700;
+  background-color: #ffe6cc;
+  border: 1px solid #f6b26b;
+}
+
+.table-row {
+  background-color: #fff7ec;
+  border: 1px solid #f6b26b;
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #fff0e0;
+  }
+}
+
+.estado {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+
+  &.activo {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  &.inactivo {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}
+
+.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.editar {
+  background-color: #4caf50;
+  color: #fff;
+
+  &:hover {
+    background-color: #43a047;
+  }
+}
+
+.eliminar {
+  background-color: #f44336;
+  color: #fff;
+
+  &:hover {
+    background-color: #e53935;
+  }
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+
+  i {
+    font-size: 2.5rem;
+    color: $gray-light;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $gray-dark;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .table-header,
+  .table-row {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto auto;
+    row-gap: 0.5rem;
+    text-align: left;
+  }
+
+  .acciones {
+    justify-content: flex-start;
+  }
+
+  .table-header > div:nth-child(n+3),
+  .table-row > div:nth-child(n+3) {
+    grid-column: span 2;
+  }
+}

@@ -44,4 +44,15 @@ export class UserService {
   deleteProfile(): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${this.authService.getUserId()}/deactivate`)
   }
+
+  //obtener todos los usuarios
+  getAllUsers() {
+  return this.http.get<any[]>(`${this.baseUrl}`); 
+  }
+
+  //desactivar usuario
+  deactivateUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${userId}/deactivate`);
+  }
+
 }
