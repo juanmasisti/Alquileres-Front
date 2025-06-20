@@ -33,7 +33,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.rol = sessionStorage.getItem('rol');
-    // obtener el nombre del usuario desde el servicio
+
     this.userService.getProfile().subscribe({
       next: (user) => {
         this.name = user.nombre;
@@ -42,13 +42,30 @@ export class NavbarComponent implements OnInit {
         console.log('Error al obtener perfil del usuario:', err);
       },
     });
+
     this.checkViewport();
+
     this.navService.items.subscribe((items) => {
-      this.menuItems = items;
+      // Clonamos el array para no modificar el observable directamente
+      let menu = [...items];
+
+      // Agregamos el ítem USUARIOS solo si es admin
+      if (this.rol === 'admin') {
+        menu.push({
+          title: 'USUARIOS',
+          path: '/usuarios',
+          type: 'link',
+          icon: 'fas fa-users-cog',
+        });
+      }
+
+      this.menuItems = menu;
     });
+
     console.log('Token en sesión:', sessionStorage.getItem('token'));
     console.log('Autenticado:', this.isAuthenticated());
-  }
+    console.log('Rol del usuario:', this.rol);
+  } 
 
   @HostListener('window:resize', ['$event'])
   onResize() {

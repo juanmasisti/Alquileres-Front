@@ -12,6 +12,7 @@ import { TestComponent } from './pages/testear/testear.component';
 import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo.component';
 import { LoginComponent } from './pages/login/Login.component';
 import { ManagementComponent } from './pages/management/management.component';
+import { UsersComponent } from './pages/users/users.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,16 @@ export const routes: Routes = [
     },
     component: ContactComponent,
   },
+
+  {
+    path: 'usuarios',
+    data: {
+      title: 'Usuarios',
+    },
+    component: UsersComponent
+  }
+  ,
+  // fin navbar
   {
     path: 'registrar',
     data: {

@@ -164,7 +164,7 @@ export class PersonProfileComponent implements OnInit {
   deleteProfile() {
   const dialogRef = this.dialog.open(ConfirmModalComponent, {
     data: {
-      title: '¿Estás seguro?',
+      title: '¿Estás seguro/a?',
       description: 'Esta acción eliminará tu cuenta permanentemente.',
       confirmText: 'Sí, eliminar',
       cancelText: 'Cancelar',
