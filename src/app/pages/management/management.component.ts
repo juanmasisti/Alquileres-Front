@@ -7,17 +7,19 @@ import { Reserva } from 'src/app/models/reserva.model';
 import { CommonModule } from '@angular/common';
 import { Maquinaria } from 'src/app/models/maquinaria.model';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
+import { ManageModalComponent } from './manage-modal/manage-modal.component';
 
 @Component({
   selector: 'app-management',
   templateUrl: './management.component.html',
   styleUrls: ['./management.component.scss'],
-  imports: [NavbarComponent, FooterComponent, CommonModule],
+  imports: [NavbarComponent, FooterComponent, CommonModule, MatDialogModule],
 })
 export class ManagementComponent implements OnInit {
   lista: any[] = [];
-  loading: boolean = true;
+  loading: boolean = false;
   rol: string = sessionStorage.getItem('rol') ?? 'visitante';
   activeTab: 'reservas' | 'alquileres' = 'reservas'; // Default to reservas
 
@@ -39,6 +41,7 @@ export class ManagementComponent implements OnInit {
   fetchReservas(): void {
     this.lista = [];
     this.activeTab = 'reservas';
+    this.loading = true;
     this.reservaService.getReservas().subscribe({
       next: (data) => {
         this.lista = data.sort((a, b) => {
@@ -60,6 +63,7 @@ export class ManagementComponent implements OnInit {
   fetchAlquileres(): void {
     this.lista = [];
     this.activeTab = 'alquileres';
+    this.loading = true;
     this.alquilerService.getAlquileres().subscribe({
       next: (data) => {
         this.lista = data.sort((a, b) => {
@@ -117,6 +121,13 @@ export class ManagementComponent implements OnInit {
       error: (error) => {
         console.error(`Error cancelling reserva ${id}:`, error);
       },
+    });
+  }
+
+  abrirGestionModal(alquiler: any): void {
+    this.dialog.open(ManageModalComponent, {
+      width: '500px', // podés ajustar el ancho
+      data: alquiler,
     });
   }
 }

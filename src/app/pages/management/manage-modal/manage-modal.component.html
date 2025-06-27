@@ -1,0 +1,64 @@
+<div class="manage-modal">
+  <h2>GESTIONAR ALQUILER</h2>
+  <div class="manage-info">
+    <p>
+      <b>{{ this.alquiler.maquinaria.nombre }}</b> con codigo
+      <b>{{ this.alquiler.maquinaria.inventario }}</b
+      >,
+    </p>
+    <p>
+      Codigo de alquiler <b>{{ this.alquiler.codigo_reserva }}</b
+      >,
+    </p>
+    <p>
+      Alquilado por <b>{{ this.alquiler.usuario.email }}</b
+      >.
+    </p>
+    <p>
+      Desde <b>{{ this.alquiler.fecha_inicio | date }}</b
+      >, hasta <b>{{ this.alquiler.fecha_fin | date }}</b
+      >,
+    </p>
+  </div>
+  <form [formGroup]="manageForm" class="form-container">
+    <!-- <div class="form-group">
+      <label for="codigo">Cambiar estado ⤵</label>
+      <select formControlName="estado" class="form-control">
+        <option value="" disabled selected>- Seleccionar estado -</option>
+        <option *ngFor="let st of estados" [value]="st">{{ st }}</option>
+      </select>
+      <small
+        *ngIf="
+          manageForm.get('state')?.touched && manageForm.get('state')?.invalid
+        "
+      >
+        El estado es requerido.
+      </small>
+    </div> -->
+    <div class="form-group">
+      <label>Obsevaciones de devolucion ⤵ (opcional)</label>
+      <textarea
+        formControlName="observacion"
+        placeholder="Observaciones"
+        class="form-control auto-grow"
+        rows="1"
+        maxlength="255"
+      ></textarea>
+      <small class="contador">
+        {{ manageForm.get("observacion")?.value?.length || 0 }}/255
+      </small>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="loading || manageForm.invalid"
+      class="form-control confirm-btn"
+      (click)="openConfirmModal()"
+    >
+      <span *ngIf="!loading">Confirmar</span>
+      <span *ngIf="loading"
+        ><i class="fas fa-spinner fa-spin"></i> Cargando...</span
+      >
+    </button>
+  </form>
+</div>

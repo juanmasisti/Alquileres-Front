@@ -16,4 +16,9 @@ export class AlquileresService {
     return this.http.get<Alquiler[]>(this.baseUrl);
   }
 
+  confirmarAlquiler(id: number, observacion: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${id}/confirmar`, {
+      observacion,
+    });
+  }
 }
