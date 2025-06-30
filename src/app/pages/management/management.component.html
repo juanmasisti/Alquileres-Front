@@ -25,7 +25,11 @@
 
     <div class="reservas-table">
       <div class="reservas-header">
+        @if (activeTab === 'reservas') {
         <span>CODIGO DE RESERVA</span>
+        } @else if (activeTab === 'alquileres') {
+        <span>CODIGO DE ALQUILER</span>
+        }
         <span>MAQUINA</span>
         <span>DESDE</span>
         <span>HASTA</span>
@@ -35,9 +39,14 @@
         <span>ACCIONES</span>
       </div>
 
-      <!-- Ejemplo de reservas -->
+      <!-- Spinner de carga -->
+      <div *ngIf="loading" class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Cargando...</p>
+      </div>
 
-      <div *ngIf="!loading && lista.length == 0" class="no-results">
+      <!-- Mensaje cuando no hay resultados -->
+      <div *ngIf="!loading && lista.length === 0" class="no-results">
         <i class="fas fa-exclamation-circle"></i>
         @if (activeTab === 'reservas') {
         <p>No se encontraron reservas</p>
@@ -46,14 +55,13 @@
         }
       </div>
 
-      @for (r of lista; track r.id) { 
-        @if (activeTab === 'reservas') {
+      @for (r of lista; track r.id) { @if (activeTab === 'reservas') {
       <div class="reserva-row">
         <span>{{ r.codigo_reserva }}</span>
         <span>{{ r.maquinaria.nombre }}</span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
-        <span>${{ r.precio_total }}</span>
+        <span>${{ r.precio_dia }}</span>
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
         <a
@@ -73,7 +81,11 @@
         <span>${{ r.precio }}</span>
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
-        <a class="cancelar" style="cursor: pointer">Valorar</a>
+        @if (rol == 'cliente') {
+        <a class="cancelar" style="cursor: pointer">Valorar</a>} @else if (rol
+        == 'empleado' || rol == 'admin') {
+        <a class="cancelar" (click)="abrirGestionModal(r)">Gestionar</a>
+        }
       </div>
       } }
     </div>
