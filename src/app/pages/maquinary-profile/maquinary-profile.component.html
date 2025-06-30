@@ -93,7 +93,7 @@
             [(ngModel)]="selectedClientEmail"
             (input)="onClientEmailInput($event)"
             placeholder="Ingresá el email del cliente"
-            [attr.list]="'clientsList'"
+            list="clientsList"
           />
 
           <datalist id="clientsList">
@@ -101,11 +101,15 @@
               {{ user.fullName || user.email }}
             </option>
           </datalist>
+          <!-- Mensaje de error si el email ingresado no existe -->
+          <p class="error-message" *ngIf="selectedClientEmail && !emailExists">
+            El email ingresado no corresponde a ningún cliente registrado.
+          </p>
         </div>
 
-          <label for="dateRangePicker">Seleccioná el rango de fechas:</label>
+          <label for="dateRangePicker" *ngIf="selectedClientEmail && emailExists">Seleccioná el rango de fechas:</label>
 
-          <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-form-field appearance="fill" style="width: 100%;" *ngIf="selectedClientEmail && emailExists">
             <mat-label>Rango de fechas</mat-label>
            <mat-date-range-input 
               [rangePicker]="picker"
@@ -138,7 +142,7 @@
           </mat-form-field>
 
           <!-- Mostrar resumen de lo seleccionado -->
-        <div *ngIf="beginDate && endDate && precioTotal>0" class="summary-container">
+        <div *ngIf="beginDate && endDate && precioTotal>0 && emailExists" class="summary-container">
             <div class="summary-item">
               <span class="summary-label">Desde:</span>
               <span>{{ beginDate | date: 'dd/MM/yyyy' }}</span>

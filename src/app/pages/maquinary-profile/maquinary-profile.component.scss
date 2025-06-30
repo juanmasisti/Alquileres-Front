@@ -340,6 +340,11 @@ $summary-border: $gray-light;
 
 .form-group {
   margin-bottom: 1.5rem;
+  .error-message {
+    color: #f44336; // Rojo para errores
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
 
   label {
     display: block;

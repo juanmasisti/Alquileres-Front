@@ -66,6 +66,7 @@ export class MaquinaryProfileComponent implements OnInit {
   allUsers: any[] = [];
   filteredUsers: any[] = [];
   selectedClientEmail: string = '';
+  emailExists: boolean = true;
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     const startDate = new Date(Date.now());
@@ -144,7 +145,9 @@ export class MaquinaryProfileComponent implements OnInit {
   loadAllUsers() {
     this.userService.getAllUsers().subscribe({
       next: (users) => {
-        this.allUsers = users.filter(u => u.role === 'cliente');
+        console.log('Usuarios cargados:', users);
+        this.allUsers = users
+        console.log('Cantidad de usuarios:', this.allUsers.length);
       },
       error: (err) => {
         console.error('Error al obtener usuarios', err);
@@ -427,13 +430,31 @@ export class MaquinaryProfileComponent implements OnInit {
 
 onClientEmailInput(event: Event): void {
   const input = event.target as HTMLInputElement;
-  const value = input.value;
-  console.log('Email ingresado:', value);
+  const value = input.value.trim();
 
-  // Filtra usuarios si querés
+  console.log('🔵 Email ingresado:', value);
+  console.log('🔵 allUsers cargados:', this.allUsers.length);
+
+  if (!this.allUsers || this.allUsers.length === 0) {
+    console.warn('⚠️ No hay usuarios cargados aún');
+    this.filteredUsers = [];
+    this.emailExists = false;
+    return;
+  }
+
+  // Filtra usuarios que incluyan el valor tipeado
   this.filteredUsers = this.allUsers.filter(user =>
     user.email.toLowerCase().includes(value.toLowerCase())
   );
+
+  // console.log('🟢 Usuarios filtrados:', this.filteredUsers);
+
+  // Verifica si el email exacto existe en la lista de usuarios
+  this.emailExists = this.allUsers.some(user =>
+    user.email.toLowerCase() === value.toLowerCase()
+  );
+
+  console.log('🟢 emailExists:', this.emailExists);
 }
 
 }
