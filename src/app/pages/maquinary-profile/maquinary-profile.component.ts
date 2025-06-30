@@ -363,7 +363,7 @@ export class MaquinaryProfileComponent implements OnInit {
 
     this.destroyMp()
 
-    this.mercadoPagoService.getPreferenceId(item, this.isEmployee? this.selectedClientEmail: undefined).subscribe({ // si es empleado, pasamos el email del cliente
+    this.mercadoPagoService.getPreferenceId({ ...item, user_email: this.isEmployee ? this.selectedClientEmail : undefined }).subscribe({ // si es empleado, pasamos el email del cliente
       next: async (res) => {
         this.initBricks();
         this.renderWalletBrick(res.id)

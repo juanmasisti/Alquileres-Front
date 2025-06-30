@@ -15,13 +15,11 @@ export class MercadoPagoService {
   
   constructor(private http: HttpClient) {}
 
-  getPreferenceId(pagoData: PagoModel, userEmail?: string): Observable<any> {
+  getPreferenceId(pagoData: PagoModel): Observable<any> {
     let params: HttpParams = new HttpParams()
     for (const [key, value] of Object.entries(pagoData)) {
+        if(value == undefined || !value) continue
         params = params.set(key, value)
-    }
-    if (userEmail) {
-      params = params.set('userEmail', userEmail);
     }
     return this.http.get<any>(this.baseUrl, { params });
   }

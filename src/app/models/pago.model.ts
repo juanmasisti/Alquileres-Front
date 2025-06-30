@@ -2,5 +2,6 @@ export interface PagoModel {
     maq_id: number,
     days: number,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    user_email?: string
 }
