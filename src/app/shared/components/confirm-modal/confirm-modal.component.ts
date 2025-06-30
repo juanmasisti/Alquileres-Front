@@ -9,6 +9,7 @@ interface ConfirmModalData {
   confirmText: string;
   cancelText: string;
   icon?: string;
+  loading?: boolean; // modal de tipo loader
 }
 
 @Component({

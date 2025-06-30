@@ -58,6 +58,15 @@ export class NavbarComponent implements OnInit {
           icon: 'fas fa-users-cog',
         });
       }
+      // Agregamos el agregar cliente solo si es empleado
+      if (this.rol === 'empleado') {
+        menu.push({
+          title: 'AGREGAR CLIENTE',
+          path: '/crear-cliente',
+          type: 'link',
+          icon: 'fas fa-user-plus'
+        });
+      }
 
       this.menuItems = menu;
     });

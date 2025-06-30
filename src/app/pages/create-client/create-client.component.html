@@ -1,0 +1,97 @@
+<app-navbar></app-navbar>
+
+<section class="crear-cliente-page">
+  <h2 class="page-title">Registrar Cliente</h2>
+
+  <form [formGroup]="userForm" (ngSubmit)="createUser()" class="form-container">
+    
+    <!-- Nombre -->
+    <div class="form-group">
+      <input type="text" placeholder="Nombre" formControlName="nombre" />
+      <small *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors">
+        @if (userForm.get('nombre')?.errors?.['required']) {
+          El nombre es obligatorio.
+        } @else if (userForm.get('nombre')?.errors?.['minlength']) {
+          Mínimo 2 caracteres.
+        } @else if (userForm.get('nombre')?.errors?.['maxlength']) {
+          Máximo 50 caracteres.
+        } @else if (userForm.get('nombre')?.errors?.['invalidName']) {
+          Solo letras y espacios permitidos.
+        }
+      </small>
+    </div>
+
+    <!-- Apellido -->
+    <div class="form-group">
+      <input type="text" placeholder="Apellido" formControlName="apellido" />
+      <small *ngIf="userForm.get('apellido')?.touched && userForm.get('apellido')?.errors">
+        @if (userForm.get('apellido')?.errors?.['required']) {
+          El apellido es obligatorio.
+        } @else if (userForm.get('apellido')?.errors?.['invalidLastName']) {
+          Solo letras y espacios permitidos.
+        }
+      </small>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <input type="email" placeholder="Email" formControlName="email" />
+      <small *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors">
+        @if (userForm.get('email')?.errors?.['required']) {
+          El email es obligatorio.
+        } @else if (userForm.get('email')?.errors?.['invalidEmail']) {
+          El formato de email es inválido.
+        }
+      </small>
+    </div>
+
+    <!-- Teléfono -->
+    <div class="form-group">
+      <input type="tel" placeholder="Teléfono" formControlName="telefono" />
+      <small *ngIf="userForm.get('telefono')?.touched && userForm.get('telefono')?.errors">
+        @if (userForm.get('telefono')?.errors?.['required']) {
+          El teléfono es obligatorio.
+        } @else if (userForm.get('telefono')?.errors?.['invalidPhone']) {
+          El número de teléfono es inválido.
+        }
+      </small>
+    </div>
+
+    <!-- DNI -->
+    <div class="form-group">
+      <input type="text" placeholder="DNI" formControlName="dni" />
+      <small *ngIf="userForm.get('dni')?.touched && userForm.get('dni')?.errors">
+        @if (userForm.get('dni')?.errors?.['required']) {
+          El DNI es obligatorio.
+        } @else if (userForm.get('dni')?.errors?.['invalidDni']) {
+          Debe tener 7 u 8 dígitos numéricos.
+        }
+      </small>
+    </div>
+
+    <!-- Fecha de nacimiento -->
+    <div class="form-group">
+      <input type="date" formControlName="nacimiento" [max]="maxDate" />
+      <small *ngIf="userForm.get('nacimiento')?.touched && userForm.get('nacimiento')?.errors">
+        @if (userForm.get('nacimiento')?.errors?.['required']) {
+          La fecha de nacimiento es obligatoria.
+        } @else if (userForm.get('nacimiento')?.errors?.['tooYoung']) {
+          {{ userForm.get('nacimiento')?.errors?.['tooYoung']?.message }}
+        }
+      </small>
+    </div>
+
+    <!-- Error del servidor -->
+    <div *ngIf="errorMessage" class="form-group">
+      <small class="error">{{ errorMessage }}</small>
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button type="submit" [disabled]="userForm.invalid">Crear Cliente</button>
+      <button type="button" class="cancelar" (click)="cancel()">Atrás</button>
+    </div>
+  </form>
+</section>
+
+<app-footer></app-footer>

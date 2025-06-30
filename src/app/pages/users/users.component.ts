@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/services/user.service';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
+import { CreateUserModalComponent } from 'src/app/shared/components/create-user-modal/create-user-modal.component';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
 
@@ -83,6 +84,25 @@ export class UsersComponent implements OnInit {
             );
             }
           });
+        }
+      });
+    }
+
+    openCreateUserModal(): void {
+      const dialogRef = this.dialog.open(CreateUserModalComponent, {
+        data: {
+          tipoCuenta: 'empleado', // o 'cliente' si lo usas en otro lado
+          titulo: 'Crear Cuenta de Empleado',
+          accionLabel: 'Crear'
+        },
+        width: '700px',
+        maxWidth: '95vw', // para que no se rompa en mobile
+        height: '70vh',
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.loadUsers(); // recargar usuarios si se creó uno nuevo
         }
       });
     }

@@ -13,6 +13,9 @@ import { IngresarCodigoComponent } from './pages/ingresar-codigo/ingresar-codigo
 import { LoginComponent } from './pages/login/Login.component';
 import { ManagementComponent } from './pages/management/management.component';
 import { UsersComponent } from './pages/users/users.component';
+import { CreateClientComponent } from './pages/create-client/create-client.component';
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -46,8 +49,10 @@ export const routes: Routes = [
     path: 'usuarios',
     data: {
       title: 'Usuarios',
+      roles: ['admin'] // Solo los administradores pueden acceder a esta ruta
     },
-    component: UsersComponent
+    component: UsersComponent,
+    canActivate: [AuthGuard, RoleGuard],
   }
   ,
   // fin navbar
@@ -78,6 +83,7 @@ export const routes: Routes = [
       title: 'Perfil',
     },
     component: PersonProfileComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: `perfil/id/cambiar-clave`,
@@ -85,6 +91,7 @@ export const routes: Routes = [
       title: 'Cambiar clave',
     },
     component: ChangePasswordComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'recuperar-clave',
@@ -113,6 +120,7 @@ export const routes: Routes = [
       title: 'Ingresar código',
     },
     component: IngresarCodigoComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'gestiones',
@@ -120,7 +128,17 @@ export const routes: Routes = [
       title: 'Gestiones',
     },
     component: ManagementComponent,
+    canActivate: [AuthGuard]
   },
+  {
+    path: 'crear-cliente',
+    data: {
+      title: 'Crear Cliente',
+      roles: ['empleado'] // Solo los empleados pueden acceder a esta ruta
+    },
+    component: CreateClientComponent,
+    canActivate: [AuthGuard, RoleGuard],
+  }
 ];
 @NgModule({
   imports: [

@@ -127,6 +127,31 @@
     color: $gray-dark;
   }
 }
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  .title {
+    margin: 0; // quitar márgenes por defecto
+  }
+
+  .btn.agregar {
+    background-color: #ee9b00;
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #ca7c00;
+    }
+  }
+}
 
 // Responsive
 @media (max-width: 768px) {
@@ -147,3 +172,4 @@
     grid-column: span 2;
   }
 }
+

@@ -1,0 +1,104 @@
+@use "index" as *;
+
+.crear-cliente-page {
+  max-width: 600px;
+  margin: 6rem auto 7rem auto; // espacio arriba y abajo
+  padding: 2rem;
+  border-radius: 10px;
+
+  .page-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: $primary-color;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid $primary-color;
+    padding-bottom: 0.8rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+
+      input {
+        padding: 0.8rem 1rem;
+        border: 1.5px solid $primary-color;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+          outline: none;
+          border-color: $secondary-color;
+          box-shadow: 0 0 5px rgba($secondary-color, 0.4);
+        }
+      }
+
+      small {
+        color: red;
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+      }
+
+      .error {
+        color: red;
+        font-weight: 600;
+        text-align: center;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-evenly;
+      flex-direction: row-reverse;
+      gap: 1rem;
+      margin-top: 1rem;
+
+      button {
+        padding: 0.7rem 1.4rem;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+
+        &:first-child {
+          background-color: $primary-color;
+          color: white;
+
+          &:hover {
+            background-color: darken($primary-color, 10%);
+            transform: scale(1.03);
+          }
+
+          &:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+          }
+        }
+
+        &.cancelar {
+          background-color: #ccc;
+          color: #333;
+
+          &:hover {
+            background-color: #bbb;
+            transform: scale(1.03);
+          }
+        }
+      }
+    }
+  }
+}

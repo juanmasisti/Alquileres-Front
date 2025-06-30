@@ -55,4 +55,12 @@ export class UserService {
     return this.http.delete(`${this.baseUrl}/${userId}/deactivate`);
   }
 
+  // createClientAndEmployee(data: any): Observable<any> {
+  //   return this.http.post(`${this.baseUrl}/create`, data).pipe(
+  //     catchError((error) => {
+  //       console.error('Error al crear usuario:', error);
+  //       return throwError(() => error);
+  //     })
+  //   );
+  // }
 }

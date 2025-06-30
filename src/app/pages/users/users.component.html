@@ -2,8 +2,12 @@
 
 <section class="main__container">
   <div class="manage__container">
-    <h1 class="title">LISTADO DE USUARIOS</h1>
-
+    <div class="header-actions">
+      <h1 class="title">LISTADO DE USUARIOS</h1>
+      <button class="btn agregar" (click)="openCreateUserModal()">
+        + Agregar Empleado
+      </button>
+    </div>
     <div class="table-wrapper">
       <div class="table-header">
         <div>NOMBRE</div>
