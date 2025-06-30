@@ -21,13 +21,15 @@ export class ManagementComponent implements OnInit {
   lista: any[] = [];
   loading: boolean = false;
   rol: string = sessionStorage.getItem('rol') ?? 'visitante';
-  activeTab: 'reservas' | 'alquileres' = 'reservas'; // Default to reservas
+  activeTab: 'reservas' | 'alquileres' = 'reservas';
+  hoy = new Date();
 
   constructor(
     private reservaService: ReservasService,
     private alquilerService: AlquileresService,
     private dialog: MatDialog
-  ) {}
+  ) 
+  { this.hoy.setHours(0, 0, 0, 0); }
 
   ngOnInit() {
     this.fetchReservas();
@@ -44,12 +46,7 @@ export class ManagementComponent implements OnInit {
     this.loading = true;
     this.reservaService.getReservas().subscribe({
       next: (data) => {
-        this.lista = data.sort((a, b) => {
-          return (
-            new Date(b.fecha_inicio).getTime() -
-            new Date(a.fecha_inicio).getTime()
-          );
-        });
+        this.lista = this.sortReservas(data);
         this.loading = false;
         console.log('Reservas fetched and sorted:', this.lista);
       },
@@ -60,18 +57,43 @@ export class ManagementComponent implements OnInit {
     });
   }
 
+  private sortReservas(data: any[]): any[] {
+    const statusPriority = (estado: string) => {
+      switch (estado) {
+        case 'Activa': return 1;
+        case 'Cancelada': return 2;
+        case 'Reembolsada': return 3;
+        case 'Finalizada': return 3;
+        default: return 4;
+      }
+    };
+
+    return data.sort((a, b) => {
+      const pa = statusPriority(a.estado);
+      const pb = statusPriority(b.estado);
+
+      if (pa !== pb) {
+        return pa - pb;
+      }
+
+      const da = new Date(a.fecha_inicio).getTime();
+      const db = new Date(b.fecha_inicio).getTime();
+
+      if (pa === 1 || pa === 2) {
+        return da - db;
+      } else {
+        return db - da;
+      }
+    });
+  }
+
   fetchAlquileres(): void {
     this.lista = [];
     this.activeTab = 'alquileres';
     this.loading = true;
     this.alquilerService.getAlquileres().subscribe({
       next: (data) => {
-        this.lista = data.sort((a, b) => {
-          return (
-            new Date(b.fecha_inicio).getTime() -
-            new Date(a.fecha_inicio).getTime()
-          );
-        });
+        this.lista = this.sortAlquileres(data);
         this.loading = false;
         console.log('Alquileres fetched and sorted: ', this.lista);
       },
@@ -79,6 +101,34 @@ export class ManagementComponent implements OnInit {
         console.error('Error fetching alquileres: ', error);
         this.loading = false;
       },
+    });
+  }
+
+  private sortAlquileres(data: any[]): any[] {
+    const statusPriority = (estado: string) => {
+      switch (estado) {
+        case 'Activo': return 1;
+        case 'Finalizado': return 2;
+        default: return 2;
+      }
+    };
+
+    return data.sort((a, b) => {
+      const pa = statusPriority(a.estado);
+      const pb = statusPriority(b.estado);
+
+      if (pa !== pb) {
+        return pa - pb;
+      }
+
+      const da = new Date(a.fecha_inicio).getTime();
+      const db = new Date(b.fecha_inicio).getTime();
+
+      if (pa === 1) {
+        return da - db;
+      } else {
+        return db - da;
+      }
     });
   }
 
@@ -107,7 +157,7 @@ export class ManagementComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.cancelarReserva(id); // ← Solo se ejecuta si el usuario confirmó
+        this.cancelarReserva(id);
       }
     });
   }
@@ -116,10 +166,68 @@ export class ManagementComponent implements OnInit {
     this.reservaService.cancelarReserva(id).subscribe({
       next: () => {
         console.log(`Reserva ${id} cancelled successfully`);
-        this.fetchReservas(); // Refresh the list after cancellation
+        this.fetchReservas();
       },
       error: (error) => {
         console.error(`Error cancelling reserva ${id}:`, error);
+      },
+    });
+  }
+
+  modalConfirmarReserva( id: number , maquina: Maquinaria): void {
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        width: '400px',
+        data: {
+          title: `¿Confirmar entrega de ${maquina.nombre}?`,
+          description: `Se confirmará la entrega de ${ maquina.nombre }.`,
+          confirmText: 'Confirmar',
+          cancelText: 'Atrás',
+        },
+  });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.confirmarReserva(id, 'entregado');
+      }
+    });
+  }
+
+  modalConfirmarReembolso(
+    id: number,
+    maquina: Maquinaria,
+    precioTotal: number
+  ): void {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: {
+        title: `¿Confirmar reembolso de ${maquina.nombre}?`,
+        description: `Se confirmará el reembolso de ${maquina.nombre} con un costo total de $${precioTotal}.`,
+        confirmText: 'Confirmar',
+        cancelText: 'Atrás',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.confirmarReserva(id, 'reembolso');
+      }
+    });
+  }
+
+  confirmarReserva(id: number, estado: string): void {
+    this.reservaService.confirmarReserva(id).subscribe({
+      next: () => {
+
+        if (estado === 'entregado') {
+          console.log(`Reserva ${id} confirmada. Se entregó la maquinaria.`);
+        }
+        else if (estado === 'reembolso') {
+          console.log(`Reserva ${id} reembolsada.`);
+        }
+        this.fetchReservas();
+      },
+      error: (error) => {
+        console.error(`Error confirmando reserva ${id}:`, error);
       },
     });
   }
@@ -129,5 +237,11 @@ export class ManagementComponent implements OnInit {
       width: '500px', // podés ajustar el ancho
       data: alquiler,
     });
+  }
+
+  reservaIniciada(fecha_inicio: string) {
+    const reservaDate = new Date(fecha_inicio);
+    reservaDate.setHours(0, 0, 0, 0);
+    return reservaDate <= this.hoy;
   }
 }
