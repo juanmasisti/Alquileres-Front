@@ -84,6 +84,25 @@
       <!-- Modal -->
       <div *ngIf="mostrarModal" class="modal-overlay">
         <div class="modal">
+          <!-- Input email cliente (solo para empleado) -->
+         <div *ngIf="isEmployee" class="form-group">
+          <label for="clientEmail">Email del cliente</label>
+          <input
+            type="email"
+            id="clientEmail"
+            [(ngModel)]="selectedClientEmail"
+            (input)="onClientEmailInput($event)"
+            placeholder="Ingresá el email del cliente"
+            [attr.list]="'clientsList'"
+          />
+
+          <datalist id="clientsList">
+            <option *ngFor="let user of filteredUsers" [value]="user.email">
+              {{ user.fullName || user.email }}
+            </option>
+          </datalist>
+        </div>
+
           <label for="dateRangePicker">Seleccioná el rango de fechas:</label>
 
           <mat-form-field appearance="fill" style="width: 100%;">

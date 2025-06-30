@@ -26,6 +26,8 @@ import { Maquinaria, MaquinariaState } from 'src/app/models/maquinaria.model';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { ReservasService } from 'src/app/services/reservas.service';
+import { User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/services/user.service';
 
 declare var MercadoPago: any;
 
@@ -58,6 +60,12 @@ export class MaquinaryProfileComponent implements OnInit {
   beginDate?: Date;
   endDate?: Date;
   isAdmin = sessionStorage.getItem('rol') === 'admin'
+  isEmployee = sessionStorage.getItem('rol') === 'empleado'
+
+  // Para el autocomplete de usuarios
+  allUsers: any[] = [];
+  filteredUsers: any[] = [];
+  selectedClientEmail: string = '';
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     const startDate = new Date(Date.now());
@@ -83,7 +91,8 @@ export class MaquinaryProfileComponent implements OnInit {
     private maquinariaService: MaquinariaService,
     private mercadoPagoService: MercadoPagoService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userService: UserService
   ) {
     this.minDate.setDate(this.minDate.getDate() + 1)
   }
@@ -93,6 +102,8 @@ export class MaquinaryProfileComponent implements OnInit {
   }
 
  ngOnInit() {
+  // cargamos los usuarios para el autocomplete
+  this.loadAllUsers();
   const id = this.route.snapshot.paramMap.get('id');
   this.initMercadoPago();
 
@@ -129,6 +140,18 @@ export class MaquinaryProfileComponent implements OnInit {
     this.isLoading = false;
   }
 }
+
+  loadAllUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (users) => {
+        this.allUsers = users.filter(u => u.role === 'cliente');
+      },
+      error: (err) => {
+        console.error('Error al obtener usuarios', err);
+        this.allUsers = [];
+      }
+    });
+  }
 
   private initMercadoPago() {
     const publicKey = environment.mercadoPagoPublicKey;
@@ -340,7 +363,7 @@ export class MaquinaryProfileComponent implements OnInit {
 
     this.destroyMp()
 
-    this.mercadoPagoService.getPreferenceId(item).subscribe({
+    this.mercadoPagoService.getPreferenceId(item, this.isEmployee? this.selectedClientEmail: undefined).subscribe({ // si es empleado, pasamos el email del cliente
       next: async (res) => {
         this.initBricks();
         this.renderWalletBrick(res.id)
@@ -401,4 +424,16 @@ export class MaquinaryProfileComponent implements OnInit {
       default: return '';
     }
   }    
+
+onClientEmailInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const value = input.value;
+  console.log('Email ingresado:', value);
+
+  // Filtra usuarios si querés
+  this.filteredUsers = this.allUsers.filter(user =>
+    user.email.toLowerCase().includes(value.toLowerCase())
+  );
+}
+
 }
