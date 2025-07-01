@@ -21,7 +21,7 @@ export class ManagementComponent implements OnInit {
   lista: any[] = [];
   loading: boolean = false;
   rol: string = sessionStorage.getItem('rol') ?? 'visitante';
-  activeTab: 'reservas' | 'alquileres' = 'reservas'; // Default to reservas
+  activeTab: 'reservas' | 'alquileres' = 'reservas';
   hoy = new Date();
 
   constructor(
@@ -73,17 +73,15 @@ export class ManagementComponent implements OnInit {
       const pb = statusPriority(b.estado);
 
       if (pa !== pb) {
-        return pa - pb; // Sort by status priority
+        return pa - pb;
       }
 
       const da = new Date(a.fecha_inicio).getTime();
       const db = new Date(b.fecha_inicio).getTime();
 
       if (pa === 1 || pa === 2) {
-        // Activa or Cancelada: ascending (oldest first)
         return da - db;
       } else {
-        // Reembolsada or Finalizada: descending (newest first)
         return db - da;
       }
     });
@@ -159,7 +157,7 @@ export class ManagementComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.cancelarReserva(id); // ← Solo se ejecuta si el usuario confirmó
+        this.cancelarReserva(id);
       }
     });
   }
@@ -168,7 +166,7 @@ export class ManagementComponent implements OnInit {
     this.reservaService.cancelarReserva(id).subscribe({
       next: () => {
         console.log(`Reserva ${id} cancelled successfully`);
-        this.fetchReservas(); // Refresh the list after cancellation
+        this.fetchReservas();
       },
       error: (error) => {
         console.error(`Error cancelling reserva ${id}:`, error);
@@ -189,7 +187,7 @@ export class ManagementComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.confirmarReserva(id, 'entregado'); // ← Solo se ejecuta si el usuario confirmó
+        this.confirmarReserva(id, 'entregado');
       }
     });
   }
@@ -226,7 +224,7 @@ export class ManagementComponent implements OnInit {
         else if (estado === 'reembolso') {
           console.log(`Reserva ${id} reembolsada.`);
         }
-        this.fetchReservas(); // Refresh the list after cancellation
+        this.fetchReservas();
       },
       error: (error) => {
         console.error(`Error confirmando reserva ${id}:`, error);
