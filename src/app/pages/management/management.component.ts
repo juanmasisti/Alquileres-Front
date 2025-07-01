@@ -46,12 +46,7 @@ export class ManagementComponent implements OnInit {
     this.loading = true;
     this.reservaService.getReservas().subscribe({
       next: (data) => {
-        this.lista = data.sort((a, b) => {
-          return (
-            new Date(b.fecha_inicio).getTime() -
-            new Date(a.fecha_inicio).getTime()
-          );
-        });
+        this.lista = this.sortReservas(data);
         this.loading = false;
         console.log('Reservas fetched and sorted:', this.lista);
       },
@@ -62,18 +57,45 @@ export class ManagementComponent implements OnInit {
     });
   }
 
+  private sortReservas(data: any[]): any[] {
+    const statusPriority = (estado: string) => {
+      switch (estado) {
+        case 'Activa': return 1;
+        case 'Cancelada': return 2;
+        case 'Reembolsada': return 3;
+        case 'Finalizada': return 3;
+        default: return 4;
+      }
+    };
+
+    return data.sort((a, b) => {
+      const pa = statusPriority(a.estado);
+      const pb = statusPriority(b.estado);
+
+      if (pa !== pb) {
+        return pa - pb; // Sort by status priority
+      }
+
+      const da = new Date(a.fecha_inicio).getTime();
+      const db = new Date(b.fecha_inicio).getTime();
+
+      if (pa === 1 || pa === 2) {
+        // Activa or Cancelada: ascending (oldest first)
+        return da - db;
+      } else {
+        // Reembolsada or Finalizada: descending (newest first)
+        return db - da;
+      }
+    });
+  }
+
   fetchAlquileres(): void {
     this.lista = [];
     this.activeTab = 'alquileres';
     this.loading = true;
     this.alquilerService.getAlquileres().subscribe({
       next: (data) => {
-        this.lista = data.sort((a, b) => {
-          return (
-            new Date(b.fecha_inicio).getTime() -
-            new Date(a.fecha_inicio).getTime()
-          );
-        });
+        this.lista = this.sortAlquileres(data);
         this.loading = false;
         console.log('Alquileres fetched and sorted: ', this.lista);
       },
@@ -81,6 +103,34 @@ export class ManagementComponent implements OnInit {
         console.error('Error fetching alquileres: ', error);
         this.loading = false;
       },
+    });
+  }
+
+  private sortAlquileres(data: any[]): any[] {
+    const statusPriority = (estado: string) => {
+      switch (estado) {
+        case 'Activo': return 1;
+        case 'Finalizado': return 2;
+        default: return 2;
+      }
+    };
+
+    return data.sort((a, b) => {
+      const pa = statusPriority(a.estado);
+      const pb = statusPriority(b.estado);
+
+      if (pa !== pb) {
+        return pa - pb;
+      }
+
+      const da = new Date(a.fecha_inicio).getTime();
+      const db = new Date(b.fecha_inicio).getTime();
+
+      if (pa === 1) {
+        return da - db;
+      } else {
+        return db - da;
+      }
     });
   }
 
