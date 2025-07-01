@@ -1,22 +1,22 @@
 <div class="manage-modal">
-  <h2>GESTIONAR ALQUILER</h2>
+  <h2>CONFIRMAR DEVOLUCION DE ALQUILER</h2>
   <div class="manage-info">
     <p>
-      <b>{{ this.alquiler.maquinaria.nombre }}</b> con codigo
-      <b>{{ this.alquiler.maquinaria.inventario }}</b
+      <b>{{ this.data.alquiler.maquinaria.nombre }}</b> con codigo
+      <b>{{ this.data.alquiler.maquinaria.inventario }}</b
       >,
     </p>
     <p>
-      Codigo de alquiler <b>{{ this.alquiler.codigo_reserva }}</b
+      Codigo de alquiler <b>{{ this.data.alquiler.codigo_reserva }}</b
       >,
     </p>
     <p>
-      Alquilado por <b>{{ this.alquiler.usuario.email }}</b
+      Alquilado por <b>{{ this.data.alquiler.usuario.email }}</b
       >.
     </p>
     <p>
-      Desde <b>{{ this.alquiler.fecha_inicio | date }}</b
-      >, hasta <b>{{ this.alquiler.fecha_fin | date }}</b
+      Desde <b>{{ this.data.alquiler.fecha_inicio | date }}</b
+      >, hasta <b>{{ this.data.alquiler.fecha_fin | date }}</b
       >,
     </p>
   </div>

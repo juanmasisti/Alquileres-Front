@@ -20,6 +20,7 @@ import { ManageModalComponent } from './manage-modal/manage-modal.component';
 export class ManagementComponent implements OnInit {
   lista: any[] = [];
   loading: boolean = false;
+  reservaExpandida: boolean = false;
   rol: string = sessionStorage.getItem('rol') ?? 'visitante';
   activeTab: 'reservas' | 'alquileres' = 'reservas'; // Default to reservas
 
@@ -127,7 +128,19 @@ export class ManagementComponent implements OnInit {
   abrirGestionModal(alquiler: any): void {
     this.dialog.open(ManageModalComponent, {
       width: '500px', // podés ajustar el ancho
-      data: alquiler,
+      data: { alquiler: alquiler, callback: this.fetchAlquileres.bind(this) }, // Pasar la función de actualización
     });
+  }
+
+  toggleExpandida(reserva: any) {
+    this.reservaExpandida = this.reservaExpandida === reserva ? null : reserva;
+  }
+
+  diasEntre(fechaInicio: string, fechaFin: string): number {
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+    return Math.ceil(
+      (fin.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24)
+    );
   }
 }

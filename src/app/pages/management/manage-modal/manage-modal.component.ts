@@ -33,11 +33,11 @@ export class ManageModalComponent implements OnInit {
     private alquilerService: AlquileresService,
     private dialogRef: MatDialogRef<ManageModalComponent>,
     private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public alquiler: any //recibo la data del alquiler desde el componente management.component.ts
+    @Inject(MAT_DIALOG_DATA) public data: any //recibo la data del alquiler desde el componente management.component.ts
   ) {}
 
   ngOnInit() {
-    console.log('Alquiler recibido:', this.alquiler);
+    console.log('Alquiler recibido:', this.data.alquiler);
 
     this.manageForm = this.fb.group({
       //estado: ['', Validators.required],
@@ -75,7 +75,7 @@ export class ManageModalComponent implements OnInit {
       width: '400px',
       data: {
         title: `¿Confirmar devolución?`,
-        description: `Estás confirmando la devolución de la maquinaria "${this.alquiler.maquinaria.nombre}" a la sucursal de "${this.alquiler.maquinaria.sucursal}".`,
+        description: `Estás confirmando la devolución de la maquinaria "${this.data.alquiler.maquinaria.nombre}" a la sucursal de "${this.data.alquiler.maquinaria.sucursal}".`,
         confirmText: 'Confirmar',
         cancelText: 'Atrás',
       },
@@ -85,12 +85,13 @@ export class ManageModalComponent implements OnInit {
       if (result === true) {
         this.loading = true;
         this.alquilerService
-          .confirmarAlquiler(this.alquiler.id, observacion)
+          .confirmarAlquiler(this.data.alquiler.id, observacion)
           .subscribe({
             next: (res) => {
               console.log('Alquiler confirmado correctamente:', res);
               this.loading = false;
 
+              this.data.callback(); // Llamar al callback para actualizar la lista de alquileres
               this.dialogRef.close(true);
             },
             error: (err) => {

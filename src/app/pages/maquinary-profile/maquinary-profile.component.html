@@ -41,7 +41,11 @@
         <h2 class="title">
           {{ maquinaria.nombre }}
           <ng-container *ngIf="isAdmin">
-            <select [ngModel]="maquinaria.state" (change)="onStateChange($event)" class="state-selector">
+            <select
+              [ngModel]="maquinaria.state"
+              (change)="onStateChange($event)"
+              class="state-selector"
+            >
               <option value="Disponible">Disponible</option>
               <option value="Mantenimiento">Mantenimiento</option>
               <option value="Eliminado">Eliminado</option>
@@ -81,80 +85,103 @@
           <i class="fas fa-calendar-check"></i> Reservar ahora
         </button>
 
-      <!-- Modal -->
-      <div *ngIf="mostrarModal" class="modal-overlay">
-        <div class="modal">
-          <label for="dateRangePicker">Seleccioná el rango de fechas:</label>
+        <!-- Modal -->
+        <div *ngIf="mostrarModal" class="modal-overlay">
+          <div class="modal">
+            <label for="dateRangePicker">Seleccioná el rango de fechas:</label>
 
-          <mat-form-field appearance="fill" style="width: 100%;">
-            <mat-label>Rango de fechas</mat-label>
-           <mat-date-range-input 
-              [rangePicker]="picker"
-              [min]="minDate"
-              [dateFilter]="isDateEnabled"
-              name="rangoFechas">
-              
-              <input
-                matStartDate
-                placeholder="Desde"
-                [(ngModel)]="beginDate"
-                readonly
-                (ngModelChange)="onDateChanged()"
-                name="beginDate"
-            />
+            <mat-form-field appearance="fill" style="width: 100%">
+              <mat-label>Rango de fechas</mat-label>
+              <mat-date-range-input
+                [rangePicker]="picker"
+                [min]="minDate"
+                [dateFilter]="isDateEnabled"
+                name="rangoFechas"
+              >
+                <input
+                  matStartDate
+                  placeholder="Desde"
+                  [(ngModel)]="beginDate"
+                  readonly
+                  (ngModelChange)="onDateChanged()"
+                  name="beginDate"
+                />
 
-              <input
-                matEndDate
-                placeholder="Hasta"
-                [(ngModel)]="endDate"
-                readonly
-                (ngModelChange)="onDateChanged()"
-                name="endDate"     
-            />
-            </mat-date-range-input>
+                <input
+                  matEndDate
+                  placeholder="Hasta"
+                  [(ngModel)]="endDate"
+                  readonly
+                  (ngModelChange)="onDateChanged()"
+                  name="endDate"
+                />
+              </mat-date-range-input>
 
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+                class="custom-datepicker-toggle"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker
+                #picker
+                [dateClass]="dateClass"
+              ></mat-date-range-picker>
+            </mat-form-field>
 
-            <mat-datepicker-toggle matSuffix [for]="picker" class="custom-datepicker-toggle"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker [dateClass]="dateClass"></mat-date-range-picker>
-          </mat-form-field>
+            <!-- Mostrar resumen de lo seleccionado -->
+            <div
+              *ngIf="beginDate && endDate && precioTotal > 0"
+              class="summary-container"
+            >
+              <div class="summary-item">
+                <span class="summary-label">Desde:</span>
+                <span>{{ beginDate | date : "dd/MM/yyyy" }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Hasta:</span>
+                <span>{{ endDate | date : "dd/MM/yyyy" }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Precio por día:</span>
+                <span>${{ maquinaria.precio }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Días seleccionados:</span>
+                <span>{{ diasSeleccionados }}</span>
+              </div>
+              <div class="summary-item total">
+                <span class="summary-label">Precio total:</span>
+                <span>${{ precioTotal }}</span>
+              </div>
+            </div>
 
-          <!-- Mostrar resumen de lo seleccionado -->
-        <div *ngIf="beginDate && endDate && precioTotal>0" class="summary-container">
-            <div class="summary-item">
-              <span class="summary-label">Desde:</span>
-              <span>{{ beginDate | date: 'dd/MM/yyyy' }}</span>
+            <div class="modal-actions mt-3">
+              <div
+                *ngIf="beginDate && endDate && precioTotal > 0 && !mostrarPagar"
+                class="loading-spinner"
+              >
+                <i class="fas fa-circle-notch fa-spin"></i>
+              </div>
+              <div id="walletBrick_container"></div>
+              <button class="btn cancel" (click)="cerrarModal()">
+                Cancelar
+              </button>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Hasta:</span>
-              <span>{{ endDate | date: 'dd/MM/yyyy' }}</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Precio por día:</span>
-              <span>${{ maquinaria.precio }}</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Días seleccionados:</span>
-              <span>{{ diasSeleccionados }}</span>
-            </div>
-            <div class="summary-item total">
-              <span class="summary-label">Precio total:</span>
-              <span>${{ precioTotal }}</span>
-            </div>
-        </div>
-
-          <div class="modal-actions mt-3">
-            <div *ngIf="beginDate && endDate && precioTotal > 0 && !mostrarPagar" class="loading-spinner">
-              <i class="fas fa-circle-notch fa-spin"></i>
-            </div>
-            <div  id="walletBrick_container"></div>
-            <button class="btn cancel" (click)="cerrarModal()">Cancelar</button>
           </div>
         </div>
       </div>
-      
-      </div>
     </div>
   </div>
-</section>
 
+  <div class="main__container">
+    <!-- <app-estadisticas></app-estadisticas> -->
+    <h2>
+      Aca iria el componente de las estadisticas, solo visible para el admin
+    </h2>
+  </div>
+
+  <div class="main__container">
+    <app-comments *ngIf="maquinaria" [maquinaria]="maquinaria"></app-comments>
+  </div>
+</section>
 <app-footer></app-footer>
