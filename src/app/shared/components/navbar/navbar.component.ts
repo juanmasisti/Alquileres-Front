@@ -56,7 +56,15 @@ export class NavbarComponent implements OnInit {
           path: '/usuarios',
           type: 'link',
           icon: 'fas fa-users-cog',
-        });
+        } ,
+        {
+          title: 'VER ESTADÍSTICAS',
+          path: '/estadisticas',
+          type: 'link',
+          icon: 'fas fa-chart-bar'
+        }
+      );
+    
       }
       // Agregamos el agregar cliente solo si es empleado
       if (this.rol === 'empleado') {

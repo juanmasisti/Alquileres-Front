@@ -16,6 +16,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { CreateClientComponent } from './pages/create-client/create-client.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 export const routes: Routes = [
   {
@@ -137,6 +138,15 @@ export const routes: Routes = [
       roles: ['empleado'] // Solo los empleados pueden acceder a esta ruta
     },
     component: CreateClientComponent,
+    canActivate: [AuthGuard, RoleGuard],
+  },
+  {
+    path: 'estadisticas',
+    data: {
+      title: 'Estadísticas',
+      roles: ['admin'] // Solo los administradores pueden acceder a esta ruta
+    },
+    component: StatisticsComponent,
     canActivate: [AuthGuard, RoleGuard],
   }
 ];
