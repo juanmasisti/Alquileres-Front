@@ -111,9 +111,9 @@
           </p>
         </div>
 
-          <label for="dateRangePicker" *ngIf="selectedClientEmail && emailExists">Seleccioná el rango de fechas:</label>
+          <label for="dateRangePicker" *ngIf="(selectedClientEmail && emailExists) || !isEmployee">Seleccioná el rango de fechas:</label>
 
-          <mat-form-field appearance="fill" style="width: 100%;" *ngIf="selectedClientEmail && emailExists">
+          <mat-form-field appearance="fill" style="width: 100%;" *ngIf="(selectedClientEmail && emailExists) || !isEmployee">
             <mat-label>Rango de fechas</mat-label>
            <mat-date-range-input 
               [rangePicker]="picker"
@@ -152,7 +152,7 @@
             </mat-form-field>
 
           <!-- Mostrar resumen de lo seleccionado -->
-        <div *ngIf="beginDate && endDate && precioTotal>0 && emailExists" class="summary-container">
+        <div *ngIf="beginDate && endDate && precioTotal>0" class="summary-container">
             <div class="summary-item">
               <span class="summary-label">Desde:</span>
               <span>{{ beginDate | date: 'dd/MM/yyyy' }}</span>
