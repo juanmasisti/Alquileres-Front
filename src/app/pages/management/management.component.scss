@@ -84,14 +84,15 @@
   padding-right: 20px;
 }
 
-.cancelar {
+.accion {
+  margin: 0 0.5rem;
   color: #007bff;
   text-decoration: none;
   text-align: center;
   cursor: pointer;
 }
 
-.cancelar:hover {
+.accion:hover {
   text-decoration: underline;
 }
 

@@ -16,9 +16,13 @@ export class AlquileresService {
     return this.http.get<Alquiler[]>(this.baseUrl);
   }
 
-  confirmarAlquiler(id: number, observacion: string): Observable<any> {
+  confirmarAlquiler(id: number, observacion?: string): Observable<any> {
     return this.http.patch(`${this.baseUrl}/${id}/confirmar`, {
       observacion,
     });
+  }
+
+  puntuarAlquiler(id: number, puntaje: number, comentario?: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${id}/puntuar`, { puntaje, comentario }); 
   }
 }

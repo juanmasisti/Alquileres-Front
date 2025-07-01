@@ -62,15 +62,37 @@
         <span>${{ r.precio_dia }}</span>
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
-        <span
-          ><a
-            class="cancelar"
+        <span class = "acciones">
+          <!-- Había que hacerlo así para poder tener más de un botón -->
+          <a
+            class="accion"
             style="cursor: pointer"
-            *ngIf="r.estado == 'Activa'"
+            *ngIf="( r.estado == 'Activa' ) && rol == 'empleado'"
+            (click)="modalConfirmarReserva(r.id, r.maquinaria)"
+            > Confirmar </a
+          >
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="( r.estado == 'Cancelada' ) && rol == 'empleado'"
+            (click)="modalConfirmarReembolso(r.id, r.maquinaria, r.precio_total)"
+            > Reembolsar </a
+          >
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="rol == 'cliente' && r.estado == 'Activa' && !reservaIniciada(r.fecha_inicio)"
             (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
-            >Cancelar</a
-          ></span
-        >
+            > Cancelar </a
+          >
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="( rol == 'empleado' || rol == 'admin' ) && r.estado == 'Activa'"
+            (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
+            > Cancelar </a
+          >
+        </span>
       </div>
       } @else if (activeTab === 'alquileres') {
       <div
@@ -143,7 +165,7 @@
             !== 'Finalizado') {
             <span class="label">Gestionar:</span>
             <span
-              ><a class="accion valor" (click)="abrirGestionModal(r)">
+              ><a class="accion valor" (click)="modalConfirmarAlquiler(r)">
                 Devolver
               </a></span
             >} }

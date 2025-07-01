@@ -14,7 +14,7 @@ export class RoleGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot): boolean { // ActivatedRouteSnapshot contiene información sobre la ruta que se está activando
     const expectedRoles: string[] = route.data['roles']; // accede a los roles esperados desde los datos de la ruta
     const userRole = this.authService.getUserRole(); // implementá este método en AuthService
 

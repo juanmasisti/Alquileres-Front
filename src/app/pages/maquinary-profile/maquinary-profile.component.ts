@@ -32,6 +32,8 @@ import { Maquinaria, MaquinariaState } from 'src/app/models/maquinaria.model';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { ReservasService } from 'src/app/services/reservas.service';
+import { User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/services/user.service';
 import { CommentsComponent } from './comments/comments.component';
 
 declare var MercadoPago: any;
@@ -65,7 +67,14 @@ export class MaquinaryProfileComponent implements OnInit {
   precioTotal: number = 0;
   beginDate?: Date;
   endDate?: Date;
-  isAdmin = sessionStorage.getItem('rol') === 'admin';
+  isAdmin = sessionStorage.getItem('rol') === 'admin'
+  isEmployee = sessionStorage.getItem('rol') === 'empleado'
+
+  // Para el autocomplete de usuarios
+  allUsers: any[] = [];
+  filteredUsers: any[] = [];
+  selectedClientEmail: string = '';
+  emailExists: boolean = true;
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     const startDate = new Date(Date.now());
@@ -93,7 +102,8 @@ export class MaquinaryProfileComponent implements OnInit {
     private maquinariaService: MaquinariaService,
     private mercadoPagoService: MercadoPagoService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userService: UserService
   ) {
     this.minDate.setDate(this.minDate.getDate() + 1);
   }
@@ -102,9 +112,11 @@ export class MaquinaryProfileComponent implements OnInit {
     return !!this.authService.getToken() && !this.isAdmin;
   }
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.initMercadoPago();
+ ngOnInit() {
+  // cargamos los usuarios para el autocomplete
+  this.loadAllUsers();
+  const id = this.route.snapshot.paramMap.get('id');
+  this.initMercadoPago();
 
     // Manejo del resultado de pago
     this.route.queryParams.subscribe((params) => {
@@ -133,14 +145,26 @@ export class MaquinaryProfileComponent implements OnInit {
       }
     });
 
-    if (id) {
-      this.loadMaquinaria(+id);
-    } else {
-      this.error = 'No se encontró el ID de la maquinaria';
-      this.isLoading = false;
-    }
+  if (id) {
+    this.loadMaquinaria(+id);
+  } else {
+    this.error = 'No se encontró el ID de la maquinaria';
+    this.isLoading = false;
+  }
+}
 
-    console.log('Maquina desde el padre', this.maquinaria);
+  loadAllUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (users) => {
+        console.log('Usuarios cargados:', users);
+        this.allUsers = users
+        console.log('Cantidad de usuarios:', this.allUsers.length);
+      },
+      error: (err) => {
+        console.error('Error al obtener usuarios', err);
+        this.allUsers = [];
+      }
+    });
   }
 
   private initMercadoPago() {
@@ -369,7 +393,7 @@ export class MaquinaryProfileComponent implements OnInit {
 
     this.destroyMp();
 
-    this.mercadoPagoService.getPreferenceId(item).subscribe({
+    this.mercadoPagoService.getPreferenceId({ ...item, user_email: this.isEmployee ? this.selectedClientEmail : undefined }).subscribe({ // si es empleado, pasamos el email del cliente
       next: async (res) => {
         this.initBricks();
         this.renderWalletBrick(res.id);
@@ -442,5 +466,35 @@ export class MaquinaryProfileComponent implements OnInit {
       default:
         return '';
     }
+  }    
+
+onClientEmailInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const value = input.value.trim();
+
+  console.log('🔵 Email ingresado:', value);
+  console.log('🔵 allUsers cargados:', this.allUsers.length);
+
+  if (!this.allUsers || this.allUsers.length === 0) {
+    console.warn('⚠️ No hay usuarios cargados aún');
+    this.filteredUsers = [];
+    this.emailExists = false;
+    return;
   }
+
+  // Filtra usuarios que incluyan el valor tipeado
+  this.filteredUsers = this.allUsers.filter(user =>
+    user.email.toLowerCase().includes(value.toLowerCase())
+  );
+
+  // console.log('🟢 Usuarios filtrados:', this.filteredUsers);
+
+  // Verifica si el email exacto existe en la lista de usuarios
+  this.emailExists = this.allUsers.some(user =>
+    user.email.toLowerCase() === value.toLowerCase()
+  );
+
+  console.log('🟢 emailExists:', this.emailExists);
+}
+
 }
