@@ -64,13 +64,36 @@
         <span>${{ r.precio_dia }}</span>
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
-        <a
-          class="cancelar"
-          style="cursor: pointer"
-          *ngIf="r.estado == 'Activa'"
-          (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
-          >Cancelar</a
-        >
+        <span class = "acciones">
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="( r.estado == 'Activa' ) && rol == 'empleado'"
+            (click)="modalConfirmarReserva(r.id, r.maquinaria)"
+            > Confirmar </a
+          >
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="( r.estado == 'Cancelada' ) && rol == 'empleado'"
+            (click)="modalConfirmarReembolso(r.id, r.maquinaria, r.precio_total)"
+            > Confirmar </a
+          >
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="rol == 'cliente' && r.estado == 'Activa' && !reservaIniciada(r.fecha_inicio)"
+            (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
+            > Cancelar </a
+          >
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="( rol == 'empleado' || rol == 'admin' ) && r.estado == 'Activa'"
+            (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
+            > Cancelar </a
+          >
+        </span>
       </div>
       } @else if (activeTab === 'alquileres') {
       <div class="reserva-row">
@@ -82,8 +105,8 @@
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
         @if (rol == 'cliente') {
-        <a class="cancelar" style="cursor: pointer">Valorar</a>} @else if (rol
-        == 'empleado' || rol == 'admin') {
+        <a class="cancelar" style="cursor: pointer">Valorar</a>} 
+        @else if (rol == 'empleado' || rol == 'admin') {
         <a class="cancelar" (click)="abrirGestionModal(r)">Gestionar</a>
         }
       </div>

@@ -22,12 +22,14 @@ export class ManagementComponent implements OnInit {
   loading: boolean = false;
   rol: string = sessionStorage.getItem('rol') ?? 'visitante';
   activeTab: 'reservas' | 'alquileres' = 'reservas'; // Default to reservas
+  hoy = new Date();
 
   constructor(
     private reservaService: ReservasService,
     private alquilerService: AlquileresService,
     private dialog: MatDialog
-  ) {}
+  ) 
+  { this.hoy.setHours(0, 0, 0, 0); }
 
   ngOnInit() {
     this.fetchReservas();
@@ -124,10 +126,74 @@ export class ManagementComponent implements OnInit {
     });
   }
 
+  modalConfirmarReserva( id: number , maquina: Maquinaria): void {
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        width: '400px',
+        data: {
+          title: `¿Confirmar entrega de ${maquina.nombre}?`,
+          description: `Se confirmará la entrega de ${ maquina.nombre }.`,
+          confirmText: 'Confirmar',
+          cancelText: 'Atrás',
+        },
+  });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.confirmarReserva(id, 'entregado'); // ← Solo se ejecuta si el usuario confirmó
+      }
+    });
+  }
+
+  modalConfirmarReembolso(
+    id: number,
+    maquina: Maquinaria,
+    precioTotal: number
+  ): void {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: {
+        title: `¿Confirmar reembolso de ${maquina.nombre}?`,
+        description: `Se confirmará el reembolso de ${maquina.nombre} con un costo total de $${precioTotal}.`,
+        confirmText: 'Confirmar',
+        cancelText: 'Atrás',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.confirmarReserva(id, 'reembolso');
+      }
+    });
+  }
+
+  confirmarReserva(id: number, estado: string): void {
+    this.reservaService.confirmarReserva(id).subscribe({
+      next: () => {
+
+        if (estado === 'entregado') {
+          console.log(`Reserva ${id} confirmada. Se entregó la maquinaria.`);
+        }
+        else if (estado === 'reembolso') {
+          console.log(`Reserva ${id} reembolsada.`);
+        }
+        this.fetchReservas(); // Refresh the list after cancellation
+      },
+      error: (error) => {
+        console.error(`Error confirmando reserva ${id}:`, error);
+      },
+    });
+  }
+
   abrirGestionModal(alquiler: any): void {
     this.dialog.open(ManageModalComponent, {
       width: '500px', // podés ajustar el ancho
       data: alquiler,
     });
+  }
+
+  reservaIniciada(fecha_inicio: string) {
+    const reservaDate = new Date(fecha_inicio);
+    reservaDate.setHours(0, 0, 0, 0);
+    return reservaDate <= this.hoy;
   }
 }
