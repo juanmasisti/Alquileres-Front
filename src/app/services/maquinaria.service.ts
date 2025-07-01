@@ -123,4 +123,20 @@ export class MaquinariaService {
   actualizarEstado(id: number, estado: string): Observable<any> {
     return this.http.patch(`${this.baseUrl}/${id}/estado`, { estado });
   }
+
+  getComentarios(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${id}/preguntas`);
+  }
+
+  postComentario(id: number, comentario: string): Observable<any> { 
+    return this.http.post(`${this.baseUrl}/${id}/pregunta`, { comentario });
+  }
+
+  getRespuestas(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/pregunta/${id}/responder`);
+  }
+
+  postRespuesta(id: number, respuesta: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/pregunta/${id}/responder`, { respuesta });
+  }
 }

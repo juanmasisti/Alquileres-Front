@@ -5,14 +5,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 // Angular Material imports para datepicker + Luxon adapter
-import { MatCalendarCellClassFunction, MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatCalendarCellClassFunction,
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { LuxonDateModule, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
+import {
+  LuxonDateModule,
+  MAT_LUXON_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-luxon-adapter';
 
 import { DateTime } from 'luxon';
 
@@ -28,6 +34,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ReservasService } from 'src/app/services/reservas.service';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
+import { CommentsComponent } from './comments/comments.component';
 
 declare var MercadoPago: any;
 
@@ -46,6 +53,7 @@ declare var MercadoPago: any;
     MatInputModule,
     MatNativeDateModule,
     LuxonDateModule,
+    CommentsComponent,
   ],
 })
 export class MaquinaryProfileComponent implements OnInit {
@@ -54,7 +62,7 @@ export class MaquinaryProfileComponent implements OnInit {
   error: string | null = null;
   mostrarModal = false;
   mostrarPagar = false;
-  mostrarReservar: boolean = false
+  mostrarReservar: boolean = false;
   diasSeleccionados: number = 0;
   precioTotal: number = 0;
   beginDate?: Date;
@@ -73,18 +81,20 @@ export class MaquinaryProfileComponent implements OnInit {
     const endDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 días a partir de hoy
 
     if (view === 'month') {
-      return cellDate >= startDate && cellDate <= endDate ? 'custom-date-class' : '';
+      return cellDate >= startDate && cellDate <= endDate
+        ? 'custom-date-class'
+        : '';
     }
     return '';
-  }
+  };
 
-  fechasOcupadas: { fecha_inicio: string, fecha_fin: string }[] = [];
+  fechasOcupadas: { fecha_inicio: string; fecha_fin: string }[] = [];
 
   minDate = new Date(); // Fecha mínima para el datepicker (hoy)
 
   private bricksBuilder: any = null;
   private mp: any = null;
-  private paymentBrickController: any = null
+  private paymentBrickController: any = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -95,7 +105,7 @@ export class MaquinaryProfileComponent implements OnInit {
     private snackBar: MatSnackBar,
     private userService: UserService
   ) {
-    this.minDate.setDate(this.minDate.getDate() + 1)
+    this.minDate.setDate(this.minDate.getDate() + 1);
   }
 
   isClient() {
@@ -108,31 +118,32 @@ export class MaquinaryProfileComponent implements OnInit {
   const id = this.route.snapshot.paramMap.get('id');
   this.initMercadoPago();
 
-  // Manejo del resultado de pago
-  this.route.queryParams.subscribe(params => {
-    const paymentResult = params['payment'];
-    if (paymentResult !== undefined) {
-      if (paymentResult === '1') {
-        this.dialog.open(ConfirmModalComponent, {
-          data: {
-            title: '¡Pago exitoso!',
-            description: 'El pago fue procesado correctamente.',
-            confirmText: 'Aceptar',
-            icon: 'success'
-          }
-        });
-      } else if (paymentResult === '0') {
-        this.dialog.open(ConfirmModalComponent, {
-          data: {
-            title: 'Pago fallido',
-            description: 'Hubo un error al procesar el pago. Por favor, intente nuevamente.',
-            confirmText: 'Cerrar',
-            icon: 'error'
-          }
-        });
+    // Manejo del resultado de pago
+    this.route.queryParams.subscribe((params) => {
+      const paymentResult = params['payment'];
+      if (paymentResult !== undefined) {
+        if (paymentResult === '1') {
+          this.dialog.open(ConfirmModalComponent, {
+            data: {
+              title: '¡Pago exitoso!',
+              description: 'El pago fue procesado correctamente.',
+              confirmText: 'Aceptar',
+              icon: 'success',
+            },
+          });
+        } else if (paymentResult === '0') {
+          this.dialog.open(ConfirmModalComponent, {
+            data: {
+              title: 'Pago fallido',
+              description:
+                'Hubo un error al procesar el pago. Por favor, intente nuevamente.',
+              confirmText: 'Cerrar',
+              icon: 'error',
+            },
+          });
+        }
       }
-    }
-  });
+    });
 
   if (id) {
     this.loadMaquinaria(+id);
@@ -166,39 +177,49 @@ export class MaquinaryProfileComponent implements OnInit {
   }
 
   // https://www.mercadopago.com.ar/developers/es/docs/checkout-pro/additional-settings/user-interface/auxiliary-callbacks
-  private async renderWalletBrick(preferenceId: string, cb: Function = () => { }) {
-    if (this.creandoBrick) return
-    this.creandoBrick = true
-    this.paymentBrickController = await this.bricksBuilder.create('wallet', 'walletBrick_container', {
-      initialization: {
-        preferenceId,
-        redirectMode: 'self',
-      },
-      customization: {
-        theme: 'default',
-        customStyle: {
-          borderRadius: '10px',
-          verticalPadding: '10px',
-          horizontalPadding: '10px',
-          hideValueProp: true,
+  private async renderWalletBrick(
+    preferenceId: string,
+    cb: Function = () => {}
+  ) {
+    if (this.creandoBrick) return;
+    this.creandoBrick = true;
+    this.paymentBrickController = await this.bricksBuilder.create(
+      'wallet',
+      'walletBrick_container',
+      {
+        initialization: {
+          preferenceId,
+          redirectMode: 'self',
         },
-      },
-      callbacks: {
-        onSubmit: cb,
-        onReady: () => {
-          this.creandoBrick = false
-          this.mostrarPagar = true
-        }
-     },
-    })
+        customization: {
+          theme: 'default',
+          customStyle: {
+            borderRadius: '10px',
+            verticalPadding: '10px',
+            horizontalPadding: '10px',
+            hideValueProp: true,
+          },
+        },
+        callbacks: {
+          onSubmit: cb,
+          onReady: () => {
+            this.creandoBrick = false;
+            this.mostrarPagar = true;
+          },
+        },
+      }
+    );
   }
 
   private loadMaquinaria(id: number): void {
     this.maquinariaService.getById(id).subscribe({
       next: (data) => {
         this.maquinaria = data;
-        if (this.maquinaria.state == MaquinariaState.Disponible && this.isClient()) {
-          this.setFechasOcupadas(id)
+        if (
+          this.maquinaria.state == MaquinariaState.Disponible &&
+          this.isClient()
+        ) {
+          this.setFechasOcupadas(id);
         }
         this.isLoading = false;
       },
@@ -207,20 +228,19 @@ export class MaquinaryProfileComponent implements OnInit {
         this.isLoading = false;
         console.error(err);
       },
-      },
-    );
+    });
   }
 
   private setFechasOcupadas(id: number) {
     this.maquinariaService.getFechasOcupadas(id).subscribe({
       next: (res: any) => {
         this.fechasOcupadas = res;
-        this.mostrarReservar = true
-        this.printFechasOcupadas()
+        this.mostrarReservar = true;
+        this.printFechasOcupadas();
       },
       error: (err: any) => {
         console.error('Error cargando fechas ocupadas', err);
-        this.mostrarReservar = true
+        this.mostrarReservar = true;
       },
     });
   }
@@ -228,31 +248,31 @@ export class MaquinaryProfileComponent implements OnInit {
   private printFechasOcupadas() {
     this.fechasOcupadas.forEach(({ fecha_fin, fecha_inicio }) => {
       const inicio_formated = DateTime.fromISO(fecha_inicio);
-      const fin_formated = DateTime.fromISO(fecha_fin)
+      const fin_formated = DateTime.fromISO(fecha_fin);
       console.log(
         `---- Fecha ocupada ----\n`,
         `Inicio: ${inicio_formated.day}-${inicio_formated.month}-${inicio_formated.year}\n`,
-        `Fin: ${fin_formated.day}-${fin_formated.month}-${fin_formated.year}\n`,
-      ) 
-    })
+        `Fin: ${fin_formated.day}-${fin_formated.month}-${fin_formated.year}\n`
+      );
+    });
   }
 
-  private containsOccupiedDatesInRange (start: Date, end: Date): boolean {
-  const startDate = DateTime.fromJSDate(start).startOf('day');
-  const endDate = DateTime.fromJSDate(end).startOf('day');
+  private containsOccupiedDatesInRange(start: Date, end: Date): boolean {
+    const startDate = DateTime.fromJSDate(start).startOf('day');
+    const endDate = DateTime.fromJSDate(end).startOf('day');
 
-  for (const { fecha_inicio, fecha_fin } of this.fechasOcupadas) {
-    const inicioOcupada = DateTime.fromISO(fecha_inicio).startOf('day');
-    const finOcupada = DateTime.fromISO(fecha_fin).startOf('day');
+    for (const { fecha_inicio, fecha_fin } of this.fechasOcupadas) {
+      const inicioOcupada = DateTime.fromISO(fecha_inicio).startOf('day');
+      const finOcupada = DateTime.fromISO(fecha_fin).startOf('day');
 
-    if (inicioOcupada <= endDate && finOcupada >= startDate) {
-      // Hay superposición entre el rango seleccionado y una fecha ocupada
-      return true;
+      if (inicioOcupada <= endDate && finOcupada >= startDate) {
+        // Hay superposición entre el rango seleccionado y una fecha ocupada
+        return true;
+      }
     }
-  }
 
-  return false;
-}
+    return false;
+  }
 
   // Cuando el usuario selecciona rango en el datepicker
   onDateChanged(): void {
@@ -264,11 +284,13 @@ export class MaquinaryProfileComponent implements OnInit {
       start.setHours(0, 0, 0, 0);
       finish.setHours(0, 0, 0, 0);
 
-      this.destroyMp()
+      this.destroyMp();
 
       // ⚠ Verificamos si el rango cruza fechas ocupadas
       if (this.containsOccupiedDatesInRange(start, finish)) {
-        this.snackBar.open('El rango contiene fechas ya reservadas', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('El rango contiene fechas ya reservadas', 'Cerrar', {
+          duration: 3000,
+        });
         this.beginDate = this.endDate = undefined;
         this.diasSeleccionados = this.precioTotal = 0;
         this.mostrarPagar = false;
@@ -278,16 +300,21 @@ export class MaquinaryProfileComponent implements OnInit {
       // Verificar que no se seleccione mas de 30 dias
       const maxDays = 30;
       if (finish.getTime() - start.getTime() > maxDays * 24 * 60 * 60 * 1000) {
-        this.snackBar.open(`No se puede reservar por más de ${maxDays} días`, 'Cerrar', { duration: 3000 });
+        this.snackBar.open(
+          `No se puede reservar por más de ${maxDays} días`,
+          'Cerrar',
+          { duration: 3000 }
+        );
         this.beginDate = this.endDate = undefined;
         this.diasSeleccionados = this.precioTotal = 0;
         this.mostrarPagar = false;
         return;
-
       }
 
       const msInDay = 1000 * 60 * 60 * 24;
-      const diffInDays = Math.ceil((finish.getTime() - start.getTime()) / msInDay);
+      const diffInDays = Math.ceil(
+        (finish.getTime() - start.getTime()) / msInDay
+      );
 
       if (diffInDays <= 0) {
         this.diasSeleccionados = 0;
@@ -317,8 +344,8 @@ export class MaquinaryProfileComponent implements OnInit {
   isDateEnabled = (date: Date | null): boolean => {
     if (!date) return false;
 
-    const formatDate = DateTime.fromISO(date.toString())
-    let ocupada = false
+    const formatDate = DateTime.fromISO(date.toString());
+    let ocupada = false;
 
     for (const { fecha_inicio, fecha_fin } of this.fechasOcupadas) {
       const inicio = DateTime.fromISO(fecha_inicio).startOf('day');
@@ -340,17 +367,17 @@ export class MaquinaryProfileComponent implements OnInit {
     this.mostrarModal = this.mostrarPagar = false;
     this.diasSeleccionados = 0;
     this.precioTotal = 0;
-    this.beginDate = this.endDate = undefined
+    this.beginDate = this.endDate = undefined;
   }
 
   destroyMp() {
     if (this.paymentBrickController != null) {
-      this.paymentBrickController.unmount()
-      this.paymentBrickController = null
+      this.paymentBrickController.unmount();
+      this.paymentBrickController = null;
     }
   }
 
-  private creandoBrick = false
+  private creandoBrick = false;
 
   showMercadoPago(dias: number) {
     if (!this.maquinaria || !dias || !this.beginDate || !this.endDate) return;
@@ -359,17 +386,17 @@ export class MaquinaryProfileComponent implements OnInit {
       maq_id: this.maquinaria.id,
       days: dias,
       startDate: this.beginDate,
-      endDate: this.endDate
+      endDate: this.endDate,
     };
 
-    if(this.creandoBrick) return
+    if (this.creandoBrick) return;
 
-    this.destroyMp()
+    this.destroyMp();
 
     this.mercadoPagoService.getPreferenceId({ ...item, user_email: this.isEmployee ? this.selectedClientEmail : undefined }).subscribe({ // si es empleado, pasamos el email del cliente
       next: async (res) => {
         this.initBricks();
-        this.renderWalletBrick(res.id)
+        this.renderWalletBrick(res.id);
       },
       error: (err) => {
         console.error('Error con MercadoPago', err);
@@ -378,53 +405,66 @@ export class MaquinaryProfileComponent implements OnInit {
   }
 
   onStateChange(event: any) {
+    const nuevoEstado = event.target.value;
 
-    const nuevoEstado = event.target.value
-
-    if (this.maquinaria == null) return
+    if (this.maquinaria == null) return;
     if (this.maquinaria.state === nuevoEstado) return;
 
-    let desc = `¿Estás seguro de cambiar el estado a "${nuevoEstado}"?`
+    let desc = `¿Estás seguro de cambiar el estado a "${nuevoEstado}"?`;
     if (this.maquinaria.state === MaquinariaState.Disponible) {
-      desc += ` Si hay reservas activas, se cancelarán.`
+      desc += ` Si hay reservas activas, se cancelarán.`;
     }
 
-    const prevState = this.maquinaria!.state
+    const prevState = this.maquinaria!.state;
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
       data: {
         title: 'Confirmar cambio de estado',
         description: desc,
         confirmText: 'Sí, cambiar',
-        cancelText: 'Cancelar'
-      }
+        cancelText: 'Cancelar',
+      },
     });
 
     dialogRef.afterClosed().subscribe((confirmado: boolean) => {
-      this.destroyMp()
+      this.destroyMp();
       if (confirmado) {
-        this.maquinariaService.actualizarEstado(this.maquinaria!.id, nuevoEstado).subscribe({
-          next: () => {
-            this.maquinaria!.state = nuevoEstado; // ✅ Solo lo cambiamos si se confirma
-            this.snackBar.open('Estado actualizado correctamente.', 'Cerrar', { duration: 3000 });
-          },
-          error: (err) => {
-            console.error('Error al actualizar el estado:', err);
-            this.snackBar.open('Ocurrió un error al actualizar el estado.', 'Cerrar', { duration: 3000 });
-          }
-        });
+        this.maquinariaService
+          .actualizarEstado(this.maquinaria!.id, nuevoEstado)
+          .subscribe({
+            next: () => {
+              this.maquinaria!.state = nuevoEstado; // ✅ Solo lo cambiamos si se confirma
+              this.snackBar.open(
+                'Estado actualizado correctamente.',
+                'Cerrar',
+                { duration: 3000 }
+              );
+            },
+            error: (err) => {
+              console.error('Error al actualizar el estado:', err);
+              this.snackBar.open(
+                'Ocurrió un error al actualizar el estado.',
+                'Cerrar',
+                { duration: 3000 }
+              );
+            },
+          });
       } else {
-        event.target.value = prevState
+        event.target.value = prevState;
       }
     });
   }
 
   getStatusClass(status: string): string {
-    switch(status.toLowerCase()) {
-      case 'disponible': return 'available';
-      case 'alquilada': return 'rented';
-      case 'mantenimiento': return 'maintenance';
-      default: return '';
+    switch (status.toLowerCase()) {
+      case 'disponible':
+        return 'available';
+      case 'alquilada':
+        return 'rented';
+      case 'mantenimiento':
+        return 'maintenance';
+      default:
+        return '';
     }
   }    
 

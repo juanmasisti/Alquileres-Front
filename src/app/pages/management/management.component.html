@@ -22,23 +22,21 @@
         ALQUILERES
       </button>
     </div>
-
+    <div class="reservas-header">
+      @if (activeTab === 'reservas') {
+      <span>CODIGO DE RESERVA</span>
+      } @else if (activeTab === 'alquileres') {
+      <span>CODIGO DE ALQUILER</span>
+      }
+      <span>MAQUINA</span>
+      <span>DESDE</span>
+      <span>HASTA</span>
+      <span>PRECIO</span>
+      <span>SUCURSAL</span>
+      <span>ESTADO</span>
+      <span>ACCIONES</span>
+    </div>
     <div class="reservas-table">
-      <div class="reservas-header">
-        @if (activeTab === 'reservas') {
-        <span>CODIGO DE RESERVA</span>
-        } @else if (activeTab === 'alquileres') {
-        <span>CODIGO DE ALQUILER</span>
-        }
-        <span>MAQUINA</span>
-        <span>DESDE</span>
-        <span>HASTA</span>
-        <span>PRECIO</span>
-        <span>SUCURSAL</span>
-        <span>ESTADO</span>
-        <span>ACCIONES</span>
-      </div>
-
       <!-- Spinner de carga -->
       <div *ngIf="loading" class="loading">
         <i class="fas fa-spinner fa-spin"></i>
@@ -65,6 +63,7 @@
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
         <span class = "acciones">
+          <!-- Había que hacerlo así para poder tener más de un botón -->
           <a
             class="accion"
             style="cursor: pointer"
@@ -96,7 +95,11 @@
         </span>
       </div>
       } @else if (activeTab === 'alquileres') {
-      <div class="reserva-row">
+      <div
+        class="reserva-row"
+        [class.activa]="reservaExpandida === r"
+        (click)="toggleExpandida(r)"
+      >
         <span>{{ r.codigo_reserva }}</span>
         <span>{{ r.maquinaria.nombre }} </span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
@@ -104,12 +107,72 @@
         <span>${{ r.precio }}</span>
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
-        @if (rol == 'cliente') {
-        <a class="cancelar" style="cursor: pointer">Valorar</a>} 
-        @else if (rol == 'empleado' || rol == 'admin') {
-        <a class="cancelar" (click)="abrirGestionModal(r)">Gestionar</a>
-        }
+        <span><a class="cancelar" style="cursor: pointer">Ver más</a></span>
       </div>
+
+      <!-- Sección expandible -->
+      <div *ngIf="reservaExpandida === r" class="detalle-reserva">
+        <h3>{{ r.maquinaria.nombre }}</h3>
+
+        <div class="detalle-info">
+          <div class="detalle-item">
+            <span class="label">Marca:</span>
+            <span class="valor">{{ r.maquinaria.marca }}</span>
+          </div>
+          <div class="detalle-item">
+            <span class="label">Categoría:</span>
+            <span class="valor">{{ r.maquinaria.categoria }}</span>
+          </div>
+          <div class="detalle-item">
+            <span class="label">Alquilado por:</span>
+            <span class="valor">{{ r.usuario.email }}</span>
+          </div>
+          <div class="detalle-item">
+            <span class="label">Precio por día:</span>
+            <span class="valor">${{ r.maquinaria.precio }}</span>
+          </div>
+          <div class="detalle-item">
+            <span class="label">Desde:</span>
+            <span class="valor">{{
+              r.fecha_inicio | date : "dd/MM/yyyy"
+            }}</span>
+          </div>
+
+          <div class="detalle-item">
+            <span class="label">Hasta:</span>
+            <span class="valor">{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
+          </div>
+
+          <div class="detalle-item">
+            <span class="label">Total de dias:</span>
+            <span class="valor">{{
+              diasEntre(r.fecha_inicio, r.fecha_fin)
+            }}</span>
+          </div>
+          <div class="detalle-item">
+            <span class="label">Total:</span>
+            <span class="valor precio-total">${{ r.precio }}</span>
+          </div>
+          <div class="detalle-item">
+            <span class="label">Observación del empleado:</span>
+            <span class="valor">{{ r.observacion }}</span>
+          </div>
+          <div class="detalle-item">
+            @if (rol == 'cliente') {
+            <span class="label">Calificanos:</span>
+            <span><a class="accion valor">Valorar</a></span
+            >} @else if (rol == 'empleado' || rol == 'admin') { @if (r.estado
+            !== 'Finalizado') {
+            <span class="label">Gestionar:</span>
+            <span
+              ><a class="accion valor" (click)="modalConfirmarAlquiler(r)">
+                Devolver
+              </a></span
+            >} }
+          </div>
+        </div>
+      </div>
+
       } }
     </div>
   </div>

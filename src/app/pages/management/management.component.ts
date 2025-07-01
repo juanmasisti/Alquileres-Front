@@ -20,6 +20,7 @@ import { ManageModalComponent } from './manage-modal/manage-modal.component';
 export class ManagementComponent implements OnInit {
   lista: any[] = [];
   loading: boolean = false;
+  reservaExpandida: boolean = false;
   rol: string = sessionStorage.getItem('rol') ?? 'visitante';
   activeTab: 'reservas' | 'alquileres' = 'reservas';
   hoy = new Date();
@@ -232,10 +233,70 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  abrirGestionModal(alquiler: any): void {
+  modalPuntuarAlquiler(alquiler : any): void {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: {
+        title: `¿Puntuar alquiler de ${alquiler.maquinaria.nombre}?`,
+        description: `Se puntuara el alquiler de ${alquiler.maquinaria.nombre}.`,
+        confirmText: 'Puntuar',
+        cancelText: 'Atrás',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        // Puntaje + comentario de testeo
+        // comentario es opcional
+        const puntaje = 5
+        let comentario = null
+
+        if (comentario === null) this.puntuarAlquiler(alquiler.id, puntaje);
+        else this.puntuarAlquiler(alquiler.id, puntaje, comentario);
+      }
+    })
+  }
+
+  puntuarAlquiler(id: number, puntaje: number, comentario?: string): void {
+    this.alquilerService.puntuarAlquiler(id, puntaje, comentario).subscribe({
+      next: () => {
+        console.log(`Alquiler ${id} puntuado.`);
+        this.fetchAlquileres();
+      },
+      error: (error) => {
+        console.error(`Error puntuando alquiler ${id}:`, error);
+      },
+    });
+  }
+
+  modalConfirmarAlquiler(alquiler: any): void {
     this.dialog.open(ManageModalComponent, {
       width: '500px', // podés ajustar el ancho
-      data: alquiler,
+      data: { alquiler: alquiler, callback: this.fetchAlquileres.bind(this) }, // Pasar la función de actualización
+    });
+  }
+
+  toggleExpandida(reserva: any) {
+    this.reservaExpandida = this.reservaExpandida === reserva ? null : reserva;
+  }
+
+  diasEntre(fechaInicio: string, fechaFin: string): number {
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+    return Math.ceil(
+      (fin.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24)
+    );
+  }
+
+  confirmarAlquiler(id: number, comentario?: string): void {
+    this.alquilerService.confirmarAlquiler(id, comentario).subscribe({
+      next: () => {
+        console.log(`Recepción de alquiler ${id} confirmada.`);
+        this.fetchAlquileres();
+      },
+      error: (error) => {
+        console.error(`Error confirmando recepción de alquiler ${id}:`, error);
+      },
     });
   }
 

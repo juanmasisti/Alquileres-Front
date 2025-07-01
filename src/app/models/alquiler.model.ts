@@ -1,5 +1,6 @@
 import { Maquinaria } from './maquinaria.model';
 import { Location } from './maquinaria.model';
+import { Reseña } from './reseña.model';
 import { User } from './user.model'; // Asegúrate de que la ruta sea correcta
 //import { formatISO } from 'date-fns'; //puedo necesitarlo para formatear fechas
 
@@ -19,4 +20,5 @@ export interface Alquiler {
   sucursal: Location;
   estado: AlquilerState;
   precio_total: number;
+  reseña: Reseña;
 }

@@ -41,7 +41,11 @@
         <h2 class="title">
           {{ maquinaria.nombre }}
           <ng-container *ngIf="isAdmin">
-            <select [ngModel]="maquinaria.state" (change)="onStateChange($event)" class="state-selector">
+            <select
+              [ngModel]="maquinaria.state"
+              (change)="onStateChange($event)"
+              class="state-selector"
+            >
               <option value="Disponible">Disponible</option>
               <option value="Mantenimiento">Mantenimiento</option>
               <option value="Eliminado">Eliminado</option>
@@ -126,20 +130,26 @@
                 name="beginDate"
             />
 
-              <input
-                matEndDate
-                placeholder="Hasta"
-                [(ngModel)]="endDate"
-                readonly
-                (ngModelChange)="onDateChanged()"
-                name="endDate"     
-            />
-            </mat-date-range-input>
+                <input
+                  matEndDate
+                  placeholder="Hasta"
+                  [(ngModel)]="endDate"
+                  readonly
+                  (ngModelChange)="onDateChanged()"
+                  name="endDate"
+                />
+              </mat-date-range-input>
 
-
-            <mat-datepicker-toggle matSuffix [for]="picker" class="custom-datepicker-toggle"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker [dateClass]="dateClass"></mat-date-range-picker>
-          </mat-form-field>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+                class="custom-datepicker-toggle"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker
+                #picker
+                [dateClass]="dateClass"
+              ></mat-date-range-picker>
+            </mat-form-field>
 
           <!-- Mostrar resumen de lo seleccionado -->
         <div *ngIf="beginDate && endDate && precioTotal>0 && emailExists" class="summary-container">
@@ -165,19 +175,33 @@
             </div>
         </div>
 
-          <div class="modal-actions mt-3">
-            <div *ngIf="beginDate && endDate && precioTotal > 0 && !mostrarPagar" class="loading-spinner">
-              <i class="fas fa-circle-notch fa-spin"></i>
+            <div class="modal-actions mt-3">
+              <div
+                *ngIf="beginDate && endDate && precioTotal > 0 && !mostrarPagar"
+                class="loading-spinner"
+              >
+                <i class="fas fa-circle-notch fa-spin"></i>
+              </div>
+              <div id="walletBrick_container"></div>
+              <button class="btn cancel" (click)="cerrarModal()">
+                Cancelar
+              </button>
             </div>
-            <div  id="walletBrick_container"></div>
-            <button class="btn cancel" (click)="cerrarModal()">Cancelar</button>
           </div>
         </div>
       </div>
-      
-      </div>
     </div>
   </div>
-</section>
 
+  <div class="main__container">
+    <!-- <app-estadisticas></app-estadisticas> -->
+    <h2>
+      Aca iria el componente de las estadisticas, solo visible para el admin
+    </h2>
+  </div>
+
+  <div class="main__container">
+    <app-comments *ngIf="maquinaria" [maquinaria]="maquinaria"></app-comments>
+  </div>
+</section>
 <app-footer></app-footer>
