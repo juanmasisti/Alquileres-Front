@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Maquinaria, MaquinariaFilters, PeriodoOcupadoResponse } from '../models/maquinaria.model';
+import {
+  Maquinaria,
+  MaquinariaFilters,
+  PeriodoOcupadoResponse,
+} from '../models/maquinaria.model';
 
 @Injectable({ providedIn: 'root' })
 export class MaquinariaService {
   private readonly baseUrl = `${environment.apiUrl}/maquinaria`;
+  private readonly baseUrlPreguntas = `${environment.apiUrl}/pregunta`;
 
   constructor(private http: HttpClient) {}
 
@@ -108,16 +113,25 @@ export class MaquinariaService {
 
   // Obtener todas las fechas ocupadas
   getFechasOcupadas(id: number): Observable<PeriodoOcupadoResponse[]> {
-  return this.http.get<PeriodoOcupadoResponse[]>(`${this.baseUrl}/${id}/fechasOcupadas`);
-}
+    return this.http.get<PeriodoOcupadoResponse[]>(
+      `${this.baseUrl}/${id}/fechasOcupadas`
+    );
+  }
 
   // Verificar disponibilidad en un rango específico
-  getDisponibilidad(id: number, fechaInicio: string, fechaFin: string): Observable<{disponible: boolean}> {
+  getDisponibilidad(
+    id: number,
+    fechaInicio: string,
+    fechaFin: string
+  ): Observable<{ disponible: boolean }> {
     const params = new HttpParams()
       .set('fecha_inicio', fechaInicio)
       .set('fecha_fin', fechaFin);
 
-    return this.http.get<{disponible: boolean}>(`${this.baseUrl}/${id}/disponibilidad`, { params });
+    return this.http.get<{ disponible: boolean }>(
+      `${this.baseUrl}/${id}/disponibilidad`,
+      { params }
+    );
   }
 
   actualizarEstado(id: number, estado: string): Observable<any> {
@@ -128,8 +142,8 @@ export class MaquinariaService {
     return this.http.get(`${this.baseUrl}/${id}/preguntas`);
   }
 
-  postComentario(id: number, comentario: string): Observable<any> { 
-    return this.http.post(`${this.baseUrl}/${id}/pregunta`, { comentario });
+  postComentario(id: number, pregunta: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/${id}/pregunta`, { pregunta });
   }
 
   getRespuestas(id: number): Observable<any> {
@@ -137,6 +151,8 @@ export class MaquinariaService {
   }
 
   postRespuesta(id: number, respuesta: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/pregunta/${id}/responder`, { respuesta });
+    return this.http.patch(`${this.baseUrlPreguntas}/${id}/responder`, {
+      respuesta,
+    });
   }
 }
