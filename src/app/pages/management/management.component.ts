@@ -232,10 +232,54 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  abrirGestionModal(alquiler: any): void {
+  modalPuntuarAlquiler(alquiler : any): void {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: {
+        title: `¿Puntuar alquiler de ${alquiler.maquinaria.nombre}?`,
+        description: `Se puntuara el alquiler de ${alquiler.maquinaria.nombre}.`,
+        confirmText: 'Puntuar',
+        cancelText: 'Atrás',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        // PUNTAJE PLACEHOLDER
+        const puntaje = 5
+        this.puntuarAlquiler(alquiler.id, puntaje);
+      }
+    })
+  }
+
+  puntuarAlquiler(id: number, puntaje: number, comentario?: string): void {
+    this.alquilerService.puntuarAlquiler(id, puntaje, comentario).subscribe({
+      next: () => {
+        console.log(`Alquiler ${id} puntuado.`);
+        this.fetchAlquileres();
+      },
+      error: (error) => {
+        console.error(`Error puntuando alquiler ${id}:`, error);
+      },
+    });
+  }
+
+  modalConfirmarAlquiler(alquiler: any): void {
     this.dialog.open(ManageModalComponent, {
-      width: '500px', // podés ajustar el ancho
+      width: '500px',
       data: alquiler,
+    });
+  }
+
+  confirmarAlquiler(id: number, comentario?: string): void {
+    this.alquilerService.confirmarAlquiler(id, comentario).subscribe({
+      next: () => {
+        console.log(`Recepción de alquiler ${id} confirmada.`);
+        this.fetchAlquileres();
+      },
+      error: (error) => {
+        console.error(`Error confirmando recepción de alquiler ${id}:`, error);
+      },
     });
   }
 

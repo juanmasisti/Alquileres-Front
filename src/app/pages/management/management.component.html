@@ -65,6 +65,7 @@
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
         <span class = "acciones">
+          <!-- Había que hacerlo así para poder tener más de un botón -->
           <a
             class="accion"
             style="cursor: pointer"
@@ -104,11 +105,22 @@
         <span>${{ r.precio }}</span>
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
-        @if (rol == 'cliente') {
-        <a class="cancelar" style="cursor: pointer">Valorar</a>} 
-        @else if (rol == 'empleado' || rol == 'admin') {
-        <a class="cancelar" (click)="abrirGestionModal(r)">Gestionar</a>
-        }
+        <span class = "acciones">
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="( r.estado == 'Finalizado' ) && ( rol == 'cliente' ) && !r['reseña']"
+            (click)="modalPuntuarAlquiler(r)"
+            > Valorar </a
+          >
+          <a
+            class="accion"
+            style="cursor: pointer"
+            *ngIf="( r.estado == 'Activo' ) && rol == 'empleado'"
+            (click)="modalConfirmarAlquiler(r)"
+            > Recibir </a
+          >
+        </span>
       </div>
       } }
     </div>
