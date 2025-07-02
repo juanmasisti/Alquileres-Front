@@ -1,7 +1,10 @@
-<h1>Preguntas y respuestas</h1>
-<p class="subtitle">
-  Aclara tus dudas sobre la maquina <b> {{ maquinaria.nombre }}</b>
-</p>
+<div class="header">
+  <h1>Preguntas y respuestas</h1>
+  <p class="subtitle">
+    Aclara tus dudas sobre la maquina
+    <b class="enfasis"> {{ maquinaria.nombre }}</b>
+  </p>
+</div>
 <div>
   <div *ngIf="!rol" class="MensajeSinCuenta">
     <h3>
@@ -43,38 +46,36 @@
   <div class="comentarios-container">
     <div class="comentario" *ngFor="let comentario of comentarios">
       <p class="comentario-usuario">
-        <b> {{ comentario.usuario.nombre }} </b>pregunta:
+        <b class="enfasis"> {{ comentario.usuario.nombre }} </b>pregunta:
       </p>
       <div class="pregunta-container">
         <p class="comentario-pregunta">{{ comentario.pregunta }}</p>
-        <p class="comentario-fecha">
-          <b> {{ comentario.fecha_pregunta | date : "dd/MM/yyyy" }}</b>
-        </p>
+        <div class="comentario-acciones">
+          <p class="fecha">
+            <b> {{ comentario.fecha_pregunta | date : "dd/MM/yyyy" }}</b>
+          </p>
 
-        <!-- Botón Responder / Cancelar -->
-        <p
-          class="responder-btn"
-          *ngIf="!comentario.respuesta && rol === 'empleado'"
-          (click)="switchRespondiendo(comentario.id)"
-        >
-          <b>
-            {{
-              comentarioRespondiendoId === comentario.id
-                ? "Cancelar"
-                : "Responder"
-            }}
-          </b>
-        </p>
-
+          <!-- Botón Responder / Cancelar -->
+          <p
+            class="responder-btn"
+            *ngIf="!comentario.respuesta && rol === 'empleado'"
+            (click)="switchRespondiendo(comentario.id)"
+          >
+            <b>
+              {{
+                comentarioRespondiendoId === comentario.id
+                  ? "Cancelar"
+                  : "Responder"
+              }}
+            </b>
+          </p>
+        </div>
         <!-- Textarea y botón solo si está respondiendo este comentario -->
         <div
           *ngIf="comentarioRespondiendoId === comentario.id"
           class="form-container"
         >
-          <form
-            class="form-pregunta"
-            (ngSubmit)="enviarRespuesta(comentario.id)"
-          >
+          <form class="form-rta" (ngSubmit)="enviarRespuesta(comentario.id)">
             <textarea
               rows="1"
               [(ngModel)]="respuestaTexto"
@@ -91,10 +92,10 @@
         <!-- Mostrar respuesta si existe -->
         <div *ngIf="comentario.respuesta" class="respuesta-container">
           <p class="comentario-respuesta">
-            <b>⤷</b> {{ comentario.respuesta }}
+            <b class="enfasis">⤷</b> {{ comentario.respuesta }}
           </p>
-          <p class="comentario-respuesta-fecha">
-            <b>{{ comentario.fecha_respuesta | date : "dd/MM/yyyy" }}</b>
+          <p class="fecha-rta">
+            <b> {{ comentario.fecha_respuesta | date : "dd/MM/yyyy" }}</b>
           </p>
         </div>
       </div>

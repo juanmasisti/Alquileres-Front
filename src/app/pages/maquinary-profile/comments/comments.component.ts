@@ -74,8 +74,8 @@ export class CommentsComponent implements OnInit {
       .postComentario(this.maquinaria.id, texto)
       .subscribe(() => {
         this.comentarioTexto = ''; // limpiar el campo
+        this.cargarComentarios(); // recargar comentarios después de enviar
       });
-    this.cargarComentarios(); // recargar comentarios después de enviar
   }
 
   enviarRespuesta(idComentario: number) {
@@ -86,7 +86,7 @@ export class CommentsComponent implements OnInit {
     this.maquinariaService.postRespuesta(idComentario, texto).subscribe(() => {
       this.respuestaTexto = ''; // limpiar el campo
       this.switchRespondiendo(idComentario); // cerrar textarea
+      this.cargarComentarios(); // recargar comentarios después de enviar
     });
-    this.cargarComentarios(); // recargar comentarios después de enviar
   }
 }

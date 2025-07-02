@@ -1,14 +1,22 @@
 @use "index" as *;
 
-b {
-  color: $primary-color;
-  font-weight: bold;
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  & h1 {
+    padding-bottom: 2px;
+    border-bottom: 1px solid $primary-color;
+  }
 }
 
 .subtitle {
   font-size: 14px;
+  margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 10px;
+  color: #666;
 }
 
 .MensajeSinCuenta {
@@ -80,13 +88,97 @@ b {
   }
 }
 
+.enfasis {
+  font-weight: bold;
+  color: $primary-color;
+}
+
 .form-container {
   display: flex;
   align-items: center;
   justify-content: center;
 
+  margin-top: 5px;
   width: 100%;
   height: 100%;
+}
+
+.comentarios-container {
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.comentario {
+  background-color: rgba(235, 133, 16, 0.055);
+  margin: 5px 0;
+  padding: 5px;
+
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.comentario-usuario {
+  border-bottom: 1px solid $primary-color;
+  padding: 2px;
+
+  font-size: 13px;
+}
+
+.pregunta-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+  width: 100%;
+  height: 100%;
+}
+
+.comentario-pregunta {
+  font-size: 12px;
+  margin: 5px 0;
+  color: #333;
+}
+
+.comentario-acciones {
+  display: flex;
+  align-items: center;
+}
+
+.responder-btn {
+  background-color: #eebc51;
+  color: white;
+
+  padding: 2px 5px;
+  border-radius: 5px;
+
+  margin: 0 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    transition: all 0.3s ease;
+    scale: 1.05;
+  }
+}
+
+.fecha {
+  font-size: 10px;
+  color: #666;
+  margin-left: 10px;
+}
+
+.fecha-rta {
+  font-size: 10px;
+  color: #666;
+  margin-left: 20px;
+}
+
+.comentario-respuesta {
+  font-size: 12px;
+  margin: 5px 0;
+  color: #333;
 }
 
 .form-pregunta {
@@ -94,7 +186,7 @@ b {
   align-items: end;
   justify-content: center;
 
-  width: 80%;
+  width: 95%;
   min-height: 35px;
   /* background-color: aqua; */
 }
@@ -123,14 +215,22 @@ b {
   }
 }
 
+.respuesta-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+  width: 100%;
+  height: 100%;
+}
+
 .btn {
   width: 20%;
   height: 35px;
   margin-left: 10px;
 
-  font-size: 14px;
+  font-size: 11px;
   border-radius: 10px;
-  background-color: $primary-color;
+  background-color: #eebc51;
   color: white;
   border: none;
   cursor: pointer;
@@ -141,4 +241,13 @@ b {
     transition: all 0.3s ease;
     scale: 1.05;
   }
+}
+
+.form-rta {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+
+  width: 95%;
+  min-height: 35px;
 }
