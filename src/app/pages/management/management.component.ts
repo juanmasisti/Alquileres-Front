@@ -245,9 +245,13 @@ export class ManagementComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        // PUNTAJE PLACEHOLDER
+        // Puntaje + comentario de testeo
+        // comentario es opcional
         const puntaje = 5
-        this.puntuarAlquiler(alquiler.id, puntaje);
+        let comentario = null
+
+        if (comentario === null) this.puntuarAlquiler(alquiler.id, puntaje);
+        else this.puntuarAlquiler(alquiler.id, puntaje, comentario);
       }
     })
   }

@@ -23,7 +23,6 @@ export class AlquileresService {
   }
 
   puntuarAlquiler(id: number, puntaje: number, comentario?: string): Observable<any> {
-    comentario = "TESTESTSTESTSETSETSETSETSETST"
     return this.http.patch(`${this.baseUrl}/${id}/puntuar`, { puntaje, comentario }); 
   }
 }
