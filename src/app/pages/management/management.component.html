@@ -67,7 +67,7 @@
           <a
             class="accion"
             style="cursor: pointer"
-            *ngIf="( r.estado == 'Activa' ) && rol == 'empleado'"
+            *ngIf="( r.estado == 'Activa' ) && rol == 'empleado' && reservaIniciada(r.fecha_inicio)"
             (click)="modalConfirmarReserva(r.id, r.maquinaria)"
             > Confirmar </a
           >
@@ -107,7 +107,7 @@
         <span>${{ r.precio }}</span>
         <span>{{ r.sucursal }}</span>
         <span>{{ r.estado }}</span>
-        <span><a class="cancelar" style="cursor: pointer">Ver más</a></span>
+        <span><a class="accion" style="cursor: pointer">Ver más</a></span>
       </div>
 
       <!-- Sección expandible -->
