@@ -1,3 +1,5 @@
+import { Reseña } from './reseña.model';
+
 // Enums sincronizados con el backend
 export enum MaquinariaState {
   Disponible = 'Disponible',
@@ -44,6 +46,8 @@ export interface Maquinaria {
   categoria: MaquinariaCategory;
   state?: MaquinariaState;
   imagen?: string;
+  puntaje_promedio: number;
+  resenias: Reseña[];
 }
 
 // Filtros aplicables

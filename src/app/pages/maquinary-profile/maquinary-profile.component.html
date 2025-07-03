@@ -40,6 +40,10 @@
       <div class="description__container">
         <h2 class="title">
           {{ maquinaria.nombre }}
+          <rating [(ngModel)]="maquinaria.puntaje_promedio" [customTemplate]="starIcon" [max]="5" [readonly]="true"></rating>
+          <ng-template #starIcon let-i="index" let-v="value">
+            <i class="{{i < v ? 'fa-solid' : 'fa-regular'}} fa-star"></i>
+          </ng-template>
           <ng-container *ngIf="isAdmin">
             <select
               [ngModel]="maquinaria.state"
@@ -205,6 +209,9 @@
 
   <div class="main__container">
     <app-comments *ngIf="maquinaria" [maquinaria]="maquinaria"></app-comments>
+  </div>
+  <div class="main__container">
+    <app-reviews *ngIf="maquinaria" [maquinaria]="maquinaria"></app-reviews>
   </div>
 </section>
 <app-footer></app-footer>

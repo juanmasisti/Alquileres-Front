@@ -39,7 +39,8 @@
   @if (!comentariosCargando && comentarios.length === 0) {
   <div class="sin-comentarios">
     <i class="fas fa-comment-slash"></i>
-    <p>No hay comentarios aún. Sé el primero en preguntar.</p>
+    @if (rol != 'empleado' && rol != 'admin') {<p>No hay comentarios aún. Sé el primero en preguntar.</p>}
+    @if (rol == 'empleado' || rol !== 'admin') {<p>No hay comentarios aún.</p>}
   </div>
   }
   <!-- Lista de comentarios y repuestas -->

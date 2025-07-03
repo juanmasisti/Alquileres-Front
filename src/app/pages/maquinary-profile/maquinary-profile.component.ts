@@ -35,6 +35,8 @@ import { ReservasService } from 'src/app/services/reservas.service';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { CommentsComponent } from './comments/comments.component';
+import { ReviewsComponent } from './reviews/reviews.component';
+import { RatingModule } from 'ngx-bootstrap/rating';
 
 declare var MercadoPago: any;
 
@@ -54,6 +56,8 @@ declare var MercadoPago: any;
     MatNativeDateModule,
     LuxonDateModule,
     CommentsComponent,
+    ReviewsComponent,
+    RatingModule,
   ],
 })
 export class MaquinaryProfileComponent implements OnInit {

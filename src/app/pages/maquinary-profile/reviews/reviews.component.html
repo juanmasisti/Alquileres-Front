@@ -1,0 +1,37 @@
+<div class="header">
+  <h1> Valoraciones </h1>
+  <p class="subtitle">
+    La experiencia de otros usuarios con
+    <b class="enfasis"> {{ maquinaria.nombre }}</b>
+  </p>
+</div>
+<div>
+  <div *ngIf="reseniasCargando" class="cargando-resenias">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>Cargando reseñas...</p>
+  </div>
+  @if (!reseniasCargando && resenias.length === 0) {
+  <div class="sin-comentarios">
+    <i class="fas fa-comment-slash"></i>
+    <p>No valoraciones de esta máquina todavía.</p>
+  </div>
+  }
+  <!-- Lista de reseñas y comentarios -->
+  <div class="resenias-container">
+    <div class="resenia" *ngFor="let resenia of resenias">
+      <p class="resenia-usuario">
+        <b class="enfasis"> {{ resenia.autor.nombre }} </b> -  
+        <rating [(ngModel)]="resenia.puntaje" [customTemplate]="starIcon" [max]="5" [readonly]="true"></rating>
+        <ng-template #starIcon let-i="index" let-v="value">
+          <i class="{{i < v ? 'fa-solid' : 'fa-regular'}} fa-star"></i>
+        </ng-template>
+      </p>
+      <b class="fecha"> {{  resenia.fecha | date : "dd/MM/yyyy"  }} </b>
+      @if (resenia.comentario) {
+      <p class="resenia-comentario">
+        {{ resenia.comentario }}
+      </p>
+      }
+    </div>
+  </div>
+</div>
