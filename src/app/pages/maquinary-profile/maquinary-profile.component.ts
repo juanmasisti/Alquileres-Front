@@ -222,7 +222,7 @@ export class MaquinaryProfileComponent implements OnInit {
         this.maquinaria = data;
         if (
           this.maquinaria.state == MaquinariaState.Disponible &&
-          this.isClient
+          ( this.isClient || this.isEmployee )
         ) {
           this.setFechasOcupadas(id);
         }
