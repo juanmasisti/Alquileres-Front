@@ -153,25 +153,29 @@
             <span class="label">Total:</span>
             <span class="valor precio-total">${{ r.precio }}</span>
           </div>
+          @if (r.estado == 'Finalizado' && ( rol == 'empleado' || rol == 'admin' )) {
+            <div class="detalle-item">
+              <span class="label">Observación del empleado:</span>
+              @if(r.observacion){
+                <span class="valor">{{ r.observacion }}</span>  
+              }
+              @else { <span class="valor">Sin observaciones</span> }
+            </div>
+          }
           <div class="detalle-item">
-            <span class="label">Observación del empleado:</span>
-            <span class="valor">{{ r.observacion }}</span>
-          </div>
-          <div class="detalle-item">
-            @if (rol == 'cliente' && r.estado == 'Finalizado')
+            @if (r.estado == 'Finalizado')
             {
-              @if(!r.resenia){
+              @if(!r.resenia && rol == 'cliente'){
                 <span class="label">Calificanos:</span>
                 <button class="accion calificar" (click)="modalPuntuarAlquiler(r)">Calificar</button>
               }@else{
-                <span>Calificacion</span><!-- Mejorar estilos -->
-                <rating [(ngModel)]="r.resenia.puntaje" [customTemplate]="starIcon" [max]="5" [readonly]="false"></rating>
+                <span class="label">Valoración:</span><!-- Mejorar estilos -->
+                <rating class="valor" [(ngModel)]="r.resenia.puntaje" [customTemplate]="starIcon" [max]="5" [readonly]="true"></rating>
                 <ng-template #starIcon let-i="index" let-v="value">
                   <i class="{{i < v ? 'fa-solid' : 'fa-regular'}} fa-star"></i>
                 </ng-template>
                 @if(r.resenia.comentario){
-                  <span>Comentario:</span>
-                  <span>{{r.resenia.comentario}}</span>
+                  <span class="valor">"{{r.resenia.comentario}}"</span>
                 }
               }
             } @else if (r.estado !== 'Finalizado' && (rol == 'empleado' || rol == 'admin')) {

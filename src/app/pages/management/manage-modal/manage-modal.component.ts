@@ -69,7 +69,7 @@ export class ManageModalComponent implements OnInit {
     if (this.manageForm.invalid) return;
 
     const observacion =
-      this.manageForm.get('observacion')?.value || 'Sin observación';
+      this.manageForm.get('observacion')?.value;
 
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
