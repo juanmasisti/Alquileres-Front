@@ -1,0 +1,122 @@
+@use "index" as *;
+
+.manage-modal {
+  border: 1px solid $primary-color;
+  padding: 5%;
+}
+
+h2 {
+  color: $primary-color;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: $primary-color 1px solid;
+}
+
+b {
+  color: $primary-color;
+}
+
+.puntaje {
+  padding-left: 35px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.puntajeTitle {
+  font-weight: 500;
+  color: black;
+  font-size: 14px;
+  margin-top: 3px;
+  margin-bottom: 2px;
+}
+
+.manage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 auto;
+  width: 80%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-control {
+  padding: 10px;
+  border: 1px solid $primary-color;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 90%;
+  margin: 0 auto;
+  color: black;
+
+  &:focus {
+    outline: none;
+    border: 2px solid $primary-color;
+    box-shadow: none;
+  }
+}
+
+select {
+  cursor: pointer;
+
+  &:focus {
+    border-radius: 10px;
+  }
+}
+
+option {
+  background-color: white;
+  cursor: pointer;
+}
+
+textarea.auto-grow {
+  overflow: hidden;
+  resize: none; // Opcional, evita que el usuario lo redimensione manualmente
+}
+
+textarea.auto-grow:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+small.contador {
+  display: block;
+  margin-right: 25px;
+  text-align: right;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.confirm-btn {
+  background-color: rgb(255, 166, 0);
+  color: white;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(255, 166, 0), 10%;
+    scale: 1.05;
+    transition: all 0.3s ease;
+  }
+
+  &:active {
+    scale: 1;
+    transition: all 0.1s ease;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}

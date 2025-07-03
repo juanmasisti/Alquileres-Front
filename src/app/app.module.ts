@@ -7,6 +7,8 @@ import { NavbarComponent } from "./shared/components/navbar/navbar.component";
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './services/interceptors/auth.interceptor';
+import { RatingModule } from 'ngx-bootstrap/rating'
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [    AppComponent
@@ -14,6 +16,8 @@ import { AuthInterceptor } from './services/interceptors/auth.interceptor';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RatingModule,
+    FormsModule,
     RouterModule.forRoot(routes, { useHash: false, anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
     NavbarComponent,
     HttpClientModule,

@@ -9,13 +9,17 @@ import { Maquinaria } from 'src/app/models/maquinaria.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
+import { RatingModule } from 'ngx-bootstrap/rating';
+import { FormsModule } from '@angular/forms';
+import { Alquiler } from 'src/app/models/alquiler.model';
+import { PuntuarModalComponent } from './puntuar-modal/puntuar-modal.component';
 import { ManageModalComponent } from './manage-modal/manage-modal.component';
 
 @Component({
   selector: 'app-management',
   templateUrl: './management.component.html',
   styleUrls: ['./management.component.scss'],
-  imports: [NavbarComponent, FooterComponent, CommonModule, MatDialogModule],
+  imports: [NavbarComponent, FooterComponent, CommonModule, MatDialogModule, RatingModule, FormsModule],
 })
 export class ManagementComponent implements OnInit {
   lista: any[] = [];
@@ -234,39 +238,14 @@ export class ManagementComponent implements OnInit {
   }
 
   modalPuntuarAlquiler(alquiler : any): void {
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+    const dialogRef = this.dialog.open(PuntuarModalComponent, {
       width: '400px',
-      data: {
-        title: `¿Puntuar alquiler de ${alquiler.maquinaria.nombre}?`,
-        description: `Se puntuara el alquiler de ${alquiler.maquinaria.nombre}.`,
-        confirmText: 'Puntuar',
-        cancelText: 'Atrás',
-      },
+      data: { alquiler },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === true) {
-        // Puntaje + comentario de testeo
-        // comentario es opcional
-        const puntaje = 5
-        let comentario = null
-
-        if (comentario === null) this.puntuarAlquiler(alquiler.id, puntaje);
-        else this.puntuarAlquiler(alquiler.id, puntaje, comentario);
-      }
+      if (result === true) this.fetchAlquileres();
     })
-  }
-
-  puntuarAlquiler(id: number, puntaje: number, comentario?: string): void {
-    this.alquilerService.puntuarAlquiler(id, puntaje, comentario).subscribe({
-      next: () => {
-        console.log(`Alquiler ${id} puntuado.`);
-        this.fetchAlquileres();
-      },
-      error: (error) => {
-        console.error(`Error puntuando alquiler ${id}:`, error);
-      },
-    });
   }
 
   modalConfirmarAlquiler(alquiler: any): void {

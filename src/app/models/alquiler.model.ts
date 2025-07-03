@@ -20,5 +20,5 @@ export interface Alquiler {
   sucursal: Location;
   estado: AlquilerState;
   precio_total: number;
-  reseña: Reseña;
+  resenia: Reseña;
 }

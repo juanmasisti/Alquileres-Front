@@ -158,17 +158,30 @@
             <span class="valor">{{ r.observacion }}</span>
           </div>
           <div class="detalle-item">
-            @if (rol == 'cliente') {
-            <span class="label">Calificanos:</span>
-            <span><a class="accion valor">Valorar</a></span
-            >} @else if (rol == 'empleado' || rol == 'admin') { @if (r.estado
-            !== 'Finalizado') {
-            <span class="label">Gestionar:</span>
-            <span
-              ><a class="accion valor" (click)="modalConfirmarAlquiler(r)">
-                Devolver
-              </a></span
-            >} }
+            @if (rol == 'cliente' && r.estado == 'Finalizado')
+            {
+              @if(!r.resenia){
+                <span class="label">Calificanos:</span>
+                <button class="accion calificar" (click)="modalPuntuarAlquiler(r)">Calificar</button>
+              }@else{
+                <span>Calificacion</span><!-- Mejorar estilos -->
+                <rating [(ngModel)]="r.resenia.puntaje" [customTemplate]="starIcon" [max]="5" [readonly]="false"></rating>
+                <ng-template #starIcon let-i="index" let-v="value">
+                  <i class="{{i < v ? 'fa-solid' : 'fa-regular'}} fa-star"></i>
+                </ng-template>
+                @if(r.resenia.comentario){
+                  <span>Comentario:</span>
+                  <span>{{r.resenia.comentario}}</span>
+                }
+              }
+            } @else if (r.estado !== 'Finalizado' && (rol == 'empleado' || rol == 'admin')) {
+              <span class="label">Gestionar:</span>
+              <span
+                ><a class="accion valor" (click)="modalConfirmarAlquiler(r)">
+                  Devolver
+                </a></span
+              >
+            }
           </div>
         </div>
       </div>
