@@ -31,7 +31,7 @@
             'maintenance': maquinaria.state === 'Mantenimiento',
             'rented': maquinaria.state === 'Eliminado',
           }"
-          *ngIf="isAdmin"
+          *ngIf="isAdmin || isEmployee"
         >
           {{ maquinaria.state }}
         </span>
@@ -49,6 +49,16 @@
               <option value="Disponible">Disponible</option>
               <option value="Mantenimiento">Mantenimiento</option>
               <option value="Eliminado">Eliminado</option>
+            </select>
+          </ng-container>
+          <ng-container *ngIf="isEmployee">
+            <select
+              [ngModel]="maquinaria.state"
+              (change)="onStateChange($event)"
+              class="state-selector"
+            >
+              <option value="Disponible">Disponible</option>
+              <option value="Mantenimiento">Mantenimiento</option>
             </select>
           </ng-container>
         </h2>
@@ -81,7 +91,7 @@
           </p>
         </div>
 
-        <button class="rent-btn" *ngIf="mostrarReservar" (click)="abrirModal()">
+        <button class="rent-btn" *ngIf="( isClient || isEmployee ) && maquinaria.state === 'Disponible'" (click)="abrirModal()">
           <i class="fas fa-calendar-check"></i> Reservar ahora
         </button>
 

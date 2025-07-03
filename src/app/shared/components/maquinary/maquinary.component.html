@@ -120,7 +120,7 @@
             [routerLink]="['/maquinaria', m.id]"
           />
           <span
-            *ngIf="isAdmin"
+            *ngIf="isAdmin || isEmployee"
             class="card-badge"
             [ngClass]="{
             'available': m.state === 'Disponible',

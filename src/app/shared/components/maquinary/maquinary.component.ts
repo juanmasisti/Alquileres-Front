@@ -32,6 +32,7 @@ export class MaquinaryComponent implements OnInit {
   sucursales: string[] = [];
   estados: string[] = [];
   isAdmin: boolean = false;
+  isEmployee: boolean = false
 
   isLoading = false;
   private searchText$ = new Subject<string>();
@@ -46,9 +47,8 @@ export class MaquinaryComponent implements OnInit {
     this.loadFilterOptions();
     this.setupSearchDebounce();
     this.fetchMachines();
-    this.isAdmin =
-      sessionStorage.getItem('rol') === 'admin' ||
-      sessionStorage.getItem('rol') === 'empleado';
+    this.isAdmin = sessionStorage.getItem('rol') === 'admin'
+    this.isEmployee = sessionStorage.getItem('rol') === 'empleado'
   }
 
   fetchMachines(): void {

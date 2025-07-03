@@ -69,6 +69,7 @@ export class MaquinaryProfileComponent implements OnInit {
   endDate?: Date;
   isAdmin = sessionStorage.getItem('rol') === 'admin'
   isEmployee = sessionStorage.getItem('rol') === 'empleado'
+  isClient = sessionStorage.getItem('rol') === 'cliente'
 
   // Para el autocomplete de usuarios
   allUsers: any[] = [];
@@ -108,8 +109,8 @@ export class MaquinaryProfileComponent implements OnInit {
     this.minDate.setDate(this.minDate.getDate() + 1);
   }
 
-  isClient() {
-    return !!this.authService.getToken() && !this.isAdmin;
+  isClientDEPRECATED() {
+    return !!this.authService.getToken() && !this.isAdmin && !this.isEmployee;
   }
 
  ngOnInit() {
@@ -217,7 +218,7 @@ export class MaquinaryProfileComponent implements OnInit {
         this.maquinaria = data;
         if (
           this.maquinaria.state == MaquinariaState.Disponible &&
-          this.isClient()
+          this.isClient
         ) {
           this.setFechasOcupadas(id);
         }
