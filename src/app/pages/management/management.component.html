@@ -89,7 +89,13 @@
 
       @for (r of listaFiltrada; track r.id) { @if (activeTab === 'reservas') {
       <div class="reserva-row">
-        <span>{{ r.codigo_reserva }}</span>
+        <span class="code">
+          <i
+            class="fas fa-exclamation-circle"
+            *ngIf="expiresToday(r.fecha_inicio)"
+          ></i>
+          {{ r.codigo_reserva }}</span
+        >
         <span>{{ r.maquinaria.nombre }}</span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
@@ -162,7 +168,13 @@
         [class.activa]="reservaExpandida === r"
         (click)="toggleExpandida(r)"
       >
-        <span>{{ r.codigo_reserva }}</span>
+        <span class="code">
+          <i
+            class="fas fa-exclamation-circle"
+            *ngIf="expiresToday(r.fecha_inicio)"
+          ></i>
+          {{ r.codigo_reserva }}</span
+        >
         <span>{{ r.maquinaria.nombre }} </span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>

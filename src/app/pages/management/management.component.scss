@@ -101,6 +101,18 @@
   text-decoration: underline;
 }
 
+.code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  & i {
+    color: $primary-color;
+    font-size: 1.2rem;
+  }
+}
+
 .no-results {
   flex: 1;
   text-align: center;

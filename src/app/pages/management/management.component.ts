@@ -57,6 +57,17 @@ export class ManagementComponent implements OnInit {
     });
   }
 
+  expiresToday(fecha: string | Date): boolean {
+    const hoy = new Date();
+    const fechaInicio = new Date(fecha);
+
+    return (
+      fechaInicio.getFullYear() === hoy.getFullYear() &&
+      fechaInicio.getMonth() === hoy.getMonth() &&
+      fechaInicio.getDate() === hoy.getDate()
+    );
+  }
+
   fetchReservas(): void {
     this.lista = [];
     this.activeTab = 'reservas';
