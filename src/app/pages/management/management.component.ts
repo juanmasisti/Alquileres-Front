@@ -19,22 +19,33 @@ import { ManageModalComponent } from './manage-modal/manage-modal.component';
   selector: 'app-management',
   templateUrl: './management.component.html',
   styleUrls: ['./management.component.scss'],
-  imports: [NavbarComponent, FooterComponent, CommonModule, MatDialogModule, RatingModule, FormsModule],
+  imports: [
+    NavbarComponent,
+    FooterComponent,
+    CommonModule,
+    MatDialogModule,
+    RatingModule,
+    FormsModule,
+  ],
 })
 export class ManagementComponent implements OnInit {
   lista: any[] = [];
+  filtroActivo: string = '';
+  listaOriginal: any[] = [];
   loading: boolean = false;
   reservaExpandida: boolean = false;
   rol: string = sessionStorage.getItem('rol') ?? 'visitante';
   activeTab: 'reservas' | 'alquileres' = 'reservas';
   hoy = new Date();
+  searchItem: string = '';
 
   constructor(
     private reservaService: ReservasService,
     private alquilerService: AlquileresService,
     private dialog: MatDialog
-  ) 
-  { this.hoy.setHours(0, 0, 0, 0); }
+  ) {
+    this.hoy.setHours(0, 0, 0, 0);
+  }
 
   ngOnInit() {
     this.fetchReservas();
@@ -52,6 +63,7 @@ export class ManagementComponent implements OnInit {
     this.reservaService.getReservas().subscribe({
       next: (data) => {
         this.lista = this.sortReservas(data);
+        this.listaOriginal = [...this.lista];
         this.loading = false;
         console.log('Reservas fetched and sorted:', this.lista);
       },
@@ -65,11 +77,16 @@ export class ManagementComponent implements OnInit {
   private sortReservas(data: any[]): any[] {
     const statusPriority = (estado: string) => {
       switch (estado) {
-        case 'Activa': return 1;
-        case 'Cancelada': return 2;
-        case 'Reembolsada': return 3;
-        case 'Finalizada': return 3;
-        default: return 4;
+        case 'Activa':
+          return 1;
+        case 'Cancelada':
+          return 2;
+        case 'Reembolsada':
+          return 3;
+        case 'Finalizada':
+          return 3;
+        default:
+          return 4;
       }
     };
 
@@ -99,6 +116,7 @@ export class ManagementComponent implements OnInit {
     this.alquilerService.getAlquileres().subscribe({
       next: (data) => {
         this.lista = this.sortAlquileres(data);
+        this.listaOriginal = [...this.lista];
         this.loading = false;
         console.log('Alquileres fetched and sorted: ', this.lista);
       },
@@ -112,9 +130,12 @@ export class ManagementComponent implements OnInit {
   private sortAlquileres(data: any[]): any[] {
     const statusPriority = (estado: string) => {
       switch (estado) {
-        case 'Activo': return 1;
-        case 'Finalizado': return 2;
-        default: return 2;
+        case 'Activo':
+          return 1;
+        case 'Finalizado':
+          return 2;
+        default:
+          return 2;
       }
     };
 
@@ -135,6 +156,38 @@ export class ManagementComponent implements OnInit {
         return db - da;
       }
     });
+  }
+
+  filtrarPor(criterio: string): void {
+    this.filtroActivo = criterio;
+
+    switch (criterio) {
+      case 'maquina':
+        this.lista = [...this.listaOriginal].sort((a, b) =>
+          a.maquinaria.nombre.localeCompare(b.maquinaria.nombre)
+        );
+        break;
+      case 'fecha':
+        this.lista = [...this.listaOriginal].sort(
+          (a, b) =>
+            new Date(a.fecha_inicio).getTime() -
+            new Date(b.fecha_inicio).getTime()
+        );
+        break;
+      case 'sucursal':
+        this.lista = [...this.listaOriginal].sort((a, b) =>
+          a.sucursal.localeCompare(b.sucursal)
+        );
+        break;
+      case 'estado':
+        this.lista = [...this.listaOriginal].sort((a, b) =>
+          a.estado.localeCompare(b.estado)
+        );
+        break;
+      default:
+        this.lista = [...this.listaOriginal];
+        break;
+    }
   }
 
   modalCancelarReserva(
@@ -179,16 +232,16 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  modalConfirmarReserva( id: number , maquina: Maquinaria): void {
-      const dialogRef = this.dialog.open(ConfirmModalComponent, {
-        width: '400px',
-        data: {
-          title: `¿Confirmar entrega de ${maquina.nombre}?`,
-          description: `Se confirmará la entrega de ${ maquina.nombre }.`,
-          confirmText: 'Confirmar',
-          cancelText: 'Atrás',
-        },
-  });
+  modalConfirmarReserva(id: number, maquina: Maquinaria): void {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: {
+        title: `¿Confirmar entrega de ${maquina.nombre}?`,
+        description: `Se confirmará la entrega de ${maquina.nombre}.`,
+        confirmText: 'Confirmar',
+        cancelText: 'Atrás',
+      },
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
@@ -222,11 +275,9 @@ export class ManagementComponent implements OnInit {
   confirmarReserva(id: number, estado: string): void {
     this.reservaService.confirmarReserva(id).subscribe({
       next: () => {
-
         if (estado === 'entregado') {
           console.log(`Reserva ${id} confirmada. Se entregó la maquinaria.`);
-        }
-        else if (estado === 'reembolso') {
+        } else if (estado === 'reembolso') {
           console.log(`Reserva ${id} reembolsada.`);
         }
         this.fetchReservas();
@@ -237,7 +288,7 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  modalPuntuarAlquiler(alquiler : any): void {
+  modalPuntuarAlquiler(alquiler: any): void {
     const dialogRef = this.dialog.open(PuntuarModalComponent, {
       width: '400px',
       data: { alquiler },
@@ -245,7 +296,7 @@ export class ManagementComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) this.fetchAlquileres();
-    })
+    });
   }
 
   modalConfirmarAlquiler(alquiler: any): void {

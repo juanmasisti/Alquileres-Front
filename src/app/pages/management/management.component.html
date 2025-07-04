@@ -22,19 +22,53 @@
         ALQUILERES
       </button>
     </div>
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        placeholder="Buscar por codigo..."
+        [(ngModel)]="searchItem"
+      />
+    </div>
     <div class="reservas-header">
-      @if (activeTab === 'reservas') {
-      <span>CODIGO DE RESERVA</span>
-      } @else if (activeTab === 'alquileres') {
-      <span>CODIGO DE ALQUILER</span>
-      }
-      <span>MAQUINA</span>
-      <span>DESDE</span>
-      <span>HASTA</span>
-      <span>PRECIO</span>
-      <span>SUCURSAL</span>
-      <span>ESTADO</span>
-      <span>ACCIONES</span>
+      <div>
+        @if (activeTab === 'reservas') {
+        <span>CODIGO DE RESERVA</span>
+        } @else if (activeTab === 'alquileres') {
+        <span>CODIGO DE ALQUILER</span>
+        }
+      </div>
+      <div>
+        <span
+          (click)="filtrarPor('maquina')"
+          [class.filtro-activo]="filtroActivo === 'maquina'"
+          >MAQUINA</span
+        >
+      </div>
+      <div>
+        <span
+          (click)="filtrarPor('fecha')"
+          [class.filtro-activo]="filtroActivo === 'fecha'"
+          >DESDE</span
+        >
+      </div>
+      <div><span>HASTA</span></div>
+      <div><span>PRECIO</span></div>
+      <div>
+        <span
+          (click)="filtrarPor('sucursal')"
+          [class.filtro-activo]="filtroActivo === 'sucursal'"
+          >SUCURSAL</span
+        >
+      </div>
+      <div>
+        <span
+          (click)="filtrarPor('estado')"
+          [class.filtro-activo]="filtroActivo === 'estado'"
+          >ESTADO</span
+        >
+      </div>
+      <div><span>ACCIONES</span></div>
     </div>
     <div class="reservas-table">
       <!-- Spinner de carga -->
