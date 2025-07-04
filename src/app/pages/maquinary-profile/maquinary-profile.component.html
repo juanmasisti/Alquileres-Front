@@ -40,32 +40,39 @@
       <div class="description__container">
         <h2 class="title">
           {{ maquinaria.nombre }}
-          <rating [(ngModel)]="maquinaria.puntaje_promedio" [customTemplate]="starIcon" [max]="5" [readonly]="true"></rating>
+          <rating
+            [(ngModel)]="maquinaria.puntaje_promedio"
+            [customTemplate]="starIcon"
+            [max]="5"
+            [readonly]="true"
+          ></rating>
           <ng-template #starIcon let-i="index" let-v="value">
-            <i class="{{i < v ? 'fa-solid' : 'fa-regular'}} fa-star"></i>
+            <i class="{{ i < v ? 'fa-solid' : 'fa-regular' }} fa-star"></i>
           </ng-template>
-          <ng-container *ngIf="isAdmin">
-            <select
-              [ngModel]="maquinaria.state"
-              (change)="onStateChange($event)"
-              class="state-selector"
-            >
-              <option value="Disponible">Disponible</option>
-              <option value="Mantenimiento">Mantenimiento</option>
-              <option value="Eliminado">Eliminado</option>
-            </select>
-          </ng-container>
-          <ng-container *ngIf="isEmployee">
-            <select
-              [ngModel]="maquinaria.state"
-              (change)="onStateChange($event)"
-              class="state-selector"
-            >
-              <option value="Disponible">Disponible</option>
-              <option value="Mantenimiento">Mantenimiento</option>
-            </select>
-          </ng-container>
         </h2>
+        <ng-container *ngIf="isAdmin">
+          <select
+            [ngModel]="maquinaria.state"
+            (change)="onStateChange($event)"
+            class="state-selector actions"
+          >
+            <option value="Disponible">Disponible</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+            <option value="Eliminado">Eliminado</option>
+          </select>
+        </ng-container>
+        <ng-container *ngIf="isEmployee">
+          <select
+            class="actions"
+            [ngModel]="maquinaria.state"
+            (change)="onStateChange($event)"
+            class="state-selector actions"
+          >
+            <option value="Disponible">Disponible</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+          </select>
+        </ng-container>
+
         <div class="price">
           <h3>${{ maquinaria.precio | number }}</h3>
           <p>por día</p>
@@ -95,54 +102,69 @@
           </p>
         </div>
 
-        <button class="rent-btn" *ngIf="( isClient || isEmployee ) && maquinaria.state === 'Disponible'" (click)="abrirModal()">
+        <button
+          class="rent-btn"
+          *ngIf="(isClient || isEmployee) && maquinaria.state === 'Disponible'"
+          (click)="abrirModal()"
+        >
           <i class="fas fa-calendar-check"></i> Reservar ahora
         </button>
 
-      <!-- Modal -->
-      <div *ngIf="mostrarModal" class="modal-overlay">
-        <div class="modal">
-          <!-- Input email cliente (solo para empleado) -->
-         <div *ngIf="isEmployee" class="form-group">
-          <label for="clientEmail">Email del cliente</label>
-          <input
-            type="email"
-            id="clientEmail"
-            [(ngModel)]="selectedClientEmail"
-            (input)="onClientEmailInput($event)"
-            placeholder="Ingresá el email del cliente"
-            list="clientsList"
-          />
-
-          <datalist id="clientsList">
-            <option *ngFor="let user of filteredUsers" [value]="user.email">
-              {{ user.fullName || user.email }}
-            </option>
-          </datalist>
-          <!-- Mensaje de error si el email ingresado no existe -->
-          <p class="error-message" *ngIf="selectedClientEmail && !emailExists">
-            El email ingresado no corresponde a ningún cliente registrado.
-          </p>
-        </div>
-
-          <label for="dateRangePicker" *ngIf="(selectedClientEmail && emailExists) || !isEmployee">Seleccioná el rango de fechas:</label>
-
-          <mat-form-field appearance="fill" style="width: 100%;" *ngIf="(selectedClientEmail && emailExists) || !isEmployee">
-            <mat-label>Rango de fechas</mat-label>
-           <mat-date-range-input 
-              [rangePicker]="picker"
-              [min]="minDate"
-              [dateFilter]="isDateEnabled"
-              name="rangoFechas">
-              
+        <!-- Modal -->
+        <div *ngIf="mostrarModal" class="modal-overlay">
+          <div class="modal">
+            <!-- Input email cliente (solo para empleado) -->
+            <div *ngIf="isEmployee" class="form-group">
+              <label for="clientEmail">Email del cliente</label>
               <input
-                matStartDate
-                placeholder="Desde"
-                [(ngModel)]="beginDate"
-                readonly
-                (ngModelChange)="onDateChanged()"
-                name="beginDate"
-            />
+                type="email"
+                id="clientEmail"
+                [(ngModel)]="selectedClientEmail"
+                (input)="onClientEmailInput($event)"
+                placeholder="Ingresá el email del cliente"
+                list="clientsList"
+              />
+
+              <datalist id="clientsList">
+                <option *ngFor="let user of filteredUsers" [value]="user.email">
+                  {{ user.fullName || user.email }}
+                </option>
+              </datalist>
+              <!-- Mensaje de error si el email ingresado no existe -->
+              <p
+                class="error-message"
+                *ngIf="selectedClientEmail && !emailExists"
+              >
+                El email ingresado no corresponde a ningún cliente registrado.
+              </p>
+            </div>
+
+            <label
+              for="dateRangePicker"
+              *ngIf="(selectedClientEmail && emailExists) || !isEmployee"
+              >Seleccioná el rango de fechas:</label
+            >
+
+            <mat-form-field
+              appearance="fill"
+              style="width: 100%"
+              *ngIf="(selectedClientEmail && emailExists) || !isEmployee"
+            >
+              <mat-label>Rango de fechas</mat-label>
+              <mat-date-range-input
+                [rangePicker]="picker"
+                [min]="minDate"
+                [dateFilter]="isDateEnabled"
+                name="rangoFechas"
+              >
+                <input
+                  matStartDate
+                  placeholder="Desde"
+                  [(ngModel)]="beginDate"
+                  readonly
+                  (ngModelChange)="onDateChanged()"
+                  name="beginDate"
+                />
 
                 <input
                   matEndDate
@@ -165,29 +187,32 @@
               ></mat-date-range-picker>
             </mat-form-field>
 
-          <!-- Mostrar resumen de lo seleccionado -->
-        <div *ngIf="beginDate && endDate && precioTotal>0" class="summary-container">
-            <div class="summary-item">
-              <span class="summary-label">Desde:</span>
-              <span>{{ beginDate | date: 'dd/MM/yyyy' }}</span>
+            <!-- Mostrar resumen de lo seleccionado -->
+            <div
+              *ngIf="beginDate && endDate && precioTotal > 0"
+              class="summary-container"
+            >
+              <div class="summary-item">
+                <span class="summary-label">Desde:</span>
+                <span>{{ beginDate | date : "dd/MM/yyyy" }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Hasta:</span>
+                <span>{{ endDate | date : "dd/MM/yyyy" }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Precio por día:</span>
+                <span>${{ maquinaria.precio }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Días seleccionados:</span>
+                <span>{{ diasSeleccionados }}</span>
+              </div>
+              <div class="summary-item total">
+                <span class="summary-label">Precio total:</span>
+                <span>${{ precioTotal }}</span>
+              </div>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Hasta:</span>
-              <span>{{ endDate | date: 'dd/MM/yyyy' }}</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Precio por día:</span>
-              <span>${{ maquinaria.precio }}</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Días seleccionados:</span>
-              <span>{{ diasSeleccionados }}</span>
-            </div>
-            <div class="summary-item total">
-              <span class="summary-label">Precio total:</span>
-              <span>${{ precioTotal }}</span>
-            </div>
-        </div>
 
             <div class="modal-actions mt-3">
               <div

@@ -145,6 +145,14 @@ $summary-border: $gray-light;
   margin: 0;
 }
 
+.actions {
+  font-size: 14px;
+  padding: 10px;
+  width: 40%;
+  border-radius: 10px;
+  border: 1px solid $primary-color;
+}
+
 .price {
   display: flex;
   align-items: flex-end;
@@ -355,7 +363,7 @@ $summary-border: $gray-light;
     display: block;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #333; 
+    color: #333;
   }
 
   input[type="email"] {
@@ -367,7 +375,7 @@ $summary-border: $gray-light;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
     &:focus {
-      border-color: #007bff; // 
+      border-color: #007bff; //
       outline: none;
       box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
     }
