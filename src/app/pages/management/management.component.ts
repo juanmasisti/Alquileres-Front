@@ -11,6 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
 import { FormsModule } from '@angular/forms';
+
 import { Alquiler } from 'src/app/models/alquiler.model';
 import { PuntuarModalComponent } from './puntuar-modal/puntuar-modal.component';
 import { ManageModalComponent } from './manage-modal/manage-modal.component';
@@ -156,6 +157,15 @@ export class ManagementComponent implements OnInit {
         return db - da;
       }
     });
+  }
+
+  get listaFiltrada(): any[] {
+    if (!this.searchItem?.trim()) return this.lista;
+
+    const termino = this.searchItem.toLowerCase();
+    return this.lista.filter((r) =>
+      r.codigo_reserva.toLowerCase().includes(termino)
+    );
   }
 
   filtrarPor(criterio: string): void {
