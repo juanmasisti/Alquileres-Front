@@ -61,37 +61,65 @@
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
         <span>${{ r.precio_dia }}</span>
         <span>{{ r.sucursal }}</span>
-        <span>{{ r.estado }}</span>
-        <span class = "acciones">
+        <div>
+          <span
+            class="estado"
+            [ngClass]="{
+              activo: r.estado === 'Activa',
+              finalizado: r.estado === 'Finalizada',
+              cancelado: r.estado === 'Cancelada',
+              reembolsado: r.estado === 'Reembolsada'
+            }"
+          >
+            {{ r.estado }}
+          </span>
+        </div>
+        <span class="acciones">
           <!-- Había que hacerlo así para poder tener más de un botón -->
           <a
             class="accion"
             style="cursor: pointer"
-            *ngIf="( r.estado == 'Activa' ) && rol == 'empleado' && reservaIniciada(r.fecha_inicio)"
+            *ngIf="
+              r.estado == 'Activa' &&
+              rol == 'empleado' &&
+              reservaIniciada(r.fecha_inicio)
+            "
             (click)="modalConfirmarReserva(r.id, r.maquinaria)"
-            > Confirmar </a
           >
+            Confirmar
+          </a>
           <a
             class="accion"
             style="cursor: pointer"
-            *ngIf="( r.estado == 'Cancelada' ) && rol == 'empleado'"
-            (click)="modalConfirmarReembolso(r.id, r.maquinaria, r.precio_total)"
-            > Reembolsar </a
+            *ngIf="r.estado == 'Cancelada' && rol == 'empleado'"
+            (click)="
+              modalConfirmarReembolso(r.id, r.maquinaria, r.precio_total)
+            "
           >
+            Reembolsar
+          </a>
           <a
             class="accion"
             style="cursor: pointer"
-            *ngIf="rol == 'cliente' && r.estado == 'Activa' && !reservaIniciada(r.fecha_inicio)"
+            *ngIf="
+              rol == 'cliente' &&
+              r.estado == 'Activa' &&
+              !reservaIniciada(r.fecha_inicio)
+            "
             (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
-            > Cancelar </a
           >
+            Cancelar
+          </a>
           <a
             class="accion"
             style="cursor: pointer"
-            *ngIf="( rol == 'empleado' || rol == 'admin' ) && r.estado == 'Activa'"
+            *ngIf="
+              (rol == 'empleado' || rol == 'admin') && r.estado == 'Activa'
+            "
             (click)="modalCancelarReserva(r.id, r.maquinaria, r.precio_total)"
-            > Cancelar </a
           >
+            Cancelar
+          </a>
         </span>
       </div>
       } @else if (activeTab === 'alquileres') {
@@ -106,7 +134,17 @@
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
         <span>${{ r.precio }}</span>
         <span>{{ r.sucursal }}</span>
-        <span>{{ r.estado }}</span>
+        <div>
+          <span
+            class="estado"
+            [ngClass]="{
+              activo: r.estado === 'Activo',
+              finalizado: r.estado === 'Finalizado'
+            }"
+          >
+            {{ r.estado }}
+          </span>
+        </div>
         <span><a class="accion" style="cursor: pointer">Ver más</a></span>
       </div>
 
@@ -153,38 +191,45 @@
             <span class="label">Total:</span>
             <span class="valor precio-total">${{ r.precio }}</span>
           </div>
-          @if (r.estado == 'Finalizado' && ( rol == 'empleado' || rol == 'admin' )) {
-            <div class="detalle-item">
-              <span class="label">Observación del empleado:</span>
-              @if(r.observacion){
-                <span class="valor">{{ r.observacion }}</span>  
-              }
-              @else { <span class="valor">Sin observaciones</span> }
-            </div>
+          @if (r.estado == 'Finalizado' && ( rol == 'empleado' || rol == 'admin'
+          )) {
+          <div class="detalle-item">
+            <span class="label">Observación del empleado:</span>
+            @if(r.observacion){
+            <span class="valor">{{ r.observacion }}</span>
+            } @else { <span class="valor">Sin observaciones</span> }
+          </div>
           }
           <div class="detalle-item">
-            @if (r.estado == 'Finalizado')
-            {
-              @if(!r.resenia && rol == 'cliente'){
-                <span class="label">Calificanos:</span>
-                <button class="accion calificar" (click)="modalPuntuarAlquiler(r)">Calificar</button>
-              }@else{
-                <span class="label">Valoración:</span><!-- Mejorar estilos -->
-                <rating class="valor" [(ngModel)]="r.resenia.puntaje" [customTemplate]="starIcon" [max]="5" [readonly]="true"></rating>
-                <ng-template #starIcon let-i="index" let-v="value">
-                  <i class="{{i < v ? 'fa-solid' : 'fa-regular'}} fa-star"></i>
-                </ng-template>
-                @if(r.resenia.comentario){
-                  <span class="valor">"{{r.resenia.comentario}}"</span>
-                }
-              }
-            } @else if (r.estado !== 'Finalizado' && (rol == 'empleado' || rol == 'admin')) {
-              <span class="label">Gestionar:</span>
-              <span
-                ><a class="accion valor" (click)="modalConfirmarAlquiler(r)">
-                  Devolver
-                </a></span
-              >
+            @if (r.estado == 'Finalizado') { @if(!r.resenia && rol ==
+            'cliente'){
+            <span class="label">Calificanos:</span>
+            <button class="accion calificar" (click)="modalPuntuarAlquiler(r)">
+              Calificar
+            </button>
+            }@else{
+            <span class="label">Valoración:</span
+            ><!-- Mejorar estilos -->
+            <rating
+              class="valor"
+              [(ngModel)]="r.resenia.puntaje"
+              [customTemplate]="starIcon"
+              [max]="5"
+              [readonly]="true"
+            ></rating>
+            <ng-template #starIcon let-i="index" let-v="value">
+              <i class="{{ i < v ? 'fa-solid' : 'fa-regular' }} fa-star"></i>
+            </ng-template>
+            @if(r.resenia.comentario){
+            <span class="valor">"{{ r.resenia.comentario }}"</span>
+            } } } @else if (r.estado !== 'Finalizado' && (rol == 'empleado' ||
+            rol == 'admin')) {
+            <span class="label">Gestionar:</span>
+            <span
+              ><a class="accion valor" (click)="modalConfirmarAlquiler(r)">
+                Devolver
+              </a></span
+            >
             }
           </div>
         </div>
