@@ -93,6 +93,8 @@
           <i
             class="fas fa-exclamation-circle"
             *ngIf="expiresToday(r.fecha_inicio)"
+            matTooltip="Expira hoy"
+            matTooltipClass="tooltip-expira"
           ></i>
           {{ r.codigo_reserva }}</span
         >
@@ -108,7 +110,8 @@
               activo: r.estado === 'Activa',
               finalizado: r.estado === 'Finalizada',
               cancelado: r.estado === 'Cancelada',
-              reembolsado: r.estado === 'Reembolsada'
+              reembolsado: r.estado === 'Reembolsada',
+              vencido: r.estado === 'Vencida'
             }"
           >
             {{ r.estado }}
@@ -172,6 +175,8 @@
           <i
             class="fas fa-exclamation-circle"
             *ngIf="expiresToday(r.fecha_inicio)"
+            matTooltip="Expira hoy"
+            matTooltipClass="tooltip-expira"
           ></i>
           {{ r.codigo_reserva }}</span
         >

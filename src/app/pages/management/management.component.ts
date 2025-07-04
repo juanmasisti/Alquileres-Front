@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { Alquiler } from 'src/app/models/alquiler.model';
 import { PuntuarModalComponent } from './puntuar-modal/puntuar-modal.component';
 import { ManageModalComponent } from './manage-modal/manage-modal.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-management',
@@ -27,6 +28,7 @@ import { ManageModalComponent } from './manage-modal/manage-modal.component';
     MatDialogModule,
     RatingModule,
     FormsModule,
+    MatTooltipModule,
   ],
 })
 export class ManagementComponent implements OnInit {

@@ -303,3 +303,12 @@ b {
   background-color: #e3f2fd;
   color: #0d47a1;
 }
+
+.vencido {
+  background-color: #fae8ae;
+  color: #856404;
+}
+
+::ng-deep .tooltip-expira {
+  color: $primary-color;
+}
