@@ -146,10 +146,12 @@ export class ManagementComponent implements OnInit {
       switch (estado) {
         case 'Activo':
           return 1;
+        case 'Retrasado':
+          return 2;
         case 'Finalizado':
-          return 2;
+          return 3;
         default:
-          return 2;
+          return 3;
       }
     };
 
