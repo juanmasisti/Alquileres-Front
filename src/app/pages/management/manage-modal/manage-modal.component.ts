@@ -68,14 +68,22 @@ export class ManageModalComponent implements OnInit {
   openConfirmModal(): void {
     if (this.manageForm.invalid) return;
 
-    const observacion =
-      this.manageForm.get('observacion')?.value;
+    const observacion = this.manageForm.get('observacion')?.value;
 
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
       data: {
         title: `¿Confirmar devolución?`,
-        description: `Estás confirmando la devolución de la maquinaria "${this.data.alquiler.maquinaria.nombre}" a la sucursal de "${this.data.alquiler.maquinaria.sucursal}".`,
+        description: `Estás confirmando la devolución de la maquinaria "${
+          this.data.alquiler.maquinaria.nombre
+        }" a la sucursal de "${this.data.alquiler.maquinaria.sucursal}".
+        ${
+          this.data.alquiler.deuda > 0
+            ? 'El retraso de la devolucion genero una deuda pendiente de $' +
+              this.data.alquiler.deuda +
+              '.'
+            : ''
+        }`,
         confirmText: 'Confirmar',
         cancelText: 'Atrás',
       },

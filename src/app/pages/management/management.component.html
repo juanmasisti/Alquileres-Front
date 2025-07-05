@@ -190,7 +190,8 @@
             class="estado"
             [ngClass]="{
               activo: r.estado === 'Activo',
-              finalizado: r.estado === 'Finalizado'
+              finalizado: r.estado === 'Finalizado',
+              vencido: r.estado === 'Retrasado'
             }"
           >
             {{ r.estado }}

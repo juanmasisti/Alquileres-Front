@@ -309,6 +309,8 @@ b {
   color: #856404;
 }
 
-::ng-deep .tooltip-expira {
+.tooltip-expira {
   color: $primary-color;
+  background-color: #fff7ec;
+  border: 1px solid $primary-color;
 }
