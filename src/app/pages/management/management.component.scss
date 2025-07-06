@@ -270,6 +270,12 @@ b {
   }
 }
 
+.enfasis {
+  color: $secondary-color;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
 .filtro-activo {
   font-weight: bold;
   background-color: #ffcd98;
