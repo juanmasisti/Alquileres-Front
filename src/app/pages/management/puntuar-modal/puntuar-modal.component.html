@@ -2,8 +2,8 @@
   <h2>¿Puntuar alquiler de {{alquiler.maquinaria.nombre}}?</h2>
   <div class="puntaje">
     <span class="puntajeTitle">Puntaje:</span>
-    <div className="flex flex-row">
-      <rating [(ngModel)]="valorRating" [customTemplate]="starIcon" [max]="5" [readonly]="false"></rating>
+    <div className="flex flex-row" class="estrellas">
+      <rating [(ngModel)]="valorRating" [customTemplate]="starIcon" [max]="5" [readonly]="false" class="estrella"></rating>
       <ng-template #starIcon let-i="index" let-v="value">
         <i class="{{i < v ? 'fa-solid' : 'fa-regular'}} fa-star"></i>
       </ng-template>

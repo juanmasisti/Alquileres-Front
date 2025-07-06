@@ -197,7 +197,14 @@
             {{ r.estado }}
           </span>
         </div>
-        <span><a class="accion" style="cursor: pointer">Ver más</a></span>
+        <span
+          ><a class="accion" style="cursor: pointer"> Ver más</a
+          ><i
+            class="fas fa-exclamation-circle enfasis"
+            matTooltip="No olvides valorarnos!"
+            *ngIf="r.estado === 'Finalizado' && !r.resenia && rol === 'cliente'"
+          ></i
+        ></span>
       </div>
 
       <!-- Sección expandible -->
