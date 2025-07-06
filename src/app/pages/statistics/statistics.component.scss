@@ -32,3 +32,167 @@ canvas {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   padding: 10px;
 }
+
+.header {
+  display: flex;
+  margin-bottom: 30px;
+  align-items: center;
+  flex-direction: column;
+}
+
+// Estilos para los filtros
+.chart-section {
+  margin-bottom: 40px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.period-filter {
+  display: flex;
+  gap: 8px;
+  
+  button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    
+    &:hover {
+      background: #e0e0e0;
+    }
+    
+    &.active {
+      background: $primary-color;
+      color: white;
+      border-color: $primary-color;
+    }
+  }
+}
+
+// Estilos para el modal
+.export-modal-container {
+  padding: 24px;
+  border-radius: 8px;
+  background: white;
+  max-width: 500px;
+}
+
+.export-modal-title {
+  color: $primary-color;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.export-modal-text {
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.export-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.select-all-section {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  
+  .mat-checkbox {
+    font-weight: 500;
+  }
+}
+
+
+// Estilos para los checkboxes personalizados
+::ng-deep {
+  .mat-mdc-checkbox {
+    --mdc-checkbox-selected-icon-color: #3f51b5;
+    --mdc-checkbox-selected-hover-icon-color: #3949ab;
+    --mdc-checkbox-selected-focus-icon-color: #303f9f;
+    --mdc-checkbox-selected-pressed-icon-color: #283593;
+  }
+}
+
+
+.export-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  
+  .cancel-btn {
+    color: #666;
+    
+    &:hover {
+      color: #333;
+      background: rgba(0,0,0,0.04);
+    }
+  }
+  
+  .export-btn {
+    background-color: #3f51b5;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    &:hover:not([disabled]) {
+      background-color: #303f9f;
+    }
+
+    &:disabled {
+      background-color: #cccccc !important;
+      color: #666666 !important;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .material-icons {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Actualizar los estilos del botón
+.export-pdf-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  padding: 0 16px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: darken($primary-color, 10%) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .material-icons {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+}
+
+.empty-msg {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: #888;
+}
+

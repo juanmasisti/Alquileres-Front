@@ -1,9 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, TemplateRef } from '@angular/core';
 import { StatsService } from 'src/app/services/stats.service';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.component';
 import { Chart, registerables, ChartType } from 'chart.js';
 import { CommonModule } from '@angular/common';
+import jsPDF from 'jspdf';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 Chart.register(...registerables); // Registra todos los componentes de chart.js existentes
 
@@ -12,7 +17,8 @@ Chart.register(...registerables); // Registra todos los componentes de chart.js 
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.scss'],
   standalone: true,
-  imports: [CommonModule, NavbarComponent, FooterComponent]
+  imports: [CommonModule, NavbarComponent, FooterComponent, 
+    MatDialogModule, FormsModule, MatButtonModule, MatCheckboxModule]
 })
 export class StatisticsComponent implements OnInit, AfterViewInit {
 
@@ -20,18 +26,56 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
   @ViewChild('clientesChart') clientesChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('alquileresChart') alquileresChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('ingresosChart') ingresosChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('exportModal') exportModal!: TemplateRef<any>;
+  dialogRef!: MatDialogRef<any>;
 
-  constructor(private statsService: StatsService) {}
+  // Datos para ver si hay información cargada
+  clientesData: any[] = [];
+  alquileresData: any[] = [];
+  ingresosData: any[] = [];
+  noData: boolean = false;
 
-  ngOnInit(): void {
-    // No hacemos nada aquí con los gráficos ya que los ViewChilds no están disponibles aún
-  }
+  // Variables para checkboxes del modal
+  exportClientes: boolean = false;
+  exportAlquileres: boolean = false;
+  exportIngresos: boolean = false;
+  exportAll: boolean = false; // Checkbox para seleccionar/deseleccionar todos
+
+  // Datos filtrados que se mostrarán en los gráficos
+  clientesFiltrados: any[] = [];
+  alquileresFiltrados: any[] = [];
+  ingresosFiltrados: any[] = [];
+
+  // periodos para filtrar datos
+  periods = [
+    { value: 'dia', label: 'Día' },
+    { value: 'mes', label: 'Mes' },
+    { value: 'anio', label: 'Año' }
+  ];
+
+  clientesPeriodo: string = 'anio';  // Período inicial para clientes
+  alquileresPeriodo: string = 'anio'; // Período inicial para alquileres
+  ingresosPeriodo: string = 'anio';   // Período inicial para ingresos
+
+  constructor(private statsService: StatsService, private dialog: MatDialog) {}
+
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    // Usamos AfterViewInit porque aquí ya tenemos acceso a los elementos ViewChild
-    this.cargarClientes();
-    this.cargarAlquileres();
-    this.cargarIngresos();
+    this.statsService.getClientes().subscribe(data => {
+      this.clientesData = data;
+      this.filtrarClientes();
+    });
+    
+    this.statsService.getAlquileres().subscribe(data => {
+      this.alquileresData = data;
+      this.filtrarAlquileres();
+    });
+    
+    this.statsService.getIngresos().subscribe(data => {
+      this.ingresosData = data;
+      this.filtrarIngresos();
+    });
   }
 
   /**
@@ -130,4 +174,203 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  filtrarClientes() {
+    if (!this.clientesData.length) return;
+
+    const filteredData = this.clientesData.filter(item => {
+      const date = new Date(item.fecha);
+      const now = new Date();
+      
+      switch(this.clientesPeriodo) {
+        case 'dia': 
+          return date.toDateString() === now.toDateString();
+        case 'mes':
+          return date.getMonth() === now.getMonth() && 
+                date.getFullYear() === now.getFullYear();
+        case 'anio':
+          return date.getFullYear() === now.getFullYear();
+        default:
+          return true;
+      }
+    });
+
+    this.actualizarGrafico(
+      this.clientesChart,
+      'bar',
+      'Clientes Registrados',
+      filteredData.map(item => item.fecha),
+      filteredData.map(item => item.cantidad),
+      'rgba(75, 192, 192, 0.5)',
+      'rgba(75, 192, 192, 1)'
+    );
+  }
+
+  filtrarAlquileres() {
+    if (!this.alquileresData.length) return;
+
+    const filteredData = this.alquileresData.filter(item => {
+      const date = new Date(item.fecha);
+      const now = new Date();
+      
+      switch(this.alquileresPeriodo) {
+        case 'dia': 
+          return date.toDateString() === now.toDateString();
+        case 'mes':
+          return date.getMonth() === now.getMonth() && 
+                date.getFullYear() === now.getFullYear();
+        case 'anio':
+          return date.getFullYear() === now.getFullYear();
+        default:
+          return true;
+      }
+    });
+
+    this.actualizarGrafico(
+      this.alquileresChart,
+      'bar',
+      'Alquileres Realizados',
+      filteredData.map(item => item.fecha),
+      filteredData.map(item => item.cantidad),
+      'rgba(153, 102, 255, 0.5)',
+      'rgba(153, 102, 255, 1)'
+    );
+  }
+
+  filtrarIngresos() {
+    if (!this.ingresosData.length) return;
+
+    const filteredData = this.ingresosData.filter(item => { // filtramos los ingresos, convirtiendo la fecha a Date y entrando al switch en cada caso correspondiente.
+      const date = new Date(item.fecha);
+      const now = new Date();
+      
+      switch(this.ingresosPeriodo) {
+        case 'dia': 
+          return date.toDateString() === now.toDateString();
+        case 'mes':
+          return date.getMonth() === now.getMonth() && 
+                date.getFullYear() === now.getFullYear();
+        case 'anio':
+          return date.getFullYear() === now.getFullYear();
+        default:
+          return true;
+      }
+    });
+
+    this.actualizarGrafico( // actualizamos el gráfico de ingresos con los datos filtrados
+      this.ingresosChart,
+      'line',
+      'Ingresos',
+      filteredData.map(item => item.fecha),
+      filteredData.map(item => item.monto),
+      'rgba(255, 159, 64, 0.5)',
+      'rgba(255, 159, 64, 1)'
+    );
+  }
+
+
+  // Función para actualizar los gráficos con los datos filtrados
+  private actualizarGrafico(
+    canvasRef: ElementRef<HTMLCanvasElement>,
+    type: ChartType,
+    label: string,
+    labels: string[],
+    data: number[],
+    bgColor: string,
+    borderColor: string
+  ) {
+    const chart = Chart.getChart(canvasRef.nativeElement); // obtenemos el gráfico existente si ya fue creado
+    
+    if (chart) { // Si el gráfico ya existe, actualizamos sus datos
+      chart.data.labels = labels; // actualizamos las etiquetas del eje X
+      chart.data.datasets[0].data = data; // actualizamos los datos del dataset
+      chart.update(); // actualizamos el gráfico para reflejar los cambios
+    } else {
+      this.crearGrafico(canvasRef, type, label, labels, data, bgColor, borderColor); 
+    }
+  }
+
+  verificarSinDatos() {
+    this.noData = !this.clientesData.length && !this.alquileresData.length && !this.ingresosData.length;
+  }
+
+  openExportDialog() {
+    this.exportClientes = false;
+    this.exportAlquileres = false;
+    this.exportIngresos = false;
+    this.exportAll = false; // Reseteamos el checkbox de "Seleccionar todos"
+    this.dialogRef = this.dialog.open(this.exportModal);
+  }
+
+  exportarPDF() {
+    const doc = new jsPDF();
+    const pageHeight = doc.internal.pageSize.getHeight(); // Altura total de la página
+    let currentY = 20; // Margen superior inicial para el primer gráfico
+
+    // agregar gráficos con control de paginación, evitando que se corten.
+    const agregarGrafico = (canvasRef: ElementRef<HTMLCanvasElement>, titulo: string, y: number) => {
+      const canvas = canvasRef.nativeElement;
+      
+      // Creamos versiones ampliadas de cada gráfico para asegurar que todo el contenido sea capturado
+      const tempCanvas = document.createElement('canvas'); 
+      const context = tempCanvas.getContext('2d'); 
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height + 40; // Espacio adicional
+      
+      // Dibujar el gráfico original en el temporal
+      context?.drawImage(canvas, 0, 0);
+      
+      const imgData = tempCanvas.toDataURL('image/png'); // Convertimos el canvas a imagen PNG
+      const imgProps = doc.getImageProperties(imgData); // Obtenemos las propiedades de la imagen
+      const pdfWidth = doc.internal.pageSize.getWidth() - 20; // Ancho del PDF menos márgenes
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; // Altura proporcional de la imagen
+      
+      // Verificar si necesita nueva página
+      if (y + pdfHeight > pageHeight - 20) { // si el gráfico no cabe en la página actual
+        doc.addPage(); 
+        y = 20; // Reset Y position
+        currentY = 20;
+      }
+      
+      doc.text(titulo, 10, y);
+      doc.addImage(imgData, 'PNG', 10, y + 10, pdfWidth, pdfHeight);
+      
+      return y + pdfHeight + 20; // Retorna la nueva posición Y para el siguiente gráfico
+    };
+
+    // Agregar gráficos seleccionados
+    if (this.exportClientes) {
+      currentY = agregarGrafico(this.clientesChart, 'Clientes Registrados', currentY);
+    }
+    if (this.exportAlquileres) {
+      currentY = agregarGrafico(this.alquileresChart, 'Alquileres Realizados', currentY);
+    }
+    if (this.exportIngresos) {
+      currentY = agregarGrafico(this.ingresosChart, 'Ingresos', currentY);
+    }
+
+    doc.save('estadisticas.pdf');
+    this.dialogRef.close();
+  }
+
+  // Función para seleccionar o deseleccionar todos los checkboxes
+  toggleSelectAll() {
+    if (this.exportAll) {
+      this.exportClientes = true;
+      this.exportAlquileres = true;
+      this.exportIngresos = true;
+    } else {
+      this.exportClientes = false;
+      this.exportAlquileres = false;
+      this.exportIngresos = false;
+    }
+  }
+
+  updateSelectAll() {
+    this.exportAll = this.exportClientes && this.exportAlquileres && this.exportIngresos;
+  }
+
+  hasSelection() {
+    return this.exportClientes || this.exportAlquileres || this.exportIngresos;
+  }
 }
+

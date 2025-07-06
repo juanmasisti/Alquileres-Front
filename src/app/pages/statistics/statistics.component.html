@@ -1,25 +1,108 @@
 <app-navbar></app-navbar>
 <!-- Recordatorio: Canvas es un lienzo en blanco para dibujar programáticamente	 -->
 <div class="container">
-  <h2>📊 Estadísticas del Negocio</h2>
+  <div class="header">
+    <h2>Estadísticas del Negocio</h2>
+    <div class="export-section">
+      <button mat-raised-button color="primary" (click)="openExportDialog()" class="export-pdf-btn">
+        <span class="material-icons">picture_as_pdf</span>
+        Exportar PDF
+      </button>
+    </div>
+  </div>
 
-  <!-- Gráfico de Clientes -->
-  <section>
-    <h3>Clientes Registrados</h3>
-    <canvas #clientesChart></canvas>
-  </section>
+  <!-- Mensaje para caso datos vacíos. -->
+  <div *ngIf="noData">
+    <p class="empty-msg">No hay estadísticas disponibles para mostrar.</p>
+  </div>
 
-  <!-- Gráfico de Alquileres -->
-  <section>
-    <h3>Alquileres Realizados</h3>
-    <canvas #alquileresChart></canvas>
-  </section>
+  <ng-container *ngIf="!noData">
+    <!-- Gráfico de Clientes -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h3>Clientes Registrados</h3>
+        <div class="period-filter">
+          <button 
+            *ngFor="let period of periods" 
+            [class.active]="clientesPeriodo === period.value"
+            (click)="clientesPeriodo = period.value; filtrarClientes()"
+          >
+            {{ period.label }}
+          </button>
+        </div>
+      </div>
+      <canvas #clientesChart></canvas>
+    </section>
 
-  <!-- Gráfico de Ingresos -->
-  <section>
-    <h3>Ingresos</h3>
-    <canvas #ingresosChart></canvas>
-  </section>
+    <!-- Gráfico de Alquileres -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h3>Alquileres Realizados</h3>
+        <div class="period-filter">
+          <button 
+            *ngFor="let period of periods" 
+            [class.active]="alquileresPeriodo === period.value"
+            (click)="alquileresPeriodo = period.value; filtrarAlquileres()"
+          >
+            {{ period.label }}
+          </button>
+        </div>
+      </div>
+      <canvas #alquileresChart></canvas>
+    </section>
+
+    <!-- Gráfico de Ingresos -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h3>Ingresos</h3>
+        <div class="period-filter">
+          <button 
+            *ngFor="let period of periods" 
+            [class.active]="ingresosPeriodo === period.value"
+            (click)="ingresosPeriodo = period.value; filtrarIngresos()"
+          >
+            {{ period.label }}
+          </button>
+        </div>
+      </div>
+      <canvas #ingresosChart ></canvas>
+    </section>
+  </ng-container>
 </div>
 
 <app-footer></app-footer>
+
+<!-- Modal de exportación -->
+<ng-template #exportModal>
+  <div class="export-modal-container">
+    <h2 class="export-modal-title">Exportar a PDF</h2>
+    <div class="export-modal-content">
+      <p class="export-modal-text">Selecciona los gráficos a incluir:</p>
+      
+      <div class="select-all-section">
+        <mat-checkbox [(ngModel)]="exportAll" (change)="toggleSelectAll()" class="custom-checkbox">
+          Seleccionar todos
+        </mat-checkbox>
+      </div>
+      
+      <div class="export-checkboxes">
+        <mat-checkbox [(ngModel)]="exportClientes" (change)="updateSelectAll()" class="custom-checkbox">
+          Clientes Registrados
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="exportAlquileres" (change)="updateSelectAll()" class="custom-checkbox">
+          Alquileres Realizados
+        </mat-checkbox>
+        <mat-checkbox [(ngModel)]="exportIngresos" (change)="updateSelectAll()" class="custom-checkbox">
+          Ingresos
+        </mat-checkbox>
+      </div>
+    </div>
+    <div class="export-modal-actions">
+      <button mat-button (click)="dialogRef.close()" class="cancel-btn">Cancelar</button>
+      <button mat-raised-button (click)="exportarPDF()" class="export-btn" [disabled]="!hasSelection()">
+        <span class="material-icons">picture_as_pdf</span>
+        Exportar
+      </button>
+    </div>
+  </div>
+</ng-template>
