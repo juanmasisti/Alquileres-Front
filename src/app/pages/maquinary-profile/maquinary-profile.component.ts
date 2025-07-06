@@ -37,6 +37,7 @@ import { UserService } from 'src/app/services/user.service';
 import { CommentsComponent } from './comments/comments.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
+import { ChangeStateComponent } from './change-state/change-state.component';
 
 declare var MercadoPago: any;
 
@@ -421,7 +422,7 @@ export class MaquinaryProfileComponent implements OnInit {
     }
 
     const prevState = this.maquinaria!.state;
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+    const dialogRef = this.dialog.open(ChangeStateComponent)/*ConfirmModalComponent, {
       width: '400px',
       data: {
         title: 'Confirmar cambio de estado',
@@ -429,7 +430,7 @@ export class MaquinaryProfileComponent implements OnInit {
         confirmText: 'Sí, cambiar',
         cancelText: 'Cancelar',
       },
-    });
+    });*/
 
     dialogRef.afterClosed().subscribe((confirmado: boolean) => {
       this.destroyMp();

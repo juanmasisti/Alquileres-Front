@@ -1,0 +1,60 @@
+<div class="manage-modal">
+  <h2>Confirmar cambio de estado</h2>
+  <label
+    for="dateRangePicker"
+    *ngIf="true"
+    >Seleccioná el rango de fechas:</label
+  >
+  <mat-form-field
+    appearance="fill"
+    style="width: 100%"
+    *ngIf="true"
+  >
+    <mat-label>Rango de fechas</mat-label>
+    <mat-date-range-input
+      [rangePicker]="picker"
+      [min]="minDate"
+      [dateFilter]="isDateEnabled"
+      name="rangoFechas"
+    >
+      <input
+        matStartDate
+        placeholder="Desde"
+        [(ngModel)]="beginDate"
+        readonly
+        (ngModelChange)="onDateChanged()"
+        name="beginDate"
+      />
+
+      <input
+        matEndDate
+        placeholder="Hasta"
+        [(ngModel)]="endDate"
+        readonly
+        (ngModelChange)="onDateChanged()"
+        name="endDate"
+      />
+    </mat-date-range-input>
+
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="picker"
+      class="custom-datepicker-toggle"
+    ></mat-datepicker-toggle>
+    <mat-date-range-picker
+      #picker
+      [dateClass]="dateClass"
+    ></mat-date-range-picker>
+  </mat-form-field>
+  <button
+    type="submit"
+    [disabled]="loading"
+    class="form-control confirm-btn"
+    (click)="openConfirmModal()"
+  >
+    <span *ngIf="!loading">Confirmar</span>
+    <span *ngIf="loading"
+      ><i class="fas fa-spinner fa-spin"></i> Cargando...</span
+    >
+  </button>
+</div>
