@@ -26,6 +26,7 @@
     "alquieres-front": "file:",
     "bootstrap": "^5.3.6",
     "chart.js": "^4.5.0",
+    "jspdf": "^3.0.1",
     "libphonenumber-js": "^1.12.8",
     "luxon": "^3.6.1",
     "moment": "^2.30.1",
