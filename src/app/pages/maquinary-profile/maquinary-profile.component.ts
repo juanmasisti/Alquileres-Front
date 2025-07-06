@@ -37,7 +37,8 @@ import { UserService } from 'src/app/services/user.service';
 import { CommentsComponent } from './comments/comments.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
-import { ChangeStateComponent } from './change-state/change-state.component';
+import { DialogRef } from '@angular/cdk/dialog';
+import { selectDateModalComponent } from './selectDateModal/selectDateModal.component';
 
 declare var MercadoPago: any;
 
@@ -72,9 +73,9 @@ export class MaquinaryProfileComponent implements OnInit {
   precioTotal: number = 0;
   beginDate?: Date;
   endDate?: Date;
-  isAdmin = sessionStorage.getItem('rol') === 'admin'
-  isEmployee = sessionStorage.getItem('rol') === 'empleado'
-  isClient = sessionStorage.getItem('rol') === 'cliente'
+  isAdmin = sessionStorage.getItem('rol') === 'admin';
+  isEmployee = sessionStorage.getItem('rol') === 'empleado';
+  isClient = sessionStorage.getItem('rol') === 'cliente';
 
   // Para el autocomplete de usuarios
   allUsers: any[] = [];
@@ -118,11 +119,11 @@ export class MaquinaryProfileComponent implements OnInit {
     return !!this.authService.getToken() && !this.isAdmin && !this.isEmployee;
   }
 
- ngOnInit() {
-  // cargamos los usuarios para el autocomplete
-  this.loadAllUsers();
-  const id = this.route.snapshot.paramMap.get('id');
-  this.initMercadoPago();
+  ngOnInit() {
+    // cargamos los usuarios para el autocomplete
+    this.loadAllUsers();
+    const id = this.route.snapshot.paramMap.get('id');
+    this.initMercadoPago();
 
     // Manejo del resultado de pago
     this.route.queryParams.subscribe((params) => {
@@ -151,25 +152,25 @@ export class MaquinaryProfileComponent implements OnInit {
       }
     });
 
-  if (id) {
-    this.loadMaquinaria(+id);
-  } else {
-    this.error = 'No se encontró el ID de la maquinaria';
-    this.isLoading = false;
+    if (id) {
+      this.loadMaquinaria(+id);
+    } else {
+      this.error = 'No se encontró el ID de la maquinaria';
+      this.isLoading = false;
+    }
   }
-}
 
   loadAllUsers() {
     this.userService.getAllUsers().subscribe({
       next: (users) => {
         console.log('Usuarios cargados:', users);
-        this.allUsers = users
+        this.allUsers = users;
         console.log('Cantidad de usuarios:', this.allUsers.length);
       },
       error: (err) => {
         console.error('Error al obtener usuarios', err);
         this.allUsers = [];
-      }
+      },
     });
   }
 
@@ -223,7 +224,7 @@ export class MaquinaryProfileComponent implements OnInit {
         this.maquinaria = data;
         if (
           this.maquinaria.state == MaquinariaState.Disponible &&
-          ( this.isClient || this.isEmployee )
+          (this.isClient || this.isEmployee)
         ) {
           this.setFechasOcupadas(id);
         }
@@ -399,18 +400,24 @@ export class MaquinaryProfileComponent implements OnInit {
 
     this.destroyMp();
 
-    this.mercadoPagoService.getPreferenceId({ ...item, user_email: this.isEmployee ? this.selectedClientEmail : undefined }).subscribe({ // si es empleado, pasamos el email del cliente
-      next: async (res) => {
-        this.initBricks();
-        this.renderWalletBrick(res.id);
-      },
-      error: (err) => {
-        console.error('Error con MercadoPago', err);
-      },
-    });
+    this.mercadoPagoService
+      .getPreferenceId({
+        ...item,
+        user_email: this.isEmployee ? this.selectedClientEmail : undefined,
+      })
+      .subscribe({
+        // si es empleado, pasamos el email del cliente
+        next: async (res) => {
+          this.initBricks();
+          this.renderWalletBrick(res.id);
+        },
+        error: (err) => {
+          console.error('Error con MercadoPago', err);
+        },
+      });
   }
 
-  onStateChange(event: any) {
+  onStateChange(event: any, maquinaria: Maquinaria) {
     const nuevoEstado = event.target.value;
 
     if (this.maquinaria == null) return;
@@ -422,15 +429,27 @@ export class MaquinaryProfileComponent implements OnInit {
     }
 
     const prevState = this.maquinaria!.state;
-    const dialogRef = this.dialog.open(ChangeStateComponent)/*ConfirmModalComponent, {
-      width: '400px',
-      data: {
-        title: 'Confirmar cambio de estado',
-        description: desc,
-        confirmText: 'Sí, cambiar',
-        cancelText: 'Cancelar',
-      },
-    });*/
+    let dialogRef;
+    if (nuevoEstado === MaquinariaState.Disponible) {
+      dialogRef = this.dialog.open(ConfirmModalComponent, {
+        width: '400px',
+        data: {
+          title: 'Confirmar cambio de estado',
+          description: desc,
+          confirmText: 'Sí, cambiar',
+          cancelText: 'Cancelar',
+        },
+      });
+    } else {
+      dialogRef = this.dialog.open(selectDateModalComponent, {
+        width: '400px',
+        data: {
+          maquinaria: this.maquinaria,
+          currentState: this.maquinaria.state,
+          newState: nuevoEstado,
+        },
+      });
+    }
 
     dialogRef.afterClosed().subscribe((confirmado: boolean) => {
       this.destroyMp();
@@ -472,35 +491,34 @@ export class MaquinaryProfileComponent implements OnInit {
       default:
         return '';
     }
-  }    
-
-onClientEmailInput(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  const value = input.value.trim();
-
-  console.log('🔵 Email ingresado:', value);
-  console.log('🔵 allUsers cargados:', this.allUsers.length);
-
-  if (!this.allUsers || this.allUsers.length === 0) {
-    console.warn('⚠️ No hay usuarios cargados aún');
-    this.filteredUsers = [];
-    this.emailExists = false;
-    return;
   }
 
-  // Filtra usuarios que incluyan el valor tipeado
-  this.filteredUsers = this.allUsers.filter(user =>
-    user.email.toLowerCase().includes(value.toLowerCase())
-  );
+  onClientEmailInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.trim();
 
-  // console.log('🟢 Usuarios filtrados:', this.filteredUsers);
+    console.log('🔵 Email ingresado:', value);
+    console.log('🔵 allUsers cargados:', this.allUsers.length);
 
-  // Verifica si el email exacto existe en la lista de usuarios
-  this.emailExists = this.allUsers.some(user =>
-    user.email.toLowerCase() === value.toLowerCase()
-  );
+    if (!this.allUsers || this.allUsers.length === 0) {
+      console.warn('⚠️ No hay usuarios cargados aún');
+      this.filteredUsers = [];
+      this.emailExists = false;
+      return;
+    }
 
-  console.log('🟢 emailExists:', this.emailExists);
-}
+    // Filtra usuarios que incluyan el valor tipeado
+    this.filteredUsers = this.allUsers.filter((user) =>
+      user.email.toLowerCase().includes(value.toLowerCase())
+    );
 
+    // console.log('🟢 Usuarios filtrados:', this.filteredUsers);
+
+    // Verifica si el email exacto existe en la lista de usuarios
+    this.emailExists = this.allUsers.some(
+      (user) => user.email.toLowerCase() === value.toLowerCase()
+    );
+
+    console.log('🟢 emailExists:', this.emailExists);
+  }
 }

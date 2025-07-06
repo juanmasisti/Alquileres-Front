@@ -1,0 +1,40 @@
+<div class="manage-modal">
+  <h2 class="modal-title">Confirmar cambio de estado</h2>
+
+  <label for="dateRangePicker" class="modal-label">
+    Seleccioná hasta cuándo estará en mantenimiento
+  </label>
+
+  <mat-form-field appearance="fill" class="modal-field">
+    <mat-label>Fecha de mantenimiento</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [(ngModel)]="fechaMantenimiento"
+      [min]="minDate"
+      [matDatepickerFilter]="isDateEnabled"
+      readonly
+      name="fechaMantenimiento"
+      (dateChange)="onDateChanged()"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="picker"
+      class="custom-datepicker-toggle"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div class="modal-actions">
+    <button class="btn cancel-btn" (click)="closeModal()">Cancelar</button>
+    <button
+      type="submit"
+      class="btn confirm-btn"
+      [disabled]="!fechaMantenimiento"
+      (click)="openConfirmModal()"
+    >
+      Confirmar
+    </button>
+  </div>
+</div>
+

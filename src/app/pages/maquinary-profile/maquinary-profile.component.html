@@ -53,7 +53,7 @@
         <ng-container *ngIf="isAdmin">
           <select
             [ngModel]="maquinaria.state"
-            (change)="onStateChange($event)"
+            (change)="onStateChange($event, this.maquinaria)"
             class="state-selector actions"
           >
             <option value="Disponible">Disponible</option>
@@ -65,7 +65,7 @@
           <select
             class="actions"
             [ngModel]="maquinaria.state"
-            (change)="onStateChange($event)"
+            (change)="onStateChange($event, this.maquinaria)"
             class="state-selector actions"
           >
             <option value="Disponible">Disponible</option>

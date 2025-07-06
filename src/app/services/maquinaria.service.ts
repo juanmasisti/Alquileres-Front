@@ -134,8 +134,14 @@ export class MaquinariaService {
     );
   }
 
-  actualizarEstado(id: number, estado: string): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${id}/estado`, { estado });
+  actualizarEstado(id: number, estado: string, fecha?: Date): Observable<any> {
+    const body: any = { estado };
+
+    if (fecha) {
+      body.fecha = fecha;
+    }
+
+    return this.http.patch(`${this.baseUrl}/${id}/estado`, body);
   }
 
   getComentarios(id: number): Observable<any> {
