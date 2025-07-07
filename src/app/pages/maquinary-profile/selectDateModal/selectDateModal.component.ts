@@ -60,6 +60,7 @@ export class SelectDateModalComponent implements OnInit {
       width: '400px',
       data: {
         title: `¿Está seguro de que desea cambiar el estado de ${this.data.maquinaria.nombre} de ${this.data.currentState} a ${this.data.newState}?`,
+        description: `Se cancelaran todas las reservas ${this.fechaMantenimiento ? `desde ${this.formtDate(new Date())} hasta ${this.formtDate(this.fechaMantenimiento)}` : ''} de la maquinaria`,
         confirmText: 'Sí, cambiar',
         cancelText: 'Cancelar',
       },
@@ -94,6 +95,10 @@ export class SelectDateModalComponent implements OnInit {
           });
       }
     });
+  }
+
+  private formtDate(date:any) {
+    return Intl.DateTimeFormat('es-AR').format(date).toString()
   }
 
   closeModal(val: boolean = false) {

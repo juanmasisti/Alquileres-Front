@@ -9,7 +9,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './services/interceptors/auth.interceptor';
 import { RatingModule } from 'ngx-bootstrap/rating'
 import { FormsModule } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DATE_FORMATS } from './custom-date-format';
 
 @NgModule({
   declarations: [    AppComponent
@@ -28,8 +30,17 @@ import { MatNativeDateModule } from '@angular/material/core';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }
+      multi: true,
+   },
+   {
+     provide: DateAdapter,
+     useClass: MomentDateAdapter,
+     deps: [MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+   },
+   {
+     provide: MAT_DATE_FORMATS,
+     useValue: DATE_FORMATS
+   }
   ],
     bootstrap: [AppComponent]
 })
