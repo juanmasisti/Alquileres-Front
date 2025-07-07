@@ -38,7 +38,6 @@ import { CommentsComponent } from './comments/comments.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
 import { SelectDateModalComponent } from './selectDateModal/selectDateModal.component';
-import { HttpClient } from '@angular/common/http';
 
 declare var MercadoPago: any;
 
