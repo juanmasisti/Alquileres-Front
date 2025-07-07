@@ -39,6 +39,7 @@ import { ReviewsComponent } from './reviews/reviews.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
 import { DialogRef } from '@angular/cdk/dialog';
 import { selectDateModalComponent } from './selectDateModal/selectDateModal.component';
+import { HttpClient } from '@angular/common/http';
 
 declare var MercadoPago: any;
 
@@ -83,6 +84,9 @@ export class MaquinaryProfileComponent implements OnInit {
   selectedClientEmail: string = '';
   emailExists: boolean = true;
 
+  mostrarModalEmpleado = false;
+
+
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     const startDate = new Date(Date.now());
     const endDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 días a partir de hoy
@@ -110,7 +114,9 @@ export class MaquinaryProfileComponent implements OnInit {
     private mercadoPagoService: MercadoPagoService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private userService: UserService
+    private userService: UserService,
+    private reservasService: ReservasService,
+    
   ) {
     this.minDate.setDate(this.minDate.getDate() + 1);
   }
@@ -368,6 +374,7 @@ export class MaquinaryProfileComponent implements OnInit {
 
   abrirModal() {
     this.mostrarModal = true;
+    this.setFechasOcupadas(this.maquinaria!.id);
   }
 
   cerrarModal() {
@@ -521,4 +528,77 @@ export class MaquinaryProfileComponent implements OnInit {
 
     console.log('🟢 emailExists:', this.emailExists);
   }
+
+    abrirConfirmacionEmpleado() {
+      // Abre modal de confirmación inicial
+      const confirmDialogRef = this.dialog.open(ConfirmModalComponent, { // creamos instance del modal de confirmación
+        width: '400px',
+        data: {
+          title: 'Confirmar reserva',
+          description: '¿Estás seguro de reservar esta maquinaria para el cliente? El pago se gestionará por fuera del sistema.',
+          confirmText: 'Sí, reservar',
+          cancelText: 'Cancelar',
+        },
+      });
+
+      confirmDialogRef.afterClosed().subscribe((confirmado: boolean) => {
+        if (confirmado) {
+          // Ejecuta la reserva offline
+          this.reservarParaCliente();
+        }
+      });
+    }
+
+   reservarParaCliente() {
+      const body = {
+      id_maquinaria: this.maquinaria!.id,
+      email: this.selectedClientEmail!,
+      fecha_inicio: (this.beginDate instanceof Date)
+        ? this.beginDate.toISOString()
+        : new Date(this.beginDate!).toISOString(),
+      fecha_fin: (this.endDate instanceof Date)
+        ? this.endDate.toISOString()
+        : new Date(this.endDate!).toISOString(),
+    };
+    
+    console.log('Body generado en reservarParaCliente()', body);
+    
+    this.reservasService.reservar(body).subscribe({
+      next: (res: any) => {
+        console.log('Reserva para cliente generada correctamente', res);
+
+
+        // Modal de éxito
+        const successDialogRef = this.dialog.open(ConfirmModalComponent, {
+          width: '400px',
+          data: {
+            title: 'Reserva confirmada',
+            description: 'La reserva se ha creado correctamente. El pago se gestionará por fuera del sistema.',
+            confirmText: 'Aceptar',
+            icon: 'success',
+          },
+        });
+
+        successDialogRef.afterClosed().subscribe(() => {
+          this.cerrarModal();
+          console.log('Reserva confirmada por empleado');
+        });
+      },
+      error: (err: any) => {
+        console.error('Error al generar reserva para cliente', err);
+
+        // Modal de error
+        this.dialog.open(ConfirmModalComponent, {
+          width: '400px',
+          data: {
+            title: 'Error al reservar',
+            description: 'Ocurrió un error al intentar reservar la maquinaria para el cliente. Por favor, inténtelo nuevamente.',
+            confirmText: 'Cerrar',
+            icon: 'error',
+          },
+        });
+      }
+    });
+  }
+
 }

@@ -216,16 +216,27 @@
 
             <div class="modal-actions mt-3">
               <div
-                *ngIf="beginDate && endDate && precioTotal > 0 && !mostrarPagar"
+                *ngIf="beginDate && endDate && precioTotal > 0 && !mostrarPagar && !isEmployee"
                 class="loading-spinner"
               >
                 <i class="fas fa-circle-notch fa-spin"></i>
               </div>
-              <div id="walletBrick_container"></div>
-              <button class="btn cancel" (click)="cerrarModal()">
+              <!-- 🔑 Caso CLIENTE (normal) -->
+              <div id="walletBrick_container" *ngIf="!isEmployee"></div>
+
+              <!-- 🔑 Caso EMPLEADO -->
+              <button
+                *ngIf="isEmployee && beginDate && endDate && precioTotal > 0"
+                class="reserve"
+                (click)="abrirConfirmacionEmpleado()"
+              >
+                Reservar para cliente
+              </button>              
+              <button class="cancel" (click)="cerrarModal()">
                 Cancelar
               </button>
             </div>
+
           </div>
         </div>
       </div>

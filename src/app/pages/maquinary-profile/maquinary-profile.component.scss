@@ -329,7 +329,34 @@ $summary-border: $gray-light;
       &:hover {
         background-color: darken($primary-color, 10%);
       }
+
     }
+
+    .reserve{
+      background-color: $secondary-color;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%; // opcional: ancho completo para destacar
+      margin-bottom: 10px; // separa del boton cancelar
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($secondary-color, 20%);
+      }
+    }
+    .cancel{
+      transition: all 0.3s ease;
+         &:hover {
+            background-color: darken($gray-dark, 10%);
+            color: $white;
+            opacity: 0.8;
+        }
+    }
+
+
   }
 }
 
@@ -386,3 +413,18 @@ $summary-border: $gray-light;
     }
   }
 }
+
+// btn reservar para cliente
+.btn-reserve {
+  color: #fff;
+  background-color: $secondary-color;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; // opcional: ancho completo para destacar
+  margin-bottom: 10px; // separa del boton cancelar
+  transition: background-color 0.3s ease;
+}
+

@@ -22,4 +22,13 @@ export class ReservasService {
   confirmarReserva(id: number): Observable<any> {
     return this.http.patch(`${this.baseUrl}/${id}/confirmar`, {});
   }
+
+  reservar(data: { 
+    id_maquinaria: number; 
+    email: string; 
+    fecha_inicio: string; 
+    fecha_fin: string; 
+  }): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, data);
+}
 }
