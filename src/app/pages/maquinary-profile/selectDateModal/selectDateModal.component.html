@@ -2,7 +2,7 @@
   <h2 class="modal-title">Confirmar cambio de estado</h2>
 
   <label for="dateRangePicker" class="modal-label">
-    Seleccioná hasta cuándo estará en mantenimiento
+    (Opcional) Seleccione hasta cuándo estará en mantenimiento
   </label>
 
   <mat-form-field appearance="fill" class="modal-field">
@@ -30,7 +30,6 @@
     <button
       type="submit"
       class="btn confirm-btn"
-      [disabled]="!fechaMantenimiento"
       (click)="openConfirmModal()"
     >
       Confirmar
