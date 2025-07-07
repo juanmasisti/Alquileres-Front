@@ -1,26 +1,15 @@
-import { Maquinaria } from './../../../models/maquinaria.model';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MaquinariaService } from 'src/app/services/maquinaria.service';
-import { AlquileresService } from 'src/app/services/alquileres.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
-import {
-  MatCalendarCellClassFunction,
-  MatDatepickerModule,
-} from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { LuxonDateModule } from '@angular/material-luxon-adapter';
 import { DateTime } from 'luxon';
-
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
@@ -38,13 +27,14 @@ import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/c
     LuxonDateModule,
   ],
 })
-export class selectDateModalComponent implements OnInit {
+export class SelectDateModalComponent implements OnInit {
   minDate = new Date(); // Fecha mínima para el datepicker (hoy)
   fechaMantenimiento!: Date;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private maquinariaService: MaquinariaService,
+    private dialogRef: MatDialogRef<SelectDateModalComponent>,
     private dialog: MatDialog,
     private snackBar: MatSnackBar // ← esto es lo que faltaba
   ) {}
@@ -81,12 +71,14 @@ export class selectDateModalComponent implements OnInit {
         console.log('Actualizando estado de la maquinaria');
         this.maquinariaService
           .actualizarEstado(
-            this.data.id,
+            this.data.maquinaria.id,
             this.data.newState,
             this.fechaMantenimiento
           )
           .subscribe({
-            next: () => {},
+            next: () => {
+              this.closeModal(true)
+            },
             error: (err) => {
               console.error('Error al actualizar el estado:', err);
               this.snackBar.open(
@@ -97,16 +89,14 @@ export class selectDateModalComponent implements OnInit {
                   panelClass: ['error-snackbar'],
                 }
               );
+              this.closeModal()
             },
           });
-      } else {
-        console.log('Cambio de estado cancelado');
       }
-      this.closeModal();
     });
   }
 
-  closeModal() {
-    this.dialog.closeAll();
+  closeModal(val: boolean = false) {
+    this.dialogRef.close(val)
   }
 }

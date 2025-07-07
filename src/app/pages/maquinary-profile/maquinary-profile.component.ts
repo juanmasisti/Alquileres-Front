@@ -37,8 +37,7 @@ import { UserService } from 'src/app/services/user.service';
 import { CommentsComponent } from './comments/comments.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
-import { DialogRef } from '@angular/cdk/dialog';
-import { selectDateModalComponent } from './selectDateModal/selectDateModal.component';
+import { SelectDateModalComponent } from './selectDateModal/selectDateModal.component';
 
 declare var MercadoPago: any;
 
@@ -440,23 +439,10 @@ export class MaquinaryProfileComponent implements OnInit {
           cancelText: 'Cancelar',
         },
       });
-    } else {
-      dialogRef = this.dialog.open(selectDateModalComponent, {
-        width: '400px',
-        data: {
-          maquinaria: this.maquinaria,
-          currentState: this.maquinaria.state,
-          newState: nuevoEstado,
-        },
-      });
-    }
-
-    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
-      this.destroyMp();
-      if (confirmado) {
-        this.maquinariaService
-          .actualizarEstado(this.maquinaria!.id, nuevoEstado)
-          .subscribe({
+      dialogRef.afterClosed().subscribe((sucess) => {
+        this.destroyMp();
+        if (sucess) {
+          this.maquinariaService.actualizarEstado(this.maquinaria!.id, nuevoEstado).subscribe({
             next: () => {
               this.maquinaria!.state = nuevoEstado; // ✅ Solo lo cambiamos si se confirma
               this.snackBar.open(
@@ -474,10 +460,24 @@ export class MaquinaryProfileComponent implements OnInit {
               );
             },
           });
-      } else {
-        event.target.value = prevState;
-      }
-    });
+        } else {
+          event.target.value = prevState
+        }
+      })
+    } else {
+      dialogRef = this.dialog.open(SelectDateModalComponent, {
+        width: '400px',
+        data: {
+          maquinaria: this.maquinaria,
+          currentState: this.maquinaria.state,
+          newState: nuevoEstado,
+        },
+      });
+      dialogRef.afterClosed().subscribe((sucess) => {
+        if (sucess) this.maquinaria!.state = nuevoEstado
+        else event.target.value = prevState
+      })
+    }
   }
 
   getStatusClass(status: string): string {
