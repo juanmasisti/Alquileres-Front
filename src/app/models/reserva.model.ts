@@ -24,4 +24,5 @@ export interface Reserva {
   sucursal: Location;
   politica: ReturnPolicy;
   estado: ReservaState;
+  hideButton?: boolean
 }

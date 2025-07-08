@@ -124,6 +124,7 @@
             style="cursor: pointer"
             *ngIf="
               r.estado == 'Activa' &&
+              r.hideButton == false &&
               rol == 'empleado' &&
               reservaIniciada(r.fecha_inicio)
             "
