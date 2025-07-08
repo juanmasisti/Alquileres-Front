@@ -260,7 +260,7 @@ export class PersonProfileComponent implements OnInit {
             this.dialog.open(ConfirmModalComponent, {
               data: {
                 title: 'Error al actualizar',
-                description: 'Ocurrió un error al guardar los cambios. Por favor, intentá nuevamente.',
+                description: err.error.message || 'Ocurrió un error al actualizar tus datos. Por favor, intentá nuevamente.',
                 confirmText: 'Cerrar',
                 cancelText: ''
               },
