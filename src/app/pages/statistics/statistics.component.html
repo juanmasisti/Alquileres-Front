@@ -21,20 +21,17 @@
     <section class="chart-section">
       <div class="chart-header">
         <h3>Clientes Registrados</h3>
-      </div>
-      @if (clientesData.length == 0) {
-        <div>No se encontraron datos</div>
-      }@else {
-          <div class="period-filter">
+        <div *ngIf="clientesData.length > 0" class="period-filter">
           <button 
             *ngFor="let period of periods" 
             [class.active]="clientesPeriodo === period.value"
             (click)="toggleClientesPeriodo(period.value)"
           >
             {{ period.label }}
-        </button>
+          </button>
         </div>
-      }
+      </div>
+      <div *ngIf="clientesData.length == 0">No se encontraron datos</div>
       <canvas [hidden]="clientesData.length == 0" #clientesChart></canvas>
     </section>
 
@@ -42,20 +39,17 @@
     <section class="chart-section">
       <div class="chart-header">
         <h3>Alquileres Realizados</h3>
-      </div>
-      @if (alquileresData.length == 0) {
-        <div>No se encontraron datos</div>
-      }@else {
-        <div class="period-filter">
-        <button 
-          *ngFor="let period of periods" 
-          [class.active]="alquileresPeriodo === period.value"
-          (click)="toggleAlquileresPeriodo(period.value)"
-        >
-          {{ period.label }}
-        </button>
+        <div *ngIf="alquileresData.length > 0" class="period-filter">
+          <button 
+            *ngFor="let period of periods" 
+            [class.active]="alquileresPeriodo === period.value"
+            (click)="toggleAlquileresPeriodo(period.value)"
+          >
+            {{ period.label }}
+          </button>
         </div>
-      }
+      </div>
+      <div *ngIf="alquileresData.length == 0">No se encontraron datos</div>
       <canvas [hidden]="alquileresData.length == 0" #alquileresChart></canvas>
     </section>
 
@@ -63,11 +57,7 @@
     <section class="chart-section">
       <div class="chart-header">
         <h3>Ingresos</h3>
-      </div>
-      @if (ingresosData.length == 0) {
-        <div>No se encontraron datos</div>
-      }@else {
-        <div class="period-filter">
+        <div *ngIf="ingresosData.length > 0" class="period-filter">
           <button 
             *ngFor="let period of periods" 
             [class.active]="ingresosPeriodo === period.value"
@@ -76,7 +66,8 @@
             {{ period.label }}
           </button>
         </div>
-      }
+      </div>
+      <div *ngIf="ingresosData.length == 0">No se encontraron datos</div>
       <canvas [hidden]="ingresosData.length == 0" #ingresosChart ></canvas>
     </section>
   </ng-container>
