@@ -61,22 +61,11 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {}
 
-  ngAfterViewInit(): void {
-    this.statsService.getClientes().subscribe(data => {
-      this.clientesData = data;
-      this.filtrarClientes();
-    });
-    
-    this.statsService.getAlquileres().subscribe(data => {
-      this.alquileresData = data;
-      this.filtrarAlquileres();
-    });
-    
-    this.statsService.getIngresos().subscribe(data => {
-      this.ingresosData = data;
-      this.filtrarIngresos();
-    });
-  }
+ngAfterViewInit(): void {
+  this.cargarClientes();
+  this.cargarAlquileres();
+  this.cargarIngresos();
+}
 
   /**
    * 🔧 Función general para crear gráficos
@@ -121,221 +110,65 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  cargarClientes() {
-    this.statsService.getClientes().subscribe(data => {
-      // extraemos los labels y cantidades de la data recibida en el endpoint
-      const labels = data.map(item => item.fecha);
-      const cantidades = data.map(item => item.cantidad);
-
-      // llamamos a la función general crearGrafico
-      this.crearGrafico(
-        this.clientesChart,
-        'bar',
-        'Clientes Registrados',
-        labels,
-        cantidades,
-        'rgba(75, 192, 192, 0.5)',
-        'rgba(75, 192, 192, 1)'
-      );
-    });
-  }
-
-  cargarAlquileres() {
-    this.statsService.getAlquileres().subscribe(data => {
-      const labels = data.map(item => item.fecha);
-      const cantidades = data.map(item => item.cantidad);
-
-      this.crearGrafico(
-        this.alquileresChart,
-        'bar',
-        'Alquileres Realizados',
-        labels,
-        cantidades,
-        'rgba(153, 102, 255, 0.5)',
-        'rgba(153, 102, 255, 1)'
-      );
-    });
-  }
-
-  cargarIngresos() {
-    this.statsService.getIngresos().subscribe(data => {
-      const labels = data.map(item => item.fecha);
-      const montos = data.map(item => item.monto);
-
-      this.crearGrafico(
-        this.ingresosChart,
-        'line',
-        'Ingresos',
-        labels,
-        montos,
-        'rgba(255, 159, 64, 0.5)',
-        'rgba(255, 159, 64, 1)'
-      );
-    });
-  }
-
   toggleClientesPeriodo(period: string) {
-  if (this.clientesPeriodo === period) {
-    this.clientesPeriodo = ''; // deselecciona y muestra todos
-  } else {
-    this.clientesPeriodo = period; // setea el filtro
-  }
-  this.filtrarClientes(); // aplica filtro
+  this.clientesPeriodo = this.clientesPeriodo === period ? '' : period;
+  this.cargarClientes();
 }
 
-toggleAlquileresPeriodo(period: string) {
-  if (this.alquileresPeriodo === period) {
-    this.alquileresPeriodo = '';
-  } else {
-    this.alquileresPeriodo = period;
-  }
-  this.filtrarAlquileres();
-}
-
-toggleIngresosPeriodo(period: string) {
-  if (this.ingresosPeriodo === period) {
-    this.ingresosPeriodo = '';
-  } else {
-    this.ingresosPeriodo = period;
-  }
-  this.filtrarIngresos();
-}
-
-  filtrarClientes() {
-    if (!this.clientesData.length) return;
-
-    if (!this.clientesPeriodo) {
-      // si no hay periodo seleccionado, muestra todos
-      this.actualizarGrafico(
-        this.clientesChart,
-        'bar',
-        'Clientes Registrados',
-        this.clientesData.map(item => item.fecha),
-        this.clientesData.map(item => item.cantidad),
-        'rgba(75, 192, 192, 0.5)',
-        'rgba(75, 192, 192, 1)'
-      );
-      return;
-    }
-
-    const filteredData = this.clientesData.filter(item => {
-      const date = new Date(item.fecha);
-      const now = new Date();
-
-      switch(this.clientesPeriodo) {
-        case 'dia': 
-          return date.toDateString() === now.toDateString();
-        case 'mes':
-          return date.getMonth() === now.getMonth() && 
-                date.getFullYear() === now.getFullYear();
-        case 'anio':
-          return date.getFullYear() === now.getFullYear();
-        default:
-          return true;
-      }
-    });
-
+cargarClientes() {
+  this.statsService.getClientes(this.clientesPeriodo || undefined).subscribe(data => {
+    this.clientesData = data;
     this.actualizarGrafico(
       this.clientesChart,
       'bar',
       'Clientes Registrados',
-      filteredData.map(item => item.fecha),
-      filteredData.map(item => item.cantidad),
+      data.map(item => item.fecha),
+      data.map(item => item.cantidad),
       'rgba(75, 192, 192, 0.5)',
       'rgba(75, 192, 192, 1)'
     );
-  }
+  });
+}
 
+toggleAlquileresPeriodo(period: string) {
+  this.alquileresPeriodo = this.alquileresPeriodo === period ? '' : period;
+  this.cargarAlquileres();
+}
 
-  filtrarAlquileres() {
-    if (!this.alquileresData.length) return;
-
-    if (!this.alquileresPeriodo) {
-      // si no hay periodo seleccionado, muestra todos
-      this.actualizarGrafico(
-        this.alquileresChart,
-        'bar',
-        'Alquileres Realizados',
-        this.alquileresData.map(item => item.fecha),
-        this.alquileresData.map(item => item.cantidad),
-        'rgba(153, 102, 255, 0.5)',
-        'rgba(153, 102, 255, 1)'
-      );
-      return;
-    }
-
-    const filteredData = this.alquileresData.filter(item => {
-      const date = new Date(item.fecha);
-      const now = new Date();
-      
-      switch(this.alquileresPeriodo) {
-        case 'dia': 
-          return date.toDateString() === now.toDateString();
-        case 'mes':
-          return date.getMonth() === now.getMonth() && 
-                date.getFullYear() === now.getFullYear();
-        case 'anio':
-          return date.getFullYear() === now.getFullYear();
-        default:
-          return true;
-      }
-    });
-
+cargarAlquileres() {
+  this.statsService.getAlquileres(this.alquileresPeriodo || undefined).subscribe(data => {
+    this.alquileresData = data;
     this.actualizarGrafico(
       this.alquileresChart,
       'bar',
       'Alquileres Realizados',
-      filteredData.map(item => item.fecha),
-      filteredData.map(item => item.cantidad),
+      data.map(item => item.fecha),
+      data.map(item => item.cantidad),
       'rgba(153, 102, 255, 0.5)',
       'rgba(153, 102, 255, 1)'
     );
-  }
+  });
+}
 
-  filtrarIngresos() {
-    if (!this.ingresosData.length) return;
+toggleIngresosPeriodo(period: string) {
+  this.ingresosPeriodo = this.ingresosPeriodo === period ? '' : period;
+  this.cargarIngresos();
+}
 
-    if (!this.ingresosPeriodo) {
-      // si no hay periodo seleccionado, muestra todos
-      this.actualizarGrafico(
-        this.ingresosChart,
-        'line',
-        'Ingresos',
-        this.ingresosData.map(item => item.fecha),
-        this.ingresosData.map(item => item.monto),
-        'rgba(255, 159, 64, 0.5)',
-        'rgba(255, 159, 64, 1)'
-      );
-      return;
-    }
-
-    const filteredData = this.ingresosData.filter(item => { // filtramos los ingresos, convirtiendo la fecha a Date y entrando al switch en cada caso correspondiente.
-      const date = new Date(item.fecha);
-      const now = new Date();
-      
-      switch(this.ingresosPeriodo) {
-        case 'dia': 
-          return date.toDateString() === now.toDateString();
-        case 'mes':
-          return date.getMonth() === now.getMonth() && 
-                date.getFullYear() === now.getFullYear();
-        case 'anio':
-          return date.getFullYear() === now.getFullYear();
-        default:
-          return true;
-      }
-    });
-
-    this.actualizarGrafico( // actualizamos el gráfico de ingresos con los datos filtrados
+cargarIngresos() {
+  this.statsService.getIngresos(this.ingresosPeriodo || undefined).subscribe(data => {
+    this.ingresosData = data;
+    this.actualizarGrafico(
       this.ingresosChart,
       'line',
       'Ingresos',
-      filteredData.map(item => item.fecha),
-      filteredData.map(item => item.monto),
+      data.map(item => item.fecha),
+      data.map(item => item.monto),
       'rgba(255, 159, 64, 0.5)',
       'rgba(255, 159, 64, 1)'
     );
-  }
+  });
+}
 
 
   // Función para actualizar los gráficos con los datos filtrados
