@@ -27,11 +27,10 @@
         <div>ACCIONES</div>
       </div>
 
-      <div *ngIf="!loading && users.length === 0" class="no-results">
+      <div *ngIf="!loading && ( users.length === 0 || filteredUsers.length === 0 ) " class="no-results">
         <i class="fas fa-exclamation-circle"></i>
-        <p>No se encontraron usuarios registrados.</p>
+        <p>No se encontraron usuarios.</p>
       </div>
-
       @for (u of filteredUsers; track u.id) {
         <div class="table-row">
           <div>{{ u.nombre }}</div>

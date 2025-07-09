@@ -435,7 +435,7 @@ export class MaquinaryProfileComponent implements OnInit {
 
     const prevState = this.maquinaria!.state;
     let dialogRef;
-    if (nuevoEstado === MaquinariaState.Disponible) {
+    if (nuevoEstado === MaquinariaState.Disponible || nuevoEstado === MaquinariaState.Eliminado) {
       dialogRef = this.dialog.open(ConfirmModalComponent, {
         width: '400px',
         data: {
