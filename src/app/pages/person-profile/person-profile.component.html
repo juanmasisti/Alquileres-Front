@@ -164,6 +164,7 @@
           <a
             [routerLink]="['/perfil/id/cambiar-clave']"
             routerLinkActive="router-link-active"
+            *ngIf="isClient()"
             >Cambiar contraseña</a
           >
           <a class="cancelar" *ngIf="isClient()" (click)="deleteProfile()">
