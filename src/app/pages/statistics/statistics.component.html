@@ -21,24 +21,31 @@
     <section class="chart-section">
       <div class="chart-header">
         <h3>Clientes Registrados</h3>
-        <div class="period-filter">
-          <button 
-            *ngFor="let period of periods" 
-            [class.active]="clientesPeriodo === period.value"
-            (click)="toggleClientesPeriodo(period.value)"
-          >
-            {{ period.label }}
+        @if (clientesData.length == 0) {
+          <div>No hay datos</div>
+        }@else {
+            <div class="period-filter">
+            <button 
+              *ngFor="let period of periods" 
+              [class.active]="clientesPeriodo === period.value"
+              (click)="toggleClientesPeriodo(period.value)"
+            >
+              {{ period.label }}
           </button>
-        </div>
+          </div>
+          <canvas #clientesChart></canvas>
+        }
       </div>
-      <canvas #clientesChart></canvas>
     </section>
 
     <!-- Gráfico de Alquileres -->
     <section class="chart-section">
       <div class="chart-header">
         <h3>Alquileres Realizados</h3>
-        <div class="period-filter">
+        @if (alquileresData.length == 0) {
+          <div>No hay datos</div>
+        }@else {
+          <div class="period-filter">
           <button 
             *ngFor="let period of periods" 
             [class.active]="alquileresPeriodo === period.value"
@@ -46,26 +53,31 @@
           >
             {{ period.label }}
           </button>
-        </div>
+          </div>
+          <canvas #alquileresChart></canvas>
+        }
       </div>
-      <canvas #alquileresChart></canvas>
     </section>
 
     <!-- Gráfico de Ingresos -->
     <section class="chart-section">
       <div class="chart-header">
         <h3>Ingresos</h3>
-        <div class="period-filter">
-          <button 
-            *ngFor="let period of periods" 
-            [class.active]="ingresosPeriodo === period.value"
-            (click)="toggleIngresosPeriodo(period.value)"
-          >
-            {{ period.label }}
-          </button>
-        </div>
+        @if (ingresosData.length == 0) {
+          <div>No hay datos</div>
+        }@else {
+          <div class="period-filter">
+            <button 
+              *ngFor="let period of periods" 
+              [class.active]="ingresosPeriodo === period.value"
+              (click)="toggleIngresosPeriodo(period.value)"
+            >
+              {{ period.label }}
+            </button>
+          </div>
+        <canvas #ingresosChart ></canvas>
+        }
       </div>
-      <canvas #ingresosChart ></canvas>
     </section>
   </ng-container>
 </div>
