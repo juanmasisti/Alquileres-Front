@@ -4,6 +4,15 @@
   <div class="manage__container">
     <div class="header-actions">
       <h1 class="title">LISTADO DE USUARIOS</h1>
+
+      <input
+        type="text"
+        placeholder="Buscar usuario..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="filterUsers()"
+        class="input-busqueda"
+      />
+
       <button class="btn agregar" (click)="openCreateUserModal()">
         + Agregar Empleado
       </button>
@@ -23,7 +32,7 @@
         <p>No se encontraron usuarios registrados.</p>
       </div>
 
-      @for (u of users; track u.id) {
+      @for (u of filteredUsers; track u.id) {
         <div class="table-row">
           <div>{{ u.nombre }}</div>
           <div>{{ u.apellido }}</div>
@@ -34,9 +43,11 @@
               {{ u.isActive ? 'Activo' : 'Inactivo' }}
             </span>
           </div>
-          <div class="acciones" *ngIf="u.isActive">
+          <div class="acciones">
             <!-- <button class="btn editar">Editar</button> -->
-            <button class="btn eliminar" (click)="deactivateUser(u.id)">Eliminar</button>
+            <button class="btn eliminar" (click)="deactivateUser(u.id)" *ngIf="u.isActive">Eliminar</button>
+            <!-- Boton para reactivar usuario -->
+            <button class="btn reactivar" (click)="reactivateUser(u.id)" *ngIf="!u.isActive">Reactivar</button>
           </div>
         </div>
       }
