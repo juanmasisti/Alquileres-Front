@@ -53,9 +53,9 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     { value: 'anio', label: 'Año' }
   ];
 
-  clientesPeriodo: string = '';  // Período inicial para clientes
-  alquileresPeriodo: string = ''; // Período inicial para alquileres
-  ingresosPeriodo: string = '';   // Período inicial para ingresos
+  clientesPeriodo: string = 'dia';  // Período inicial para clientes
+  alquileresPeriodo: string = 'dia'; // Período inicial para alquileres
+  ingresosPeriodo: string = 'dia';   // Período inicial para ingresos
 
   constructor(private statsService: StatsService, private dialog: MatDialog) {}
 
