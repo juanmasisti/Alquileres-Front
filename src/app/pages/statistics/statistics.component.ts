@@ -101,10 +101,16 @@ ngAfterViewInit(): void {
           tension: type === 'line' ? 0.3 : 0 // suaviza líneas si es line
         }]
       },
-      options: {
-        responsive: true, // gráfico responsive
+        options: {
+        responsive: true,
         scales: {
-          y: { beginAtZero: true } // eje Y comienza en 0
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0, // evita decimales en los ticks del eje Y
+              stepSize: 0,  // esto asegura que los ticks en el eje Y tengan un paso de 1          
+            }
+          }
         }
       }
     });
