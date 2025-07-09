@@ -53,9 +53,9 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     { value: 'anio', label: 'Año' }
   ];
 
-  clientesPeriodo: string = '';  // Período inicial para clientes
-  alquileresPeriodo: string = ''; // Período inicial para alquileres
-  ingresosPeriodo: string = '';   // Período inicial para ingresos
+  clientesPeriodo: string = 'dia';  // Período inicial para clientes
+  alquileresPeriodo: string = 'dia'; // Período inicial para alquileres
+  ingresosPeriodo: string = 'dia';   // Período inicial para ingresos
 
   constructor(private statsService: StatsService, private dialog: MatDialog) {}
 
@@ -111,8 +111,8 @@ ngAfterViewInit(): void {
   }
 
   toggleClientesPeriodo(period: string) {
-  this.clientesPeriodo = this.clientesPeriodo === period ? '' : period;
-  this.cargarClientes();
+  this.clientesPeriodo = period; // actualiza el período seleccionado
+  this.cargarClientes(); // recarga los datos de clientes con el nuevo período
 }
 
 cargarClientes() {
@@ -131,7 +131,7 @@ cargarClientes() {
 }
 
 toggleAlquileresPeriodo(period: string) {
-  this.alquileresPeriodo = this.alquileresPeriodo === period ? '' : period;
+  this.alquileresPeriodo = period; // actualiza el período seleccionado
   this.cargarAlquileres();
 }
 
@@ -151,7 +151,7 @@ cargarAlquileres() {
 }
 
 toggleIngresosPeriodo(period: string) {
-  this.ingresosPeriodo = this.ingresosPeriodo === period ? '' : period;
+  this.ingresosPeriodo = period; // actualiza el período seleccionado
   this.cargarIngresos();
 }
 
