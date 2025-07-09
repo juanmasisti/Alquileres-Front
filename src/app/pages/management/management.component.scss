@@ -5,16 +5,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden; // para que no se desborde nada
 }
 
 .manage__container {
   width: 80%;
-  height: 80%;
-  padding: 3rem;
+  max-height: 80vh; // en vez de porcentaje relativo
+  min-height: 80vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
 
+  box-sizing: border-box;
   background-color: $section-color;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  overflow: hidden; // importante
 }
 
 .title {
@@ -28,6 +35,12 @@
   margin-bottom: 10px;
 }
 
+.codigo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .reservas-tabs {
   display: flex;
   margin: 1rem 0;
@@ -35,6 +48,7 @@
   border-radius: 10px;
   overflow: hidden;
 
+  min-height: 40px;
   font-size: 2.2rem;
 }
 
@@ -55,12 +69,12 @@
 }
 
 .reservas-table {
-  width: 100%;
-  overflow-y: scroll;
-  max-height: 65%;
+  flex: 1; // ocupa el espacio restante del contenedor
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  min-height: 0; // necesario para que scroll funcione correctamente en flex
 }
 
 .reservas-header,
@@ -105,12 +119,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-
-  & i {
-    color: $primary-color;
-    font-size: 1.2rem;
-  }
 }
 
 .no-results {

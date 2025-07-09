@@ -1,4 +1,4 @@
-@use 'index' as *;
+@use "index" as *;
 
 .main__container {
   min-height: 100vh;
@@ -9,7 +9,7 @@
   background-color: $background-color;
 }
 
-.manage__container {
+. {
   margin-top: 40px;
   margin-bottom: 40px;
   width: 95%;
@@ -167,9 +167,8 @@
     justify-content: flex-start;
   }
 
-  .table-header > div:nth-child(n+3),
-  .table-row > div:nth-child(n+3) {
+  .table-header > div:nth-child(n + 3),
+  .table-row > div:nth-child(n + 3) {
     grid-column: span 2;
   }
 }
-

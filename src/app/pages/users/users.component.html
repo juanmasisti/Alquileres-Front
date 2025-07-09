@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 
 <section class="main__container">
-  <div class="manage__container">
+  <div class="">
     <div class="header-actions">
       <h1 class="title">LISTADO DE USUARIOS</h1>
       <button class="btn agregar" (click)="openCreateUserModal()">
@@ -24,21 +24,27 @@
       </div>
 
       @for (u of users; track u.id) {
-        <div class="table-row">
-          <div>{{ u.nombre }}</div>
-          <div>{{ u.apellido }}</div>
-          <div>{{ u.email }}</div>
-          <div>{{ u.rol }}</div>
-          <div>
-            <span class="estado" [class.activo]="u.isActive" [class.inactivo]="!u.isActive">
-              {{ u.isActive ? 'Activo' : 'Inactivo' }}
-            </span>
-          </div>
-          <div class="acciones" *ngIf="u.isActive">
-            <!-- <button class="btn editar">Editar</button> -->
-            <button class="btn eliminar" (click)="deactivateUser(u.id)">Eliminar</button>
-          </div>
+      <div class="table-row">
+        <div>{{ u.nombre }}</div>
+        <div>{{ u.apellido }}</div>
+        <div>{{ u.email }}</div>
+        <div>{{ u.rol }}</div>
+        <div>
+          <span
+            class="estado"
+            [class.activo]="u.isActive"
+            [class.inactivo]="!u.isActive"
+          >
+            {{ u.isActive ? "Activo" : "Inactivo" }}
+          </span>
         </div>
+        <div class="acciones" *ngIf="u.isActive">
+          <!-- <button class="btn editar">Editar</button> -->
+          <button class="btn eliminar" (click)="deactivateUser(u.id)">
+            Eliminar
+          </button>
+        </div>
+      </div>
       }
     </div>
   </div>
