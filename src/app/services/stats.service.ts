@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -11,15 +11,22 @@ export class StatsService {
 
   constructor(private http: HttpClient) {}
 
-  getIngresos(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/ingresos`);
+  getIngresos(tam?: string): Observable<any[]> {
+    let params = new HttpParams();
+    if (tam) params = params.set('tam', tam);
+    return this.http.get<any[]>(`${this.baseUrl}/ingresos`, { params });
   }
 
-  getClientes(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/usuarios`);
+  getClientes(tam?: string): Observable<any[]> {
+    let params = new HttpParams();
+    if (tam) params = params.set('tam', tam);
+    return this.http.get<any[]>(`${this.baseUrl}/usuarios`, { params });
   }
 
-  getAlquileres(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/alquileres`);
+  getAlquileres(tam?: string): Observable<any[]> {
+    let params = new HttpParams();
+    if (tam) params = params.set('tam', tam);
+    return this.http.get<any[]>(`${this.baseUrl}/alquileres`, { params });
   }
+
 }
