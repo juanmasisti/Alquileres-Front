@@ -25,7 +25,7 @@
           <button 
             *ngFor="let period of periods" 
             [class.active]="clientesPeriodo === period.value"
-            (click)="clientesPeriodo = period.value; filtrarClientes()"
+            (click)="toggleClientesPeriodo(period.value)"
           >
             {{ period.label }}
           </button>
@@ -42,7 +42,7 @@
           <button 
             *ngFor="let period of periods" 
             [class.active]="alquileresPeriodo === period.value"
-            (click)="alquileresPeriodo = period.value; filtrarAlquileres()"
+            (click)="toggleAlquileresPeriodo(period.value)"
           >
             {{ period.label }}
           </button>
@@ -59,7 +59,7 @@
           <button 
             *ngFor="let period of periods" 
             [class.active]="ingresosPeriodo === period.value"
-            (click)="ingresosPeriodo = period.value; filtrarIngresos()"
+            (click)="toggleIngresosPeriodo(period.value)"
           >
             {{ period.label }}
           </button>

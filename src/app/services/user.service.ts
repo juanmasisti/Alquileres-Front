@@ -55,6 +55,11 @@ export class UserService {
     return this.http.delete(`${this.baseUrl}/${userId}/deactivate`);
   }
 
+  //reactivar usuario
+  reactivateUser(userId: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${userId}/activate`, {});
+  }
+
   // createClientAndEmployee(data: any): Observable<any> {
   //   return this.http.post(`${this.baseUrl}/create`, data).pipe(
   //     catchError((error) => {

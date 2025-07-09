@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { CreateUserModalComponent } from 'src/app/shared/components/create-user-modal/create-user-modal.component';
@@ -12,11 +14,13 @@ import { NavbarComponent } from 'src/app/shared/components/navbar/navbar.compone
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   standalone: true,
-  imports: [CommonModule,NavbarComponent, FooterComponent, ],
+  imports: [CommonModule,NavbarComponent, FooterComponent, FormsModule ],
 })
 export class UsersComponent implements OnInit {
   users: any[] = [];
+  filteredUsers: any[] = [];
   loading = true;
+  searchTerm: string = ''; // para almacenar el término de búsqueda
 
   constructor(private userService: UserService, private dialog: MatDialog,) {}
 
@@ -24,10 +28,21 @@ export class UsersComponent implements OnInit {
     this.loadUsers();
   }
 
+  filterUsers() {
+    const term = this.searchTerm.toLowerCase().trim();
+
+    this.filteredUsers = this.users.filter(u =>
+      u.nombre.toLowerCase().includes(term) ||
+      u.apellido.toLowerCase().includes(term) ||
+      u.email.toLowerCase().includes(term)
+    );
+  }
+
   loadUsers(): void {
     this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
+        this.filteredUsers = users;
         this.loading = false;
         console.log('Usuarios cargados:', this.users);
       },
@@ -82,6 +97,50 @@ export class UsersComponent implements OnInit {
                 }
               }
             );
+            }
+          });
+        }
+      });
+    }
+
+    reactivateUser(userId: string): void {
+      // Abrimos el modal de confirmación
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        data: {
+          title: '¿Estás seguro/a?',
+          description: 'Esta acción reactivará la cuenta del usuario.',
+          confirmText: 'Sí, reactivar',
+          cancelText: 'Cancelar',
+        }
+      });
+
+      // Nos suscribimos al observable que devuelve el modal luego de cerrarse
+      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.userService.reactivateUser(userId).subscribe({
+            next: () => {
+              this.dialog.open(ConfirmModalComponent, {
+                data: {
+                  title: 'Cuenta reactivada',
+                  description: 'La cuenta fue reactivada correctamente.',
+                  confirmText: 'Aceptar',
+                  icon: 'success'
+                }
+              }).afterClosed().subscribe(() => {
+                console.log(`Usuario con ID ${userId} reactivado`);
+                this.loadUsers(); // Recargar la lista de usuarios
+              });
+            },
+            error: (err: any) => {
+              console.error(`Error al reactivar usuario con ID ${userId}:`, err);
+              this.dialog.open(ConfirmModalComponent, {
+                data: {
+                  title: 'Error al reactivar',
+                  description: err.error.message || 'Ocurrió un error al reactivar la cuenta. Por favor, intentá nuevamente más tarde.',
+                  confirmText: 'Aceptar',
+                  icon: 'info'
+                }
+              });
             }
           });
         }

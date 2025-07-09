@@ -113,6 +113,15 @@
   }
 }
 
+.reactivar {
+  background-color: $secondary-color; // Usar un color secundario definido en index.scss
+  color: #fff;
+
+  &:hover {
+    background-color: $secondary-color;
+  }
+}
+
 .no-results {
   text-align: center;
   padding: 2rem;
@@ -170,5 +179,18 @@
   .table-header > div:nth-child(n + 3),
   .table-row > div:nth-child(n + 3) {
     grid-column: span 2;
+  }
+}
+
+.input-busqueda {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid $gray-light;
+  border-radius: 6px;
+  margin-right: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
   }
 }
