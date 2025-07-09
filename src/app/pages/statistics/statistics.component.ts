@@ -53,9 +53,9 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     { value: 'anio', label: 'Año' }
   ];
 
-  clientesPeriodo: string = 'anio';  // Período inicial para clientes
-  alquileresPeriodo: string = 'anio'; // Período inicial para alquileres
-  ingresosPeriodo: string = 'anio';   // Período inicial para ingresos
+  clientesPeriodo: string = '';  // Período inicial para clientes
+  alquileresPeriodo: string = ''; // Período inicial para alquileres
+  ingresosPeriodo: string = '';   // Período inicial para ingresos
 
   constructor(private statsService: StatsService, private dialog: MatDialog) {}
 
@@ -174,13 +174,54 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  toggleClientesPeriodo(period: string) {
+  if (this.clientesPeriodo === period) {
+    this.clientesPeriodo = ''; // deselecciona y muestra todos
+  } else {
+    this.clientesPeriodo = period; // setea el filtro
+  }
+  this.filtrarClientes(); // aplica filtro
+}
+
+toggleAlquileresPeriodo(period: string) {
+  if (this.alquileresPeriodo === period) {
+    this.alquileresPeriodo = '';
+  } else {
+    this.alquileresPeriodo = period;
+  }
+  this.filtrarAlquileres();
+}
+
+toggleIngresosPeriodo(period: string) {
+  if (this.ingresosPeriodo === period) {
+    this.ingresosPeriodo = '';
+  } else {
+    this.ingresosPeriodo = period;
+  }
+  this.filtrarIngresos();
+}
+
   filtrarClientes() {
     if (!this.clientesData.length) return;
+
+    if (!this.clientesPeriodo) {
+      // si no hay periodo seleccionado, muestra todos
+      this.actualizarGrafico(
+        this.clientesChart,
+        'bar',
+        'Clientes Registrados',
+        this.clientesData.map(item => item.fecha),
+        this.clientesData.map(item => item.cantidad),
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(75, 192, 192, 1)'
+      );
+      return;
+    }
 
     const filteredData = this.clientesData.filter(item => {
       const date = new Date(item.fecha);
       const now = new Date();
-      
+
       switch(this.clientesPeriodo) {
         case 'dia': 
           return date.toDateString() === now.toDateString();
@@ -205,8 +246,23 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     );
   }
 
+
   filtrarAlquileres() {
     if (!this.alquileresData.length) return;
+
+    if (!this.alquileresPeriodo) {
+      // si no hay periodo seleccionado, muestra todos
+      this.actualizarGrafico(
+        this.alquileresChart,
+        'bar',
+        'Alquileres Realizados',
+        this.alquileresData.map(item => item.fecha),
+        this.alquileresData.map(item => item.cantidad),
+        'rgba(153, 102, 255, 0.5)',
+        'rgba(153, 102, 255, 1)'
+      );
+      return;
+    }
 
     const filteredData = this.alquileresData.filter(item => {
       const date = new Date(item.fecha);
@@ -238,6 +294,20 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
 
   filtrarIngresos() {
     if (!this.ingresosData.length) return;
+
+    if (!this.ingresosPeriodo) {
+      // si no hay periodo seleccionado, muestra todos
+      this.actualizarGrafico(
+        this.ingresosChart,
+        'line',
+        'Ingresos',
+        this.ingresosData.map(item => item.fecha),
+        this.ingresosData.map(item => item.monto),
+        'rgba(255, 159, 64, 0.5)',
+        'rgba(255, 159, 64, 1)'
+      );
+      return;
+    }
 
     const filteredData = this.ingresosData.filter(item => { // filtramos los ingresos, convirtiendo la fecha a Date y entrando al switch en cada caso correspondiente.
       const date = new Date(item.fecha);
