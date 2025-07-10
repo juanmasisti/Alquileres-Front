@@ -177,6 +177,7 @@ canvas {
   color: white;
   padding: 0 16px;
   transition: all 0.3s ease;
+  cursor: pointer;
   
   &:hover {
     background-color: darken($primary-color, 10%) !important;
@@ -196,3 +197,19 @@ canvas {
   color: #888;
 }
 
+.simulate-btn {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 2px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: auto; // si usas flex en .header para colocarlo a la derecha
+  margin-right: 10px;
+  color: #666;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #f2f2f2;
+  }
+}

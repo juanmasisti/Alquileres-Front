@@ -572,7 +572,7 @@ export class MaquinaryProfileComponent implements OnInit {
           width: '400px',
           data: {
             title: 'Reserva confirmada',
-            description: 'La reserva se ha creado correctamente. El pago se gestionará por fuera del sistema.',
+            description: 'La reserva se ha creado correctamente.',
             confirmText: 'Aceptar',
             icon: 'success',
           },

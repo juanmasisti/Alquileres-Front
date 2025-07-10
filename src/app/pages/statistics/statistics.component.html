@@ -3,12 +3,37 @@
 <div class="container">
   <div class="header">
     <h2>Estadísticas del Negocio</h2>
-    <div class="export-section">
-      <button mat-raised-button color="primary" (click)="openExportDialog()" class="export-pdf-btn">
-        <span class="material-icons">picture_as_pdf</span>
-        Exportar PDF
+     <!-- 🔘 Botón de simulación demo -->
+      <button 
+        class="simulate-btn"
+        (click)="toggleSimulacion()"
+        matTooltip="Simular estado sin datos"
+      >
+        {{ simulandoSinDatos ? 'Restaurar datos' : 'Simular sin datos' }}
       </button>
+
+    <div matTooltip="No hay gráficos con datos para exportar" *ngIf="noData">
+    <button 
+      mat-raised-button 
+      color="primary" 
+      class="export-pdf-btn"
+      disabled
+    >
+      <span class="material-icons">picture_as_pdf</span>
+      Exportar PDF
+    </button>
     </div>
+
+    <button 
+      *ngIf="!noData"
+      mat-raised-button 
+      color="primary" 
+      (click)="openExportDialog()" 
+      class="export-pdf-btn"
+    >
+      <span class="material-icons">picture_as_pdf</span>
+      Exportar PDF
+    </button> 
   </div>
 
   <!-- Mensaje para caso datos vacíos. -->
@@ -89,13 +114,13 @@
       </div>
       
       <div class="export-checkboxes">
-        <mat-checkbox [(ngModel)]="exportClientes" (change)="updateSelectAll()" class="custom-checkbox">
+        <mat-checkbox [(ngModel)]="exportClientes" (change)="updateSelectAll()" class="custom-checkbox" *ngIf="clientesData.length > 0">
           Clientes Registrados
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="exportAlquileres" (change)="updateSelectAll()" class="custom-checkbox">
+        <mat-checkbox [(ngModel)]="exportAlquileres" (change)="updateSelectAll()" class="custom-checkbox" *ngIf="alquileresData.length > 0">
           Alquileres Realizados
         </mat-checkbox>
-        <mat-checkbox [(ngModel)]="exportIngresos" (change)="updateSelectAll()" class="custom-checkbox">
+        <mat-checkbox [(ngModel)]="exportIngresos" (change)="updateSelectAll()" class="custom-checkbox" *ngIf="ingresosData.length > 0">
           Ingresos
         </mat-checkbox>
       </div>

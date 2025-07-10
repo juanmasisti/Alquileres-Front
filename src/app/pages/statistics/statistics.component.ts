@@ -9,6 +9,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 
 Chart.register(...registerables); // Registra todos los componentes de chart.js existentes
 
@@ -18,7 +19,7 @@ Chart.register(...registerables); // Registra todos los componentes de chart.js 
   styleUrls: ['./statistics.component.scss'],
   standalone: true,
   imports: [CommonModule, NavbarComponent, FooterComponent, 
-    MatDialogModule, FormsModule, MatButtonModule, MatCheckboxModule]
+    MatDialogModule, FormsModule, MatButtonModule, MatCheckboxModule, MatTooltipModule]
 })
 export class StatisticsComponent implements OnInit, AfterViewInit {
 
@@ -133,6 +134,7 @@ cargarClientes() {
       'rgba(75, 192, 192, 0.5)',
       'rgba(75, 192, 192, 1)'
     );
+    this.verificarSinDatos();
   });
 }
 
@@ -153,6 +155,7 @@ cargarAlquileres() {
       'rgba(153, 102, 255, 0.5)',
       'rgba(153, 102, 255, 1)'
     );
+    this.verificarSinDatos();
   });
 }
 
@@ -173,6 +176,7 @@ cargarIngresos() {
       'rgba(255, 159, 64, 0.5)',
       'rgba(255, 159, 64, 1)'
     );
+    this.verificarSinDatos();
   });
 }
 
@@ -281,5 +285,20 @@ cargarIngresos() {
   hasSelection() {
     return this.exportClientes || this.exportAlquileres || this.exportIngresos;
   }
+
+simulandoSinDatos: boolean = false;
+toggleSimulacion() {
+  this.simulandoSinDatos = !this.simulandoSinDatos;
+  this.noData = this.simulandoSinDatos;
+  if (this.simulandoSinDatos) {
+    this.clientesData = [];
+    this.alquileresData = [];
+    this.ingresosData = [];
+  } else {
+    this.cargarClientes();
+    this.cargarAlquileres();
+    this.cargarIngresos();
+  }
+}
 }
 
