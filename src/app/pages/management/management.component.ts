@@ -184,7 +184,8 @@ export class ManagementComponent implements OnInit {
       r.sucursal.toLowerCase().includes(termino) || 
       r.maquinaria.nombre.toLowerCase().includes(termino) || 
       r.maquinaria.modelo.toLowerCase().includes(termino) || 
-      r.maquinaria.marca.toLowerCase().includes(termino)
+      r.maquinaria.marca.toLowerCase().includes(termino) || 
+      r.usuario.email.toLocaleLowerCase().includes(termino)
     );
   }
 
