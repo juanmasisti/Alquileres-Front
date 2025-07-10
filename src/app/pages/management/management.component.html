@@ -26,7 +26,7 @@
       <i class="fas fa-search"></i>
       <input
         type="text"
-        placeholder="Buscar por codigo..."
+        placeholder="Buscar"
         [(ngModel)]="searchItem"
       />
     </div>
@@ -98,7 +98,7 @@
           ></i>
           {{ r.codigo_reserva }}</span
         >
-        <span>{{ r.maquinaria.nombre }}</span>
+        <span>{{ r.maquinaria.nombre }} <br> {{ " " + r.maquinaria.marca + "\n" + r.maquinaria.modelo }}</span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
         <span>${{ r.precio_dia }}</span>
@@ -181,7 +181,7 @@
           ></i>
           {{ r.codigo_reserva }}</span
         >
-        <span>{{ r.maquinaria.nombre }} </span>
+        <span>{{ r.maquinaria.nombre }} <br> {{ " " + r.maquinaria.marca + "\n" + r.maquinaria.modelo }}</span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
         <span>${{ r.precio }}</span>
@@ -302,8 +302,13 @@
       *ngIf="listaFiltrada.length === 0 && searchItem.trim() && !loading"
       class="no-results"
     >
+      @if (activeTab === 'reservas' && lista.length > 0) {
       <i class="fas fa-exclamation-circle"></i>
-      <p>No se encontró ninguna máquina con ese código.</p>
+      <p>No se encontraron reservas</p>
+      } @else if (activeTab === 'alquileres' && lista.length > 0) {
+      <i class="fas fa-exclamation-circle"></i>
+      <p>No se encontraron alquileres</p>
+      }
     </div>
   </div>
 </section>

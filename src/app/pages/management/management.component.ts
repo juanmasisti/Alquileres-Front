@@ -178,8 +178,14 @@ export class ManagementComponent implements OnInit {
     if (!this.searchItem?.trim()) return this.lista;
 
     const termino = this.searchItem.toLowerCase();
-    return this.lista.filter((r) =>
-      r.codigo_reserva.toLowerCase().includes(termino)
+    return this.lista.filter((r:Reserva) =>
+      r.codigo_reserva.toLowerCase().includes(termino) || 
+      r.estado.toLowerCase().includes(termino) || 
+      r.sucursal.toLowerCase().includes(termino) || 
+      r.maquinaria.nombre.toLowerCase().includes(termino) || 
+      r.maquinaria.modelo.toLowerCase().includes(termino) || 
+      r.maquinaria.marca.toLowerCase().includes(termino) || 
+      r.usuario.email.toLocaleLowerCase().includes(termino)
     );
   }
 
