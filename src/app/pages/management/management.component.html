@@ -98,7 +98,7 @@
           ></i>
           {{ r.codigo_reserva }}</span
         >
-        <span>{{ r.maquinaria.nombre }}</span>
+        <span>{{ r.maquinaria.nombre }} <br> {{ " " + r.maquinaria.marca + "\n" + r.maquinaria.modelo }}</span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
         <span>${{ r.precio_dia }}</span>
@@ -181,7 +181,7 @@
           ></i>
           {{ r.codigo_reserva }}</span
         >
-        <span>{{ r.maquinaria.nombre }} </span>
+        <span>{{ r.maquinaria.nombre }} <br> {{ " " + r.maquinaria.marca + "\n" + r.maquinaria.modelo }}</span>
         <span>{{ r.fecha_inicio | date : "dd/MM/yyyy" }}</span>
         <span>{{ r.fecha_fin | date : "dd/MM/yyyy" }}</span>
         <span>${{ r.precio }}</span>
