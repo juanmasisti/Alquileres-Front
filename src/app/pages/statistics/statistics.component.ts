@@ -62,11 +62,11 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {}
 
-ngAfterViewInit(): void {
-  this.cargarClientes();
-  this.cargarAlquileres();
-  this.cargarIngresos();
-}
+  ngAfterViewInit(): void {
+    this.cargarClientes();
+    this.cargarAlquileres();
+    this.cargarIngresos();
+  }
 
   /**
    * 🔧 Función general para crear gráficos
@@ -286,19 +286,38 @@ cargarIngresos() {
     return this.exportClientes || this.exportAlquileres || this.exportIngresos;
   }
 
-simulandoSinDatos: boolean = false;
-toggleSimulacion() {
-  this.simulandoSinDatos = !this.simulandoSinDatos;
-  this.noData = this.simulandoSinDatos;
-  if (this.simulandoSinDatos) {
+  simulandoSinDatosC: boolean = false;
+  simulandoSinDatosA: boolean = false;
+  simulandoSinDatosI: boolean = false;
+
+toggleSimulacionCliente() {
+  this.simulandoSinDatosC = !this.simulandoSinDatosC;
+  if (this.simulandoSinDatosC) {
     this.clientesData = [];
-    this.alquileresData = [];
-    this.ingresosData = [];
   } else {
     this.cargarClientes();
+  }
+  this.verificarSinDatos();
+}
+
+toggleSimulacionAlquileres() {
+  this.simulandoSinDatosA = !this.simulandoSinDatosA;
+  if (this.simulandoSinDatosA) {
+    this.alquileresData = [];
+  } else {
     this.cargarAlquileres();
+  }
+  this.verificarSinDatos();
+}
+
+toggleSimulacionIngresos() {
+  this.simulandoSinDatosI = !this.simulandoSinDatosI;
+  if (this.simulandoSinDatosI) {
+    this.ingresosData = [];
+  } else {
     this.cargarIngresos();
   }
+  this.verificarSinDatos();
 }
 }
 

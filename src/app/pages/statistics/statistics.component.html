@@ -3,15 +3,6 @@
 <div class="container">
   <div class="header">
     <h2>Estadísticas del Negocio</h2>
-     <!-- 🔘 Botón de simulación demo -->
-      <button 
-        class="simulate-btn"
-        (click)="toggleSimulacion()"
-        matTooltip="Simular estado sin datos"
-      >
-        {{ simulandoSinDatos ? 'Restaurar datos' : 'Simular sin datos' }}
-      </button>
-
     <div matTooltip="No hay gráficos con datos para exportar" *ngIf="noData">
     <button 
       mat-raised-button 
@@ -22,7 +13,7 @@
       <span class="material-icons">picture_as_pdf</span>
       Exportar PDF
     </button>
-    </div>
+  </div>
 
     <button 
       *ngIf="!noData"
@@ -36,16 +27,19 @@
     </button> 
   </div>
 
-  <!-- Mensaje para caso datos vacíos. -->
-  <div *ngIf="noData">
-    <p class="empty-msg">No hay estadísticas disponibles para mostrar.</p>
-  </div>
-
-  <ng-container *ngIf="!noData">
+  <ng-container>
     <!-- Gráfico de Clientes -->
     <section class="chart-section">
       <div class="chart-header">
         <h3>Clientes Registrados</h3>
+        <!-- 🔘 Botón de simulación demo -->
+        <button 
+          class="simulate-btn"
+          (click)="toggleSimulacionCliente()"
+          matTooltip="Simular estado sin datos"
+        >
+          {{ simulandoSinDatosC ? 'Restaurar' : 'Simular sin datos' }}
+        </button>
         <div *ngIf="clientesData.length > 0" class="period-filter">
           <button 
             *ngFor="let period of periods" 
@@ -57,31 +51,48 @@
         </div>
       </div>
       <div *ngIf="clientesData.length == 0">No se encontraron datos</div>
-      <canvas [hidden]="clientesData.length == 0" #clientesChart></canvas>
+      <canvas [style.display]="clientesData.length > 0 ? 'block' : 'none'" #clientesChart></canvas>
     </section>
 
     <!-- Gráfico de Alquileres -->
     <section class="chart-section">
       <div class="chart-header">
         <h3>Alquileres Realizados</h3>
+          <!-- 🔘 Botón de simulación demo -->
+        <button 
+          class="simulate-btn"
+          (click)="toggleSimulacionAlquileres()"
+          matTooltip="Simular estado sin datos"
+        >
+          {{ simulandoSinDatosA ? 'Restaurar' : 'Simular sin datos' }}
+        </button>
         <div *ngIf="alquileresData.length > 0" class="period-filter">
           <button 
             *ngFor="let period of periods" 
             [class.active]="alquileresPeriodo === period.value"
             (click)="toggleAlquileresPeriodo(period.value)"
-          >
+          >7
             {{ period.label }}
           </button>
         </div>
       </div>
       <div *ngIf="alquileresData.length == 0">No se encontraron datos</div>
-      <canvas [hidden]="alquileresData.length == 0" #alquileresChart></canvas>
+      <canvas [style.display]="alquileresData.length > 0 ? 'block' : 'none'" #alquileresChart></canvas>
+      
     </section>
 
     <!-- Gráfico de Ingresos -->
     <section class="chart-section">
       <div class="chart-header">
         <h3>Ingresos</h3>
+          <!-- 🔘 Botón de simulación demo -->
+        <button 
+          class="simulate-btn"
+          (click)="toggleSimulacionIngresos()"
+          matTooltip="Simular estado sin datos"
+        >
+          {{ simulandoSinDatosI ? 'Restaurar' : 'Simular sin datos' }}
+        </button>
         <div *ngIf="ingresosData.length > 0" class="period-filter">
           <button 
             *ngFor="let period of periods" 
@@ -93,7 +104,7 @@
         </div>
       </div>
       <div *ngIf="ingresosData.length == 0">No se encontraron datos</div>
-      <canvas [hidden]="ingresosData.length == 0" #ingresosChart ></canvas>
+      <canvas [style.display]="ingresosData.length > 0 ? 'block' : 'none'" #ingresosChart ></canvas>
     </section>
   </ng-container>
 </div>
