@@ -116,7 +116,7 @@ export class MaquinaryProfileComponent implements OnInit {
     private reservasService: ReservasService,
     
   ) {
-    this.minDate.setDate(this.minDate.getDate() + 1);
+    this.minDate.setDate(this.minDate.getDate());
   }
 
   isClientDEPRECATED() {
